@@ -504,12 +504,12 @@ function productCard(p) {
       <a href="product.html?id=${p.id}"><h3>${esc(p.name)}</h3></a>
       <p>${esc(specs || (p.scale + " · " + p.drive))}</p>
       ${stockBadgeHTML}
-      <div class="price" style="margin-top:6px">
-        <strong>${INR(p.price)}</strong>
-        ${p.mrp > p.price ? `<del>${INR(p.mrp)}</del>` : ""}
+      <div class="price" style="margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <strong style="flex-shrink:0;white-space:nowrap">${INR(p.price)}</strong>
+        ${p.mrp > p.price ? `<del style="flex-shrink:0;white-space:nowrap">${INR(p.mrp)}</del>` : ""}
       </div>
-      <div class="product-actions">
-        <button class="mini-btn quick" onclick="quickView(${idArg(p.id)})">Quick view</button>
+      <div class="product-actions" style="margin-top:12px;display:flex;gap:6px">
+        <button class="mini-btn quick" onclick="quickView(${idArg(p.id)})" style="flex:1;white-space:nowrap">Quick view</button>
         ${buyBtnHTML}
       </div>
     </div>
@@ -1162,9 +1162,9 @@ function renderCategoryCarousels() {
           </a>
           <div>
             <div style="font-size:10px;font-weight:900;color:${stock > 0 ? '#2e7d32' : '#ed1c24'}">${stock > 0 ? `🟢 In Stock (${stock})` : '🔴 Out of Stock'}</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-              <strong style="font-size:15px;color:#111">${INR(p.price)}</strong>
-              <button class="mini-btn solid" onclick="addCart(${idArg(p.id)})" style="height:32px;padding:0 12px">Add 🛒</button>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px">
+              <strong style="font-size:15px;color:#111;flex-shrink:0;white-space:nowrap">${INR(p.price)}</strong>
+              <button class="mini-btn solid" onclick="addCart(${idArg(p.id)})" style="flex:0 0 auto;height:34px;padding:0 14px;white-space:nowrap">Add 🛒</button>
             </div>
           </div>
         </div>
