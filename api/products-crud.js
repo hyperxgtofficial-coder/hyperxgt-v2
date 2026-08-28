@@ -156,6 +156,23 @@ module.exports = async (req, res) => {
       // Persist to Supabase DB if credentials set (use service_role key for writes - RLS requires it)
       if (supabaseServiceKey && supabaseUrl.includes("supabase")) {
         try {
+          // Fetch existing product record from DB to avoid clearing valid image
+          let existingDbImg = '';
+          let existingDbImgs = [];
+          try {
+            const singleDbRes = await httpsRequest(`${supabaseUrl}/rest/v1/products?id=eq.${updatedProd.id}&select=image,images`, 'GET', {
+              'apikey': supabaseServiceKey,
+              'Authorization': `Bearer ${supabaseServiceKey}`
+            });
+            if (singleDbRes.statusCode === 200 && Array.isArray(singleDbRes.body) && singleDbRes.body.length > 0) {
+              existingDbImg = singleDbRes.body[0].image || '';
+              existingDbImgs = singleDbRes.body[0].images || [];
+            }
+          } catch(e) {}
+
+          const finalImg = (updatedProd.image && String(updatedProd.image).trim()) ? String(updatedProd.image).trim() : existingDbImg;
+          const finalImgs = (Array.isArray(updatedProd.images) && updatedProd.images.length > 0) ? updatedProd.images : (existingDbImgs.length > 0 ? existingDbImgs : (finalImg ? [finalImg] : []));
+
           const dbItem = {
             id: Number(updatedProd.id),
             sku: String(updatedProd.sku || `HX-${updatedProd.id}`),
@@ -164,9 +181,9 @@ module.exports = async (req, res) => {
             price: Number(updatedProd.price || 0),
             regular_price: Number(updatedProd.mrp || 0),
             stock: Number(updatedProd.stock !== undefined ? updatedProd.stock : 25),
-            image: String(updatedProd.image || ''),
-            images: Array.isArray(updatedProd.images) ? updatedProd.images : [],
-            no_image: Boolean(updatedProd.no_image)
+            image: finalImg,
+            images: finalImgs,
+            no_image: Boolean(!finalImg)
           };
           await httpsRequest(`${supabaseUrl}/rest/v1/products`, 'POST', {
             'apikey': supabaseServiceKey,
@@ -194,18 +211,36 @@ module.exports = async (req, res) => {
 
         if (supabaseServiceKey && supabaseUrl.includes("supabase")) {
           try {
-            const dbPayload = payload.map(p => ({
-              id: Number(p.id),
-              sku: String(p.sku || `HX-${p.id}`),
-              name: String(p.name || ''),
-              category: String(p.category || ''),
-              price: Number(p.price || 0),
-              regular_price: Number(p.mrp || 0),
-              stock: Number(p.stock !== undefined ? p.stock : 25),
-              image: String(p.image || ''),
-              images: Array.isArray(p.images) ? p.images : [],
-              no_image: Boolean(p.no_image)
-            }));
+            // Fetch existing products from database to preserve valid image URLs
+            let existingDbMap = new Map();
+            try {
+              const fetchDbRes = await httpsRequest(`${supabaseUrl}/rest/v1/products?select=id,image,images,no_image`, 'GET', {
+                'apikey': supabaseServiceKey,
+                'Authorization': `Bearer ${supabaseServiceKey}`
+              });
+              if (fetchDbRes.statusCode === 200 && Array.isArray(fetchDbRes.body)) {
+                fetchDbRes.body.forEach(item => existingDbMap.set(String(item.id), item));
+              }
+            } catch(e) {}
+
+            const dbPayload = payload.map(p => {
+              const dbItem = existingDbMap.get(String(p.id)) || {};
+              const imgVal = (p.image && String(p.image).trim()) ? String(p.image).trim() : (dbItem.image || '');
+              const imgsVal = (Array.isArray(p.images) && p.images.length > 0) ? p.images : (Array.isArray(dbItem.images) ? dbItem.images : (imgVal ? [imgVal] : []));
+
+              return {
+                id: Number(p.id),
+                sku: String(p.sku || `HX-${p.id}`),
+                name: String(p.name || ''),
+                category: String(p.category || ''),
+                price: Number(p.price || 0),
+                regular_price: Number(p.mrp || 0),
+                stock: Number(p.stock !== undefined ? p.stock : 25),
+                image: imgVal,
+                images: imgsVal,
+                no_image: Boolean(!imgVal)
+              };
+            });
 
             await httpsRequest(`${supabaseUrl}/rest/v1/products`, 'POST', {
               'apikey': supabaseServiceKey,
