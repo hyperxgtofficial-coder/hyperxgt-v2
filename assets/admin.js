@@ -526,19 +526,68 @@ async function deleteCollab(id) {
 function initCollabForm() {
   const btn = $("#btnAddCollab");
   if (btn) {
-    btn.onclick = async function() {
-      const name = prompt("Enter Brand Partner Name (e.g. Traxxas India):");
-      if (!name) return;
-      const logo = prompt("Enter Brand Logo URL:", "assets/hyperxgt-logo.png");
-      if (!logo) return;
-      const link = prompt("Enter Brand Website / Catalog Link:", "index.html");
-
-      await adminWrite('/api/collaborations',
-        { method: 'POST', body: JSON.stringify({ name, logo, link, active: true }) },
-        `Added brand partner "${name}" ✓`,
-        renderAdminCollaborations);
+    btn.onclick = function() {
+      if ($("#collabForm")) $("#collabForm").reset();
+      if ($("#collabId")) $("#collabId").value = "";
+      if ($("#collabLogoPreview")) $("#collabLogoPreview").style.display = "none";
+      openModal("collabModal");
     };
   }
+
+  const logoInput = $("#collabLogoFileInput");
+  if (logoInput) {
+    logoInput.onchange = async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      toast("Uploading brand logo image...");
+      try {
+        const compressedBase64 = await compressImageFile(file);
+        const res = await fetch('/api/upload-image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-key': getAdminToken()
+          },
+          body: JSON.stringify({ base64: compressedBase64, filename: file.name, contentType: file.type })
+        });
+        const data = await res.json();
+        if (data && data.url) {
+          if ($("#collabLogoUrl")) $("#collabLogoUrl").value = data.url;
+          if ($("#collabLogoImgPrev")) $("#collabLogoImgPrev").src = data.url;
+          if ($("#collabLogoPreview")) $("#collabLogoPreview").style.display = "flex";
+          toast("Brand logo uploaded successfully ✓");
+        } else {
+          toast("Logo upload failed: " + (data.error || "Unknown error"));
+        }
+      } catch(err) {
+        console.error("Logo upload error:", err);
+        toast("Logo upload error: " + err.message);
+      }
+    };
+  }
+}
+
+async function saveCollabPartner() {
+  const name = ($("#collabName") ? $("#collabName").value : "").trim();
+  const logo = ($("#collabLogoUrl") ? $("#collabLogoUrl").value : "").trim();
+  const link = ($("#collabLink") ? $("#collabLink").value : "").trim() || "https://hyperxgt.com";
+  const id = ($("#collabId") ? $("#collabId").value : "").trim();
+
+  if (!name || !logo) {
+    return alert("Please provide both Brand Name and Brand Logo Image.");
+  }
+
+  const method = id ? 'PUT' : 'POST';
+  const body = { name, logo, link, active: true };
+  if (id) body.id = id;
+
+  await adminWrite('/api/collaborations',
+    { method, body: JSON.stringify(body) },
+    `Brand partner "${name}" saved successfully ✓`,
+    () => {
+      closeEl($("#collabModal"));
+      renderAdminCollaborations();
+    });
 }
 
 // BULK CSV PRODUCT UPLOADER
