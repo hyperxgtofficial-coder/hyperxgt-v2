@@ -225,8 +225,10 @@
     "dimensions": "35 × 25 × 30 cm",
     "weight": "1.8 kg",
     "age": "14 Years & up",
-    "image": "",
-    "images": [],
+    "image": "assets/uploads/prod_1787927140240_2945.png",
+    "images": [
+      "assets/uploads/prod_1787927140240_2945.png"
+    ],
     "short_description": "The H184021 RC Car is designed for fast and smooth remote-control performance. Featuring a responsive 2.4GHz control system, it ensures stable handling and long-range operation. Its durable body and strong tires make it suitable for racing, drifting, and exciting outdoor RC adventures.",
     "full_description": "The H184021 RC Car is designed for fast and smooth remote-control performance. Featuring a responsive 2.4GHz control system, it ensures stable handling and long-range operation. Its durable body and strong tires make it suitable for racing, drifting, and exciting outdoor RC adventures.",
     "attributes": {
@@ -256,7 +258,7 @@
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "no_image": true
+    "no_image": false
   },
   {
     "id": 8,
