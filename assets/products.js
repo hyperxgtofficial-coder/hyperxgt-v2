@@ -17,8 +17,10 @@ window.HX_PRODUCTS = [
     "dimensions": "10 × 6 × 5 cm",
     "weight": "0.08 kg",
     "age": "8+ Years",
-    "image": "",
-    "images": [],
+    "image": "assets/uploads/prod_1787917128807_7818.png",
+    "images": [
+      "assets/uploads/prod_1787917128807_7818.png"
+    ],
     "short_description": "Experience precision drifting with this 1:64 scale RC Drift Car, designed for smooth control and realistic performance. Its compact size delivers fast turns, stable drifting, and exciting racing action on flat surfaces. Perfect for collectors, beginners, and RC enthusiasts looking for a stylish mini drift car with responsive handling and fun indoor driving.",
     "full_description": "Experience precision drifting with this 1:64 scale RC Drift Car, designed for smooth control and realistic performance. Its compact size delivers fast turns, stable drifting, and exciting racing action on flat surfaces. Perfect for collectors, beginners, and RC enthusiasts looking for a stylish mini drift car with responsive handling and fun indoor driving.",
     "attributes": {},
@@ -29,7 +31,11 @@ window.HX_PRODUCTS = [
     "source_page": 1,
     "featured": true,
     "stock": 25,
-    "no_image": true
+    "taxMode": "inclusive",
+    "gstRate": 18,
+    "hsn": "95030090",
+    "no_image": false,
+    "video": "https://youtu.be/7w7LUaLpM4E?si=hu1udj_zaTSfUz9v"
   },
   {
     "id": 2,
@@ -49,8 +55,10 @@ window.HX_PRODUCTS = [
     "dimensions": "25 × 22 × 15 cm",
     "weight": "1 kg",
     "age": "8+ Years",
-    "image": "",
-    "images": [],
+    "image": "assets/uploads/prod_1787920104060_6427.jpg",
+    "images": [
+      "assets/uploads/prod_1787920104060_6427.jpg"
+    ],
     "short_description": "The H284131 RC Car delivers fast speed and smooth remote control performance for exciting racing action. Built with a durable body and stable handling, it runs efficiently on different surfaces. Perfect for racing, drifting, and everyday RC fun, making it a great choice for beginners and RC car enthusiasts. 🚗",
     "full_description": "The H284131 RC Car delivers fast speed and smooth remote control performance for exciting racing action. Built with a durable body and stable handling, it runs efficiently on different surfaces. Perfect for racing, drifting, and everyday RC fun, making it a great choice for beginners and RC car enthusiasts. 🚗",
     "attributes": {},
@@ -58,7 +66,11 @@ window.HX_PRODUCTS = [
     "source_page": 1,
     "featured": true,
     "stock": 25,
-    "no_image": true
+    "taxMode": "inclusive",
+    "gstRate": 18,
+    "hsn": "95030090",
+    "no_image": false,
+    "video": ""
   },
   {
     "id": 3,
@@ -88,7 +100,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -117,7 +128,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -146,7 +156,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -196,7 +205,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -248,7 +256,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -279,7 +286,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -326,7 +332,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -373,7 +378,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -417,7 +421,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -468,7 +471,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -517,7 +519,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -570,7 +571,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -599,7 +599,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -652,7 +651,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -681,7 +679,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -730,7 +727,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -761,7 +757,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 1,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -790,7 +785,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 1,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -821,7 +815,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -850,7 +843,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -879,7 +871,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -912,7 +903,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -966,7 +956,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1018,7 +1007,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1049,7 +1037,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1080,7 +1067,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1111,7 +1097,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1142,7 +1127,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1171,7 +1155,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1200,7 +1183,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1229,7 +1211,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1258,7 +1239,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1287,7 +1267,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1316,7 +1295,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1347,7 +1325,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1378,7 +1355,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1409,7 +1385,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1440,7 +1415,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 2,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1471,7 +1445,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1522,7 +1495,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1573,7 +1545,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1624,7 +1595,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1675,7 +1645,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1726,7 +1695,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1777,7 +1745,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1828,7 +1795,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1879,7 +1845,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1930,7 +1895,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -1981,7 +1945,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2032,7 +1995,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2085,7 +2047,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2136,7 +2097,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2187,7 +2147,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2238,7 +2197,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2289,7 +2247,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2340,7 +2297,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2391,7 +2347,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2442,7 +2397,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 3,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2493,7 +2447,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2544,7 +2497,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2595,7 +2547,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2646,7 +2597,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2699,7 +2649,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2728,7 +2677,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2757,7 +2705,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2786,7 +2733,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2815,7 +2761,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2844,7 +2789,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2873,8 +2817,8 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
-    "no_image": true
+    "no_image": true,
+    "video": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
   },
   {
     "id": 72,
@@ -2902,7 +2846,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2933,7 +2876,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2965,7 +2907,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -2997,7 +2938,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3028,7 +2968,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3061,7 +3000,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3092,7 +3030,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3124,7 +3061,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3155,7 +3091,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 4,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3196,7 +3131,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3237,7 +3171,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3278,7 +3211,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3319,7 +3251,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3360,7 +3291,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3401,7 +3331,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3442,7 +3371,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3483,7 +3411,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3524,7 +3451,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3565,7 +3491,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3606,7 +3531,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3637,7 +3561,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3666,7 +3589,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3695,7 +3617,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3724,7 +3645,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3753,7 +3673,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3782,7 +3701,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3811,7 +3729,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3840,7 +3757,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3869,7 +3785,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 5,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3898,7 +3813,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 6,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3929,7 +3843,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3960,7 +3873,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -3991,7 +3903,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4022,7 +3933,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4059,7 +3969,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4096,7 +4005,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4133,7 +4041,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4168,7 +4075,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4205,7 +4111,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4242,7 +4147,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4277,7 +4181,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4312,7 +4215,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4347,7 +4249,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4382,7 +4283,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4417,7 +4317,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4452,7 +4351,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4487,7 +4385,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4522,7 +4419,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4557,7 +4453,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 6,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4592,7 +4487,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4627,7 +4521,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4662,7 +4555,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4697,7 +4589,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4732,7 +4623,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4767,7 +4657,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4802,7 +4691,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4837,7 +4725,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4872,7 +4759,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4907,7 +4793,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4942,7 +4827,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -4977,7 +4861,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5012,7 +4895,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5047,7 +4929,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5082,7 +4963,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5117,7 +4997,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5152,7 +5031,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5187,7 +5065,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5222,7 +5099,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5257,7 +5133,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 7,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5292,7 +5167,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5327,7 +5201,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5362,7 +5235,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5397,7 +5269,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5432,7 +5303,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5467,7 +5337,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5502,7 +5371,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5533,7 +5401,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5564,7 +5431,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5595,7 +5461,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5626,7 +5491,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5657,7 +5521,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5688,7 +5551,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5719,7 +5581,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5751,7 +5612,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5783,7 +5643,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5814,7 +5673,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5845,7 +5703,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5877,7 +5734,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5909,7 +5765,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 8,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5941,7 +5796,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -5973,7 +5827,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6002,7 +5855,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 9,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6033,7 +5885,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6064,7 +5915,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6095,7 +5945,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6126,7 +5975,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6157,7 +6005,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6188,7 +6035,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6219,7 +6065,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6250,7 +6095,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6281,7 +6125,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6312,7 +6155,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6343,7 +6185,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6374,7 +6215,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6406,7 +6246,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6438,7 +6277,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6479,7 +6317,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6510,7 +6347,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": true,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6542,7 +6378,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 9,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6574,7 +6409,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6606,7 +6440,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6635,7 +6468,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6664,7 +6496,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6695,7 +6526,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6726,7 +6556,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6757,7 +6586,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6788,7 +6616,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6820,7 +6647,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6852,7 +6678,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6884,7 +6709,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6915,7 +6739,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6946,7 +6769,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -6978,7 +6800,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7010,7 +6831,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7042,7 +6862,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7073,7 +6892,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7104,7 +6922,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7135,7 +6952,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7166,7 +6982,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 10,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7198,7 +7013,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7230,7 +7044,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7262,7 +7075,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7291,7 +7103,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7322,7 +7133,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7353,7 +7163,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7382,7 +7191,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7413,7 +7221,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7444,7 +7251,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7473,7 +7279,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7502,7 +7307,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7531,7 +7335,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7560,7 +7363,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7591,7 +7393,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7622,7 +7423,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7651,7 +7451,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7680,7 +7479,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7709,7 +7507,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7738,7 +7535,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7767,7 +7563,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 11,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7796,7 +7591,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7825,7 +7619,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7854,7 +7647,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7883,7 +7675,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7912,7 +7703,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7943,7 +7733,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -7974,7 +7763,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8006,7 +7794,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8038,7 +7825,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8070,7 +7856,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8099,7 +7884,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8131,7 +7915,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8163,7 +7946,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8195,7 +7977,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8224,7 +8005,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8255,7 +8035,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8286,7 +8065,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8317,7 +8095,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8348,7 +8125,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8379,7 +8155,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 12,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8410,7 +8185,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8441,7 +8215,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8472,7 +8245,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8504,7 +8276,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8536,7 +8307,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8568,7 +8338,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8599,7 +8368,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8630,7 +8398,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8662,7 +8429,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8694,7 +8460,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8726,7 +8491,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8757,7 +8521,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8788,7 +8551,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8817,7 +8579,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8848,7 +8609,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8879,7 +8639,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8910,7 +8669,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8941,7 +8699,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -8970,7 +8727,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9001,7 +8757,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 13,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9032,7 +8787,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9063,7 +8817,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9094,7 +8847,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9126,7 +8878,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9158,7 +8909,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9190,7 +8940,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9221,7 +8970,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9252,7 +9000,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9284,7 +9031,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9316,7 +9062,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9348,7 +9093,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9379,7 +9123,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9410,7 +9153,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9442,7 +9184,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9474,7 +9215,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9506,7 +9246,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9537,7 +9276,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9568,7 +9306,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9597,7 +9334,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9626,7 +9362,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 14,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9658,7 +9393,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9690,7 +9424,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9722,7 +9455,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9751,7 +9483,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9782,7 +9513,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9813,7 +9543,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9845,7 +9574,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9877,7 +9605,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9909,7 +9636,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9941,7 +9667,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -9973,7 +9698,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10005,7 +9729,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10037,7 +9760,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10069,7 +9791,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10101,7 +9822,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10132,7 +9852,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10163,7 +9882,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10195,7 +9913,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10227,7 +9944,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10259,7 +9975,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 15,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10288,7 +10003,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10317,7 +10031,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10349,7 +10062,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10381,7 +10093,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10413,7 +10124,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10444,7 +10154,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10475,7 +10184,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10504,7 +10212,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10533,7 +10240,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10564,7 +10270,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10595,7 +10300,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10624,7 +10328,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10659,7 +10362,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10691,7 +10393,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10723,7 +10424,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10755,7 +10455,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10784,7 +10483,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10816,7 +10514,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10848,7 +10545,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10880,7 +10576,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 16,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10911,7 +10606,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10942,7 +10636,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -10973,7 +10666,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11004,7 +10696,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11035,7 +10726,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11066,7 +10756,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11098,7 +10787,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11130,7 +10818,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11162,7 +10849,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11194,7 +10880,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11226,7 +10911,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11258,7 +10942,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11287,7 +10970,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11316,7 +10998,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11345,7 +11026,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11376,7 +11056,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11407,7 +11086,6 @@ window.HX_PRODUCTS = [
     ],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   },
   {
@@ -11436,7 +11114,6 @@ window.HX_PRODUCTS = [
     "upsells": [],
     "source_page": 17,
     "featured": false,
-    "stock": 25,
     "no_image": true
   }
 ];

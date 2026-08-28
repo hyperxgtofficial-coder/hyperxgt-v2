@@ -55,8 +55,10 @@
     "dimensions": "25 × 22 × 15 cm",
     "weight": "1 kg",
     "age": "8+ Years",
-    "image": "",
-    "images": [],
+    "image": "assets/uploads/prod_1787920104060_6427.jpg",
+    "images": [
+      "assets/uploads/prod_1787920104060_6427.jpg"
+    ],
     "short_description": "The H284131 RC Car delivers fast speed and smooth remote control performance for exciting racing action. Built with a durable body and stable handling, it runs efficiently on different surfaces. Perfect for racing, drifting, and everyday RC fun, making it a great choice for beginners and RC car enthusiasts. 🚗",
     "full_description": "The H284131 RC Car delivers fast speed and smooth remote control performance for exciting racing action. Built with a durable body and stable handling, it runs efficiently on different surfaces. Perfect for racing, drifting, and everyday RC fun, making it a great choice for beginners and RC car enthusiasts. 🚗",
     "attributes": {},
@@ -67,7 +69,7 @@
     "taxMode": "inclusive",
     "gstRate": 18,
     "hsn": "95030090",
-    "no_image": true,
+    "no_image": false,
     "video": ""
   },
   {
