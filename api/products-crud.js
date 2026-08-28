@@ -27,10 +27,37 @@ function getInitialProducts() {
 function saveProductsToJsonDisk(arr) {
   try {
     if (!Array.isArray(arr) || !arr.length) return;
+
+    let existingMap = new Map();
     const jsonPath = path.join(__dirname, '..', 'data', 'products.json');
+    if (fs.existsSync(jsonPath)) {
+      try {
+        const raw = fs.readFileSync(jsonPath, 'utf8');
+        const diskArr = JSON.parse(raw);
+        if (Array.isArray(diskArr)) {
+          diskArr.forEach(p => existingMap.set(String(p.id), p));
+        }
+      } catch(e) {}
+    }
+
+    const merged = arr.map(p => {
+      const old = existingMap.get(String(p.id)) || {};
+      const img = (p.image && String(p.image).trim()) ? String(p.image).trim() : (old.image || '');
+      const imgs = (Array.isArray(p.images) && p.images.length > 0) ? p.images : (Array.isArray(old.images) ? old.images : (img ? [img] : []));
+
+      return {
+        ...old,
+        ...p,
+        image: img,
+        images: imgs,
+        no_image: Boolean(!img)
+      };
+    });
+
     const dir = path.dirname(jsonPath);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(jsonPath, JSON.stringify(arr, null, 2), 'utf8');
+    fs.writeFileSync(jsonPath, JSON.stringify(merged, null, 2), 'utf8');
+    cachedProducts = merged;
   } catch(e) {
     console.error("Disk save error:", e.message);
   }
