@@ -658,4 +658,25 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
   border-color: #1488d8 !important;
 }
 
+/* 8. Social Studio Chips & Helpers */
+.social-chip {
+  display: inline-block;
+  background: #f0f4ff;
+  color: #1488d8;
+  border: 1px solid #d0e4ff;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.social-chip:hover {
+  background: #1488d8;
+  color: #fff;
+  border-color: #1488d8;
+  transform: translateY(-1px);
+}
+
 

@@ -69,10 +69,11 @@
 
       <!-- TABS NAVBAR -->
       <div class="admin-tabs">
-        <button class="admin-tab active" data-tab="products">Product Inventory & GST Manager</button>
+        <button class="admin-tab" data-tab="products">Product Inventory & GST Manager</button>
         <button class="admin-tab" data-tab="orders">Orders & Logistics Center</button>
         <button class="admin-tab" data-tab="reviews">💬 Reviews & Unboxing Approvals</button>
         <button class="admin-tab" data-tab="collaborations">🤝 Brand Collaborations</button>
+        <button class="admin-tab" data-tab="social">📱 Social Media & Publisher</button>
         <button class="admin-tab" data-tab="database">Database & Shiprocket API Logs</button>
       </div>
 
@@ -224,6 +225,250 @@
                 <!-- Rendered dynamically -->
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SOCIAL MEDIA STUDIO & PUBLISHER SECTION -->
+      <section id="tab-social" class="tab-content">
+        <div style="background:#fff; border:1px solid #1488d8; border-radius:18px; padding:24px; margin-top:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+            <div>
+              <h3 style="margin:0; color:#1488d8; font-size:18px">📱 Social Media Studio & Content Publisher</h3>
+              <p style="font-size:12px; color:#666; margin:4px 0 0">Select any SKU to auto-load product photos, generate high-converting marketing captions, and publish directly to Instagram, WhatsApp, Facebook, and X.</p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="background:#e8f4fd; color:#1488d8; font-weight:900; font-size:11px; padding:6px 12px; border-radius:999px;">⚡ AI Marketing Generator</span>
+              <span style="background:#f4f6f8; color:#333; font-weight:800; font-size:11px; padding:6px 12px; border-radius:999px;" id="socialBadgeCount">338 Products Ready</span>
+            </div>
+          </div>
+
+          <!-- DUAL-COLUMN STUDIO WORKSPACE -->
+          <div style="display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px;">
+            
+            <!-- LEFT COLUMN: CONTROLS & CONTENT BUILDER -->
+            <div>
+              <!-- 1. SKU / PRODUCT SELECTOR -->
+              <div style="background:#f8faff; border:1px solid #d0e4ff; border-radius:14px; padding:18px; margin-bottom:18px;">
+                <label class="form-label" style="color:#1488d8; font-size:12px; font-weight:900;">1. Select Product by SKU or Name *</label>
+                <div style="display:flex; gap:10px; margin-top:6px;">
+                  <select class="field" id="socialProductSelect" style="margin:0; flex:1; font-weight:700;">
+                    <option value="">-- Choose a Product (338 Available) --</option>
+                  </select>
+                </div>
+                <div style="display:flex; gap:8px; margin-top:8px;">
+                  <input class="field" id="socialSkuQuickSearch" placeholder="🔍 Quick Filter SKU (e.g. H284131, H184021)..." style="margin:0; font-size:12px; height:40px;">
+                  <button type="button" class="btn blue" id="btnRandomSocialProduct" style="height:40px; padding:0 14px; font-size:11px; white-space:nowrap; border-radius:8px;">🎲 Pick Random</button>
+                </div>
+              </div>
+
+              <!-- 2. MEDIA TYPE & CUSTOM ASSET PICKER (IMAGE OR VIDEO OF YOUR CHOICE) -->
+              <div style="background:#fff9f0; border:1px solid #ffe0b2; border-radius:14px; padding:18px; margin-bottom:18px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <label class="form-label" style="color:#d97706; font-size:12px; font-weight:900; margin:0;">2. Media Choice: Photo or Video *</label>
+                  <span id="activeMediaTypeBadge" style="background:#d97706; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:6px;">🖼️ Product Photo</span>
+                </div>
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;" id="socialMediaChoiceButtons">
+                  <button type="button" class="btn active-media-btn" data-media-type="product" style="height:34px; padding:0 12px; font-size:11px; font-weight:800; border-radius:8px; border:1px solid #d97706; background:#d97706; color:#fff;">📸 SKU Auto Photo</button>
+                  <button type="button" class="btn" data-media-type="custom-image" style="height:34px; padding:0 12px; font-size:11px; font-weight:800; border-radius:8px; border:1px solid var(--line); background:#fff; color:#333;">🖼️ Upload Custom Photo</button>
+                  <button type="button" class="btn" data-media-type="video" style="height:34px; padding:0 12px; font-size:11px; font-weight:800; border-radius:8px; border:1px solid var(--line); background:#fff; color:#333;">📹 Upload / Action Video</button>
+                </div>
+
+                <!-- UPLOAD FILE / URL INPUT CONTAINER -->
+                <div id="socialCustomMediaUploadBox" style="display:none; background:#fff; border:1.5px dashed #d97706; border-radius:10px; padding:12px; margin-top:8px;">
+                  <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                    <label class="btn blue" style="height:36px; padding:0 14px; font-size:11px; font-weight:900; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                      <span>📁 Choose Image / Video File</span>
+                      <input type="file" id="socialCustomMediaFileInput" accept="image/*,video/*" style="display:none">
+                    </label>
+                    <span style="font-size:11px; color:#888;">or paste direct media URL:</span>
+                  </div>
+                  <input class="field" id="socialCustomMediaUrlInput" placeholder="https://example.com/custom-promo-banner.jpg or .mp4" style="margin:8px 0 0; height:38px; font-size:11px;">
+                </div>
+              </div>
+
+              <!-- 3. MARKETING TONE SELECTOR -->
+              <div style="margin-bottom:18px;">
+                <label class="form-label" style="font-size:12px; font-weight:800;">3. Choose Content Tone & Marketing Angle</label>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;" id="socialToneButtons">
+                  <button type="button" class="btn active-tone" data-tone="hype" style="height:36px; padding:0 14px; font-size:11px; font-weight:800; border-radius:8px; border:1px solid #1488d8; background:#1488d8; color:#fff;">⚡ High-Speed Hype</button>
+                  <button type="button" class="btn" data-tone="specs" style="height:36px; padding:0 14px; font-size:11px; font-weight:800; border-radius:8px; border:1px solid var(--line); background:#fff; color:#333;">🏎️ Tech & Specs</button>
+                  <button type="button" class="btn" data-tone="deal" style="height:36px; padding:0 14px; font-size:11px; font-weight:800; border-radius:8px; border:1px solid var(--line); background:#fff; color:#333;">🔥 Deal & Limited Stock</button>
+                  <button type="button" class="btn" data-tone="short" style="height:36px; padding:0 14px; font-size:11px; font-weight:800; border-radius:8px; border:1px solid var(--line); background:#fff; color:#333;">📱 WhatsApp / Story Teaser</button>
+                </div>
+              </div>
+
+              <!-- 3. CUSTOM PROMO TAGLINE / CODE -->
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px;">
+                <div>
+                  <label class="form-label" style="font-size:11px;">Promo / Coupon Code (Optional)</label>
+                  <input class="field" id="socialPromoCode" placeholder="e.g. HYPERXGT10" value="HYPERXGT10" style="margin:0; height:42px; font-weight:800; color:#1488d8;">
+                </div>
+                <div>
+                  <label class="form-label" style="font-size:11px;">Custom Hook / Tagline (Optional)</label>
+                  <input class="field" id="socialCustomTagline" placeholder="e.g. Weekend Track Ready!" style="margin:0; height:42px;">
+                </div>
+              </div>
+
+              <!-- 4. GENERATED CAPTION EDITOR -->
+              <div style="margin-bottom:18px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label class="form-label" style="margin:0; font-size:12px; font-weight:900;">3. Generated Post Caption & Content</label>
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <span id="socialCharCount" style="font-size:11px; color:#888; font-weight:700;">0 chars</span>
+                    <button type="button" id="btnRegenerateCaption" style="background:none; border:none; color:#1488d8; font-weight:800; font-size:11px; cursor:pointer;">⚡ Regenerate</button>
+                  </div>
+                </div>
+                <textarea class="field" id="socialCaptionText" rows="9" style="height:auto; min-height:180px; padding:12px; font-size:12.5px; line-height:1.5; font-family:Inter,sans-serif; margin:0;" placeholder="Select a product SKU above to generate professional social content..."></textarea>
+              </div>
+
+              <!-- 5. ONE-CLICK HASHTAG CHIPS -->
+              <div style="margin-bottom:20px;">
+                <label class="form-label" style="font-size:11px; margin-bottom:6px;">Quick-Insert Hashtags (Click to add to caption):</label>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;" id="socialHashtagChips">
+                  <span class="social-chip" onclick="appendSocialHashtag('#HyperXGT')">#HyperXGT</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#RCCars')">#RCCars</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#DriftRC')">#DriftRC</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#RCRacing')">#RCRacing</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#OffRoadCrawler')">#OffRoadCrawler</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#BrushlessRC')">#BrushlessRC</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#TraxxasIndia')">#TraxxasIndia</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#HobbyGrade')">#HobbyGrade</span>
+                  <span class="social-chip" onclick="appendSocialHashtag('#RCIndia')">#RCIndia</span>
+                </div>
+              </div>
+
+              <!-- 6. 1-CLICK PUBLISHING & SHARING TOOLBAR -->
+              <div style="background:#f4f6f9; border:1px solid #e1e4e8; border-radius:14px; padding:18px;">
+                <label class="form-label" style="font-size:12px; font-weight:900; margin-bottom:10px;">4. 🚀 Direct 1-Click Publishing & Sharing</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <button type="button" class="btn" id="btnShareInstagram" style="background:linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color:#fff; height:44px; font-size:12px; font-weight:900; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer; box-shadow:0 2px 8px rgba(220,39,67,0.3);">
+                    <span>📸 Post to Instagram</span>
+                  </button>
+                  <button type="button" class="btn" id="btnShareYouTube" style="background:#FF0000; color:#fff; height:44px; font-size:12px; font-weight:900; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer; box-shadow:0 2px 8px rgba(255,0,0,0.25);">
+                    <span>▶️ Post to YouTube</span>
+                  </button>
+                  <button type="button" class="btn" id="btnShareWhatsApp" style="background:#25D366; color:#fff; height:44px; font-size:12px; font-weight:900; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;">
+                    <span>💬 Share to WhatsApp</span>
+                  </button>
+                  <button type="button" class="btn" id="btnShareTwitter" style="background:#000; color:#fff; height:44px; font-size:12px; font-weight:900; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;">
+                    <span>𝕏 Post on X (Twitter)</span>
+                  </button>
+                  <button type="button" class="btn" id="btnShareFacebook" style="background:#1877F2; color:#fff; height:44px; font-size:12px; font-weight:900; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;">
+                    <span>📘 Share to Facebook</span>
+                  </button>
+                  <button type="button" class="btn" id="btnShareLinkedIn" style="background:#0A66C2; color:#fff; height:44px; font-size:12px; font-weight:900; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;">
+                    <span>💼 Post to LinkedIn</span>
+                  </button>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:12px;">
+                  <button type="button" class="btn dark" id="btnCopyCaption" style="flex:1; height:44px; font-size:12px; font-weight:900; border-radius:10px;">
+                    📋 Copy Caption + Hashtags
+                  </button>
+                  <button type="button" class="btn blue" id="btnDownloadPostImage" style="flex:1; height:44px; font-size:12px; font-weight:900; border-radius:10px;">
+                    💾 Download Ready Media Asset
+                  </button>
+                </div>
+              </div>
+
+              <!-- 7. AUTOMATED WEBHOOK POSTING (Optional Zapier / Make / Buffer API) -->
+              <div style="margin-top:16px; background:#fff; border:1px solid #e1e4e8; border-radius:14px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" id="socialWebhookToggleHeader">
+                  <div style="font-size:12px; font-weight:800; color:#444;">⚙️ Social Auto-Publishing Webhook (Zapier / Buffer / Meta API)</div>
+                  <span id="webhookToggleIcon" style="font-size:12px; color:#888;">▼</span>
+                </div>
+                <div id="socialWebhookPanel" style="display:none; margin-top:12px;">
+                  <label class="form-label" style="font-size:11px;">Webhook Dispatch URL (e.g. Zapier / Make webhook):</label>
+                  <div style="display:flex; gap:8px;">
+                    <input class="field" id="socialWebhookUrl" placeholder="https://hooks.zapier.com/hooks/catch/..." style="margin:0; flex:1; height:40px; font-size:11px;">
+                    <button type="button" class="btn blue" id="btnTriggerWebhook" style="height:40px; padding:0 14px; font-size:11px; white-space:nowrap; border-radius:8px;">🚀 Send Webhook</button>
+                  </div>
+                  <div style="font-size:10px; color:#777; margin-top:6px;">Dispatches JSON payload with { sku, name, price, imageUrl, caption, link } to your automation bridge.</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: LIVE POST PREVIEW & GALLERY ASSETS -->
+            <div>
+              <label class="form-label" style="font-size:12px; font-weight:900; color:#111; margin-bottom:8px;">Live Social Media Mockup Preview</label>
+              
+              <!-- SOCIAL POST MOCKUP CARD -->
+              <div style="background:#fff; border:1px solid #e1e4e8; border-radius:18px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.06);">
+                <!-- POST HEADER -->
+                <div style="padding:14px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #f0f0f0;">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:36px; height:36px; border-radius:50%; background:#000; display:grid; place-items:center; border:2px solid #ed1c24;">
+                      <span style="color:#fff; font-size:11px; font-weight:900;">HX</span>
+                    </div>
+                    <div>
+                      <div style="font-size:13px; font-weight:900; color:#111; display:flex; align-items:center; gap:4px;">
+                        hyperxgt_rc <span style="color:#1488d8; font-size:12px;">✓</span>
+                      </div>
+                      <div style="font-size:10px; color:#888;">India's Hobby Grade RC Garage</div>
+                    </div>
+                  </div>
+                  <span style="font-size:18px; color:#888;">•••</span>
+                </div>
+
+                <!-- POST MEDIA CONTAINER (PHOTO OR VIDEO) -->
+                <div style="position:relative; width:100%; aspect-ratio:1/1; background:#f8f9fa; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                  <img id="socialPreviewImage" src="assets/hyperxgt-logo.png" alt="Product Preview" style="width:100%; height:100%; object-fit:contain; padding:16px; transition:transform 0.2s;">
+                  <video id="socialPreviewVideo" controls loop autoplay muted playsinline style="display:none; width:100%; height:100%; object-fit:cover; background:#000;"></video>
+                  <span id="socialPreviewCatBadge" style="position:absolute; top:12px; left:12px; background:rgba(0,0,0,0.85); color:#fff; font-size:9px; font-weight:900; padding:4px 10px; border-radius:999px; letter-spacing:0.05em;">RACING CARS</span>
+                  <span id="socialPreviewPriceBadge" style="position:absolute; bottom:12px; right:12px; background:#1488d8; color:#fff; font-size:11px; font-weight:900; padding:6px 12px; border-radius:10px; box-shadow:0 4px 12px rgba(20,136,216,0.4);">₹11,237</span>
+                  <span id="socialVideoTagBadge" style="display:none; position:absolute; top:12px; right:12px; background:#ed1c24; color:#fff; font-size:9px; font-weight:900; padding:4px 10px; border-radius:999px; letter-spacing:0.05em;">🎬 REEL / VIDEO</span>
+                </div>
+
+                <!-- POST ACTION ICONS -->
+                <div style="padding:12px 16px 6px; display:flex; justify-content:space-between; align-items:center; font-size:18px;">
+                  <div style="display:flex; gap:14px;">
+                    <span style="cursor:pointer; color:#ed1c24;">❤️</span>
+                    <span style="cursor:pointer;">💬</span>
+                    <span style="cursor:pointer;">✈️</span>
+                  </div>
+                  <span style="cursor:pointer;">🔖</span>
+                </div>
+
+                <!-- POST CAPTION PREVIEW -->
+                <div style="padding:4px 16px 16px;">
+                  <div style="font-size:11px; font-weight:800; color:#111; margin-bottom:4px;">1,248 likes</div>
+                  <div id="socialLivePreviewCaption" style="font-size:11.5px; line-height:1.45; color:#333; max-height:160px; overflow-y:auto; word-break:break-word;">
+                    <strong>hyperxgt_rc</strong> Select a product SKU on the left to see the live caption preview...
+                  </div>
+                  <div style="font-size:10px; color:#999; margin-top:8px; text-transform:uppercase;">JUST NOW</div>
+                </div>
+
+                <!-- DIRECT SHOP LINK CTA -->
+                <div style="padding:10px 16px 14px; border-top:1px solid #f0f0f0; background:#fafbfc;">
+                  <a id="socialPreviewShopBtn" href="shop.html" target="_blank" style="display:flex; align-items:center; justify-content:center; gap:6px; width:100%; height:38px; background:#111; color:#fff; font-size:11.5px; font-weight:900; border-radius:8px; text-decoration:none;">
+                    🛒 View Product on Live Store →
+                  </a>
+                </div>
+              </div>
+
+              <!-- PRODUCT MULTI-PHOTO GALLERY SWITCHER -->
+              <div style="margin-top:18px; background:#f8f9fa; border:1px solid #e1e4e8; border-radius:14px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <label class="form-label" style="font-size:11px; font-weight:800; margin:0;">Available Product Photos (Click to switch preview):</label>
+                  <span id="socialGalleryCount" style="font-size:10px; color:#888;">1 photo</span>
+                </div>
+                <div id="socialGalleryThumbs" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                  <!-- Dynamically populated thumbnails -->
+                </div>
+              </div>
+
+              <!-- QUICK LAUNCH EXTERNAL CHANNELS -->
+              <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="btn clear" style="flex:1; min-width:110px; height:34px; font-size:10.5px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#fff; border:1px solid #ccc; border-radius:8px; color:#333;">📸 Instagram</a>
+                <a href="https://business.facebook.com" target="_blank" rel="noopener noreferrer" class="btn clear" style="flex:1; min-width:110px; height:34px; font-size:10.5px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#fff; border:1px solid #ccc; border-radius:8px; color:#333;">💼 Meta Suite</a>
+                <a href="https://canva.com" target="_blank" rel="noopener noreferrer" class="btn clear" style="flex:1; min-width:110px; height:34px; font-size:10.5px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; gap:4px; background:#fff; border:1px solid #ccc; border-radius:8px; color:#333;">🎨 Canva</a>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </section>

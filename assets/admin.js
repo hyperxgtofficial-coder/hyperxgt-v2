@@ -1080,9 +1080,561 @@ async function fetchLiveBackendProductsAdmin() {
         saveProductsDB(P);
         if (typeof renderAdminProducts === "function") renderAdminProducts();
         if (typeof populateAdminCatFilter === "function") populateAdminCatFilter();
+        if (typeof populateSocialProductList === "function") populateSocialProductList();
       }
     }
   } catch(e) {}
+}
+
+// ====================================================================
+// SOCIAL MEDIA STUDIO & CONTENT PUBLISHER ENGINE
+// ====================================================================
+let currentSocialProduct = null;
+let currentSocialImage = "";
+let currentSocialTone = "hype";
+let currentSocialMediaType = "product"; // "product" | "custom-image" | "video"
+
+function populateSocialProductList(filterQuery = "") {
+  const select = $("#socialProductSelect");
+  if (!select) return;
+
+  const q = String(filterQuery || "").toLowerCase().trim();
+  let list = Array.isArray(P) ? P.filter(p => p && p.id != null) : [];
+
+  if (q) {
+    list = list.filter(p => 
+      String(p.sku || "").toLowerCase().includes(q) || 
+      String(p.name || "").toLowerCase().includes(q) ||
+      String(p.category || "").toLowerCase().includes(q)
+    );
+  }
+
+  const badge = $("#socialBadgeCount");
+  if (badge) badge.textContent = `${list.length} Products Ready`;
+
+  const previousVal = select.value;
+  select.innerHTML = `<option value="">-- Choose a Product (${list.length} Listed) --</option>` +
+    list.map(p => `
+      <option value="${p.id}" ${String(p.id) === String(previousVal) ? 'selected' : ''}>
+        [${esc(p.sku)}] ${esc(p.name)} — ${INR(p.price)} (${esc(p.category)})
+      </option>
+    `).join("");
+
+  if (!select.value && list.length > 0 && !q) {
+    select.value = list[0].id;
+    onSocialProductSelected(list[0].id);
+  }
+}
+
+function onSocialProductSelected(productId, customImg = "") {
+  const p = (P || []).find(x => String(x.id) === String(productId));
+  if (!p) return;
+
+  currentSocialProduct = p;
+  
+  if (currentSocialMediaType === "product" || !currentSocialImage) {
+    currentSocialImage = customImg || p.image || (Array.isArray(p.images) && p.images[0]) || "assets/hyperxgt-logo.png";
+  }
+
+  applySocialMediaDisplay();
+
+  const catBadge = $("#socialPreviewCatBadge");
+  if (catBadge) catBadge.textContent = (p.category || "RC PERFORMANCE").toUpperCase();
+
+  const priceBadge = $("#socialPreviewPriceBadge");
+  if (priceBadge) priceBadge.textContent = INR(p.price);
+
+  const shopBtn = $("#socialPreviewShopBtn");
+  if (shopBtn) shopBtn.href = `product.html?id=${p.id}`;
+
+  // Populate Gallery Thumbnails
+  renderSocialGalleryThumbs(p);
+
+  // Generate Initial Caption
+  refreshSocialCaption();
+}
+
+function applySocialMediaDisplay() {
+  const prevImg = $("#socialPreviewImage");
+  const prevVid = $("#socialPreviewVideo");
+  const vidBadge = $("#socialVideoTagBadge");
+  const mediaBadge = $("#activeMediaTypeBadge");
+
+  const isVideo = currentSocialMediaType === "video" || 
+    (currentSocialImage && (/\.(mp4|webm|ogg|mov)$/i.test(currentSocialImage) || currentSocialImage.startsWith("data:video/")));
+
+  if (isVideo) {
+    if (prevImg) prevImg.style.display = "none";
+    if (prevVid) {
+      prevVid.style.display = "block";
+      prevVid.src = currentSocialImage;
+    }
+    if (vidBadge) vidBadge.style.display = "inline-block";
+    if (mediaBadge) {
+      mediaBadge.textContent = "📹 Action Video";
+      mediaBadge.style.background = "#ed1c24";
+    }
+  } else {
+    if (prevVid) {
+      prevVid.pause();
+      prevVid.style.display = "none";
+    }
+    if (prevImg) {
+      prevImg.style.display = "block";
+      prevImg.src = safeUrl(currentSocialImage, "assets/hyperxgt-logo.png");
+    }
+    if (vidBadge) vidBadge.style.display = "none";
+    if (mediaBadge) {
+      mediaBadge.textContent = currentSocialMediaType === "custom-image" ? "🖼️ Custom Photo" : "📸 SKU Photo";
+      mediaBadge.style.background = "#d97706";
+    }
+  }
+}
+
+function renderSocialGalleryThumbs(p) {
+  const container = $("#socialGalleryThumbs");
+  const countLabel = $("#socialGalleryCount");
+  if (!container) return;
+
+  const allPhotos = [...new Set([p.image, ...(Array.isArray(p.images) ? p.images : [])])].filter(Boolean);
+  if (countLabel) countLabel.textContent = `${allPhotos.length} photo${allPhotos.length === 1 ? '' : 's'}`;
+
+  if (!allPhotos.length) {
+    container.innerHTML = `<span style="font-size:11px;color:#888;">No uploaded photos for this model yet.</span>`;
+    return;
+  }
+
+  container.innerHTML = allPhotos.map((url, idx) => `
+    <div onclick="switchSocialPreviewImage('${esc(url)}')" style="width:48px;height:48px;border-radius:8px;border:2px solid ${url === currentSocialImage ? '#1488d8' : '#e0e0e0'};overflow:hidden;background:#fff;cursor:pointer;padding:2px;display:grid;place-items:center;">
+      <img src="${safeUrl(url)}" alt="Thumbnail ${idx+1}" style="width:100%;height:100%;object-fit:contain;">
+    </div>
+  `).join("");
+}
+
+window.switchSocialPreviewImage = function(url) {
+  currentSocialMediaType = "product";
+  currentSocialImage = url;
+  applySocialMediaDisplay();
+  if (currentSocialProduct) renderSocialGalleryThumbs(currentSocialProduct);
+  toast("Updated preview photo from gallery 📸");
+};
+
+function refreshSocialCaption() {
+  if (!currentSocialProduct) return;
+  const promoCode = ($("#socialPromoCode")?.value || "HYPERXGT10").trim();
+  const customTagline = ($("#socialCustomTagline")?.value || "").trim();
+
+  const isVideo = currentSocialMediaType === "video" || 
+    (currentSocialImage && (/\.(mp4|webm|ogg|mov)$/i.test(currentSocialImage) || currentSocialImage.startsWith("data:video/")));
+
+  const caption = buildSocialCaption(currentSocialProduct, currentSocialTone, promoCode, customTagline, isVideo);
+  const textarea = $("#socialCaptionText");
+  if (textarea) {
+    textarea.value = caption;
+    updateSocialCharCount();
+  }
+
+  const livePreview = $("#socialLivePreviewCaption");
+  if (livePreview) {
+    livePreview.innerHTML = `<strong>hyperxgt_rc</strong> ${esc(caption).replace(/\n/g, '<br>')}`;
+  }
+}
+
+function buildSocialCaption(p, tone, promoCode, customTagline, isVideo = false) {
+  const siteUrl = "https://hyperxgt.com";
+  const productUrl = `${siteUrl}/product.html?id=${p.id}`;
+  const discountText = p.discount ? `Save ${p.discount}% OFF (MRP ${INR(p.mrp)})` : `Best Price: ${INR(p.price)}`;
+  const specsLine = [p.scale, p.speed, p.drive, p.motor].filter(Boolean).join(" • ");
+  const videoHook = isVideo ? "🎥 WATCH THIS BEAST IN ACTION! Turn on sound 🔊💨\n" : "";
+
+  if (tone === "specs") {
+    return `${videoHook}⚙️ TECHNICAL SPEC SPOTLIGHT: ${p.name.toUpperCase()} [SKU: ${p.sku}]
+${customTagline ? `\n💡 ${customTagline}\n` : ''}
+Engineered for hardcore RC hobbyists & precision performance:
+🏎️ Scale: ${p.scale || '1:16 Scale'}
+⚡ Top Speed: ${p.speed || '45+ KM/H'}
+🛡️ Drive System: ${p.drive || '4WD All-Wheel Drive'}
+🔋 Power Unit: ${p.motor || 'High-Torque Performance Motor'}
+🎯 Control: 2.4GHz Pro Multi-Channel Transmitter
+
+💰 Price: ${INR(p.price)} (${discountText})
+🎁 Use code "${promoCode}" for extra 10% OFF!
+📦 Free Express Pan-India Shipping & 7-Day Transit Guarantee.
+
+👉 Get full specs & order: ${productUrl}
+
+#HyperXGT #RCCars #RCSpecs #RCIndia #TraxxasIndia #RCRacing #HobbyGradeRC #Brushless4WD #OffRoadRC`;
+  }
+
+  if (tone === "deal") {
+    return `${videoHook}🚨 LIMITED STOCK FLASH DEAL! 🚨
+${p.name} [SKU: ${p.sku}]
+${customTagline ? `\n🔥 ${customTagline}\n` : ''}
+⚡ Only ${p.stock || 5} units left in the garage ready for dispatch!
+
+💥 Deal Price: ${INR(p.price)} (Regular MRP: ${INR(p.mrp || p.price * 1.25)})
+🎟️ Extra 10% OFF with code: ${promoCode}
+🚚 Same-Day / Express Courier Dispatch across India
+🛡️ 100% Genuine Hobby-Grade Spares & Support
+
+👇 Grab yours before stock runs out:
+${productUrl}
+
+#FlashSale #RCCarDeals #HyperXGT #RCOffers #DriftCars #RCRacingIndia #LimitedDrop`;
+  }
+
+  if (tone === "short") {
+    return `${videoHook}🏎️ ${p.name} (${p.scale || '1:16'} ${p.drive || '4WD'})
+${customTagline ? `\n${customTagline}\n` : ''}
+⚡ Speed: ${p.speed || '50+ KM/H'} | Price: ${INR(p.price)}
+🎟️ Code: ${promoCode} (10% OFF)
+
+🛒 Buy Now: ${productUrl}
+
+#HyperXGT #RCCars #RCIndia`;
+  }
+
+  // Default: Hype / High-Speed Racing
+  return `${videoHook}🔥 UNLEASH PURE RACING ADRENALINE! 🔥
+Meet the all-new ${p.name.toUpperCase()} (SKU: ${p.sku})! 🏎️💨
+${customTagline ? `\n✨ ${customTagline}\n` : ''}
+Built for high-speed dominance, technical drifts, and rugged durability:
+🏁 Performance: ${specsLine || '4WD High-Torque Racing Power'}
+🏆 Category: ${p.category || 'High-Speed RC'}
+💰 Special Garage Price: ${INR(p.price)} (${discountText})
+
+🎁 Claim your driver discount! Use code "${promoCode}" at checkout.
+
+👇 Tap the link to get track-ready:
+${productUrl}
+
+#HyperXGT #RCCars #DriftRC #RCRacing #RCIndia #HobbyGradeRC #OffRoadCrawler #BrushlessRC #RCCommunity`;
+}
+
+window.appendSocialHashtag = function(tag) {
+  const textarea = $("#socialCaptionText");
+  if (!textarea) return;
+  if (!textarea.value.includes(tag)) {
+    textarea.value = textarea.value.trim() + " " + tag;
+    updateSocialCharCount();
+    const livePreview = $("#socialLivePreviewCaption");
+    if (livePreview) {
+      livePreview.innerHTML = `<strong>hyperxgt_rc</strong> ${esc(textarea.value).replace(/\n/g, '<br>')}`;
+    }
+    toast(`Added ${tag} ✓`);
+  }
+};
+
+function updateSocialCharCount() {
+  const textarea = $("#socialCaptionText");
+  const counter = $("#socialCharCount");
+  if (textarea && counter) {
+    const len = textarea.value.length;
+    counter.textContent = `${len} chars`;
+  }
+}
+
+window.toggleSocialWebhookSection = function() {
+  const panel = $("#socialWebhookPanel");
+  const icon = $("#webhookToggleIcon");
+  if (!panel) return;
+  const isHidden = panel.style.display === "none";
+  panel.style.display = isHidden ? "block" : "none";
+  if (icon) icon.textContent = isHidden ? "▲" : "▼";
+};
+
+function initSocialPublisher() {
+  populateSocialProductList();
+
+  const select = $("#socialProductSelect");
+  if (select) {
+    select.onchange = function() {
+      onSocialProductSelected(select.value);
+    };
+  }
+
+  const quickSearch = $("#socialSkuQuickSearch");
+  if (quickSearch) {
+    quickSearch.oninput = function() {
+      populateSocialProductList(quickSearch.value);
+    };
+  }
+
+  const btnRandom = $("#btnRandomSocialProduct");
+  if (btnRandom) {
+    btnRandom.onclick = function() {
+      if (!Array.isArray(P) || !P.length) return;
+      const randomProd = P[Math.floor(Math.random() * P.length)];
+      if (select) select.value = randomProd.id;
+      onSocialProductSelected(randomProd.id);
+      toast(`Loaded ${randomProd.sku} 🎲`);
+    };
+  }
+
+  // Media Choice Mode Buttons (Product Photo, Custom Photo, Video)
+  $$("#socialMediaChoiceButtons button").forEach(btn => {
+    btn.onclick = function() {
+      $$("#socialMediaChoiceButtons button").forEach(b => {
+        b.style.background = "#fff";
+        b.style.color = "#333";
+        b.style.borderColor = "var(--line)";
+      });
+      btn.style.background = "#d97706";
+      btn.style.color = "#fff";
+      btn.style.borderColor = "#d97706";
+
+      const type = btn.dataset.mediaType || "product";
+      currentSocialMediaType = type;
+
+      const uploadBox = $("#socialCustomMediaUploadBox");
+      if (uploadBox) {
+        uploadBox.style.display = (type === "custom-image" || type === "video") ? "block" : "none";
+      }
+
+      if (type === "product") {
+        if (currentSocialProduct) {
+          currentSocialImage = currentSocialProduct.image || "assets/hyperxgt-logo.png";
+        }
+      } else if (type === "video") {
+        if (currentSocialProduct && currentSocialProduct.video_url) {
+          currentSocialImage = currentSocialProduct.video_url;
+        }
+      }
+
+      applySocialMediaDisplay();
+      refreshSocialCaption();
+      toast(`Media mode: ${btn.textContent.trim()} 🎬`);
+    };
+  });
+
+  // Custom Media File Uploader Handler
+  const customFileInput = $("#socialCustomMediaFileInput");
+  if (customFileInput) {
+    customFileInput.onchange = async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      toast(`Loading ${file.name}...`);
+      if (file.type.startsWith("image/")) {
+        currentSocialMediaType = "custom-image";
+        const base64 = await compressImageFile(file);
+        currentSocialImage = base64;
+        applySocialMediaDisplay();
+        refreshSocialCaption();
+        toast("Loaded custom image into post preview 🖼️");
+      } else if (file.type.startsWith("video/")) {
+        currentSocialMediaType = "video";
+        const videoDataUrl = await new Promise((res, rej) => {
+          const reader = new FileReader();
+          reader.onload = () => res(reader.result);
+          reader.onerror = rej;
+          reader.readAsDataURL(file);
+        });
+        currentSocialImage = videoDataUrl;
+        applySocialMediaDisplay();
+        refreshSocialCaption();
+        toast("Loaded custom video into post preview 📹");
+      }
+    };
+  }
+
+  // Custom Media Direct URL Handler
+  const customUrlInput = $("#socialCustomMediaUrlInput");
+  if (customUrlInput) {
+    customUrlInput.oninput = function() {
+      const url = customUrlInput.value.trim();
+      if (!url) return;
+      if (/\.(mp4|webm|ogg|mov)$/i.test(url)) {
+        currentSocialMediaType = "video";
+      } else {
+        currentSocialMediaType = "custom-image";
+      }
+      currentSocialImage = url;
+      applySocialMediaDisplay();
+      refreshSocialCaption();
+    };
+  }
+
+  // Tone Buttons
+  $$("#socialToneButtons button").forEach(btn => {
+    btn.onclick = function() {
+      $$("#socialToneButtons button").forEach(b => {
+        b.style.background = "#fff";
+        b.style.color = "#333";
+        b.style.borderColor = "var(--line)";
+      });
+      btn.style.background = "#1488d8";
+      btn.style.color = "#fff";
+      btn.style.borderColor = "#1488d8";
+      currentSocialTone = btn.dataset.tone || "hype";
+      refreshSocialCaption();
+      toast(`Switched tone to ${btn.textContent.trim()} ⚡`);
+    };
+  });
+
+  const promoInput = $("#socialPromoCode");
+  if (promoInput) promoInput.oninput = refreshSocialCaption;
+
+  const taglineInput = $("#socialCustomTagline");
+  if (taglineInput) taglineInput.oninput = refreshSocialCaption;
+
+  const btnRegen = $("#btnRegenerateCaption");
+  if (btnRegen) btnRegen.onclick = () => { refreshSocialCaption(); toast("Caption regenerated ⚡"); };
+
+  const captionText = $("#socialCaptionText");
+  if (captionText) {
+    captionText.oninput = function() {
+      updateSocialCharCount();
+      const livePreview = $("#socialLivePreviewCaption");
+      if (livePreview) {
+        livePreview.innerHTML = `<strong>hyperxgt_rc</strong> ${esc(captionText.value).replace(/\n/g, '<br>')}`;
+      }
+    };
+  }
+
+  const btnCopy = $("#btnCopyCaption");
+  if (btnCopy) {
+    btnCopy.onclick = async function() {
+      const text = $("#socialCaptionText")?.value || "";
+      if (!text) return toast("No caption to copy.");
+      try {
+        await navigator.clipboard.writeText(text);
+        toast("Copied caption + hashtags to clipboard! Ready to paste into Instagram / Meta ✓");
+      } catch(e) {
+        toast("Copied caption text ✓");
+      }
+    };
+  }
+
+  const btnDownloadImg = $("#btnDownloadPostImage");
+  if (btnDownloadImg) {
+    btnDownloadImg.onclick = function() {
+      if (!currentSocialImage) return toast("No media asset selected to download.");
+      const a = document.createElement("a");
+      a.href = currentSocialImage;
+      const ext = currentSocialMediaType === "video" ? "mp4" : "jpg";
+      a.download = `${currentSocialProduct ? currentSocialProduct.sku : 'hyperxgt'}_social_asset.${ext}`;
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toast(`Downloading ${ext.toUpperCase()} marketing asset ✓`);
+    };
+  }
+
+  const btnInstagram = $("#btnShareInstagram");
+  if (btnInstagram) {
+    btnInstagram.onclick = async function() {
+      const text = $("#socialCaptionText")?.value || "";
+      if (!text) return toast("Please select a product first.");
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch(e) {}
+      if (currentSocialImage && btnDownloadImg) {
+        btnDownloadImg.click();
+      }
+      toast("Copied caption + downloaded media asset! Opening Instagram 📸");
+      setTimeout(() => {
+        window.open("https://www.instagram.com/", "_blank");
+      }, 400);
+    };
+  }
+
+  const btnYouTube = $("#btnShareYouTube");
+  if (btnYouTube) {
+    btnYouTube.onclick = async function() {
+      const text = $("#socialCaptionText")?.value || "";
+      if (!text) return toast("Please select a product first.");
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch(e) {}
+      if (currentSocialImage && btnDownloadImg) {
+        btnDownloadImg.click();
+      }
+      toast("Copied caption + tags! Opening YouTube Studio ▶️");
+      setTimeout(() => {
+        window.open("https://studio.youtube.com/channel/UC/videos/upload?d=ud", "_blank");
+      }, 400);
+    };
+  }
+
+  const btnWhatsApp = $("#btnShareWhatsApp");
+  if (btnWhatsApp) {
+    btnWhatsApp.onclick = function() {
+      const text = $("#socialCaptionText")?.value || "";
+      if (!text) return toast("Please select a product first.");
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank");
+    };
+  }
+
+  const btnTwitter = $("#btnShareTwitter");
+  if (btnTwitter) {
+    btnTwitter.onclick = function() {
+      const text = $("#socialCaptionText")?.value || "";
+      const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text.slice(0, 270))}`;
+      window.open(shareUrl, "_blank");
+    };
+  }
+
+  const btnFacebook = $("#btnShareFacebook");
+  if (btnFacebook) {
+    btnFacebook.onclick = function() {
+      const p = currentSocialProduct;
+      const prodUrl = p ? `https://hyperxgt.com/product.html?id=${p.id}` : `https://hyperxgt.com`;
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(prodUrl)}`, "_blank");
+    };
+  }
+
+  const btnLinkedIn = $("#btnShareLinkedIn");
+  if (btnLinkedIn) {
+    btnLinkedIn.onclick = function() {
+      const p = currentSocialProduct;
+      const prodUrl = p ? `https://hyperxgt.com/product.html?id=${p.id}` : `https://hyperxgt.com`;
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(prodUrl)}`, "_blank");
+    };
+  }
+
+  const webhookHeader = $("#socialWebhookToggleHeader");
+  if (webhookHeader) {
+    webhookHeader.onclick = toggleSocialWebhookSection;
+  }
+
+  const btnWebhook = $("#btnTriggerWebhook");
+  if (btnWebhook) {
+    btnWebhook.onclick = async function() {
+      const hookUrl = ($("#socialWebhookUrl")?.value || "").trim();
+      if (!hookUrl) return alert("Please enter your Zapier, Make.com, or Buffer Webhook URL.");
+      if (!currentSocialProduct) return alert("Please select a product first.");
+
+      toast("Dispatching social post payload to webhook...");
+      try {
+        const payload = {
+          event: "social_post_publish",
+          timestamp: new Date().toISOString(),
+          sku: currentSocialProduct.sku,
+          name: currentSocialProduct.name,
+          category: currentSocialProduct.category,
+          price: currentSocialProduct.price,
+          mediaType: currentSocialMediaType,
+          imageUrl: currentSocialImage,
+          productUrl: `https://hyperxgt.com/product.html?id=${currentSocialProduct.id}`,
+          caption: $("#socialCaptionText")?.value || ""
+        };
+
+        await fetch(hookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          mode: 'no-cors'
+        });
+        toast("Social post payload dispatched successfully 🚀");
+      } catch(err) {
+        console.error("Webhook error:", err);
+        toast("Webhook dispatch sent (check endpoint logs) ✓");
+      }
+    };
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -1100,6 +1652,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCollabForm();
   initCsvBulkUploader();
   initDatabaseSyncHub();
+  initSocialPublisher();
 
   const openAddBtn = $("#btnOpenAddModal");
   if (openAddBtn) openAddBtn.onclick = openAddModal;
