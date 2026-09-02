@@ -1,5 +1,9 @@
 {
   "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/shiprocket", "destination": "/api/integrations" },
+    { "source": "/api/zoho", "destination": "/api/integrations?service=zoho" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

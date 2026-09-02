@@ -95,13 +95,19 @@ async function handleApi(req, res, apiName) {
     return res.status(404).json({ error: 'Not found' });
   }
 
-  const apiPath = path.join(PUBLIC_DIR, 'api', apiName + '.js');
+  let targetName = apiName;
+  if (targetName === 'zoho' || targetName === 'shiprocket') {
+    targetName = 'integrations';
+  }
+
+  const apiPath = path.join(PUBLIC_DIR, 'api', targetName + '.js');
   if (!fs.existsSync(apiPath)) {
     return res.status(404).json({ error: 'No API route named ' + apiName });
   }
 
   const parsedUrl = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
   req.query = Object.fromEntries(parsedUrl.searchParams.entries());
+  if (apiName === 'zoho') req.query.service = 'zoho';
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     try {
