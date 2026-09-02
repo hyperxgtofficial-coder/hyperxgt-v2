@@ -74,6 +74,7 @@
         <button class="admin-tab" data-tab="reviews">💬 Reviews & Unboxing Approvals</button>
         <button class="admin-tab" data-tab="collaborations">🤝 Brand Collaborations</button>
         <button class="admin-tab" data-tab="social">📱 Social Media & Publisher</button>
+        <button class="admin-tab" data-tab="zoho">💼 Zoho One Suite</button>
         <button class="admin-tab" data-tab="database">Database & Shiprocket API Logs</button>
       </div>
 
@@ -470,6 +471,163 @@
             </div>
 
           </div>
+        </div>
+      </section>
+
+      <!-- ZOHO ONE ENTERPRISE SUITE SECTION -->
+      <section id="tab-zoho" class="tab-content">
+        <!-- HEADER -->
+        <div style="background:#fff; border:1px solid #e11d48; border-radius:18px; padding:24px; margin-top:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <h3 style="margin:0; color:#e11d48; font-size:18px">💼 Zoho One Enterprise Suite Integration Hub</h3>
+                <span style="background:#ffe4e6; color:#e11d48; font-size:10px; font-weight:900; padding:3px 8px; border-radius:6px;">OFFICIAL ZOHO REST v3</span>
+              </div>
+              <p style="font-size:12px; color:#666; margin:4px 0 0">Unified enterprise automation connecting <strong>Zoho Books</strong> (GST Invoicing & Sales Accounting), <strong>Zoho Inventory</strong> (Two-Way Stock Sync), and <strong>Zoho CRM</strong> (Customer Garage Leads).</p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span id="zohoLiveStatusBadge" style="background:#f1f5f9; color:#475569; font-weight:800; font-size:11px; padding:6px 12px; border-radius:999px;">⚪ Gateway Ready</span>
+            </div>
+          </div>
+
+          <!-- 1. ZOHO ONE API CONNECTION & OAUTH GATEWAY PANEL -->
+          <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:14px; padding:18px; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h4 style="margin:0; font-size:13px; color:#9f1239; font-weight:900;">🔑 1. Zoho One OAuth API Credentials</h4>
+              <span style="font-size:11px; color:#666;">Data Center: <strong>accounts.zoho.in (India GST)</strong></span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div>
+                <label class="form-label" style="font-size:11px;">Zoho Organization ID *</label>
+                <input class="field" id="zohoOrgId" placeholder="e.g. 60028919102" value="" style="margin:0; height:38px; font-size:11.5px;">
+              </div>
+              <div>
+                <label class="form-label" style="font-size:11px;">Zoho Client ID *</label>
+                <input class="field" id="zohoClientId" placeholder="1000.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" value="" style="margin:0; height:38px; font-size:11.5px;">
+              </div>
+              <div>
+                <label class="form-label" style="font-size:11px;">Zoho Client Secret *</label>
+                <input class="field" type="password" id="zohoClientSecret" placeholder="••••••••••••••••••••••••••••••••" value="" style="margin:0; height:38px; font-size:11.5px;">
+              </div>
+              <div>
+                <label class="form-label" style="font-size:11px;">Zoho Refresh Token (Persistent Auth) *</label>
+                <input class="field" type="password" id="zohoRefreshToken" placeholder="1000.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" value="" style="margin:0; height:38px; font-size:11.5px;">
+              </div>
+            </div>
+
+            <div style="display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <label class="form-label" style="margin:0; font-size:11px; white-space:nowrap;">Data Center:</label>
+                <select class="field" id="zohoDomain" style="margin:0; height:36px; padding:0 10px; width:150px; font-size:11px; font-weight:700;">
+                  <option value="zoho.in" selected>🇮🇳 zoho.in (India / GST)</option>
+                  <option value="zoho.com">🌐 zoho.com (Global)</option>
+                  <option value="zoho.eu">🇪🇺 zoho.eu (Europe)</option>
+                </select>
+              </div>
+              <button type="button" class="btn blue" id="btnSaveZohoConfig" style="height:36px; padding:0 14px; font-size:11px; font-weight:900; border-radius:8px;">💾 Save Credentials</button>
+              <button type="button" class="btn" id="btnTestZohoConn" style="background:#e11d48; color:#fff; height:36px; padding:0 14px; font-size:11px; font-weight:900; border-radius:8px; border:none; cursor:pointer;">⚡ Test Connection to Zoho One</button>
+              <div id="zohoConnStatus" style="font-size:11.5px; font-weight:800; color:#475569;">Ready to authenticate</div>
+            </div>
+          </div>
+
+          <!-- 2. TRIPLE MODULE SYNCHRONIZATION SUITE -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-bottom:20px;">
+            
+            <!-- MODULE A: ZOHO BOOKS -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div style="font-size:13px; font-weight:900; color:#0f172a; display:flex; align-items:center; gap:6px;">
+                    <span>📦 Zoho Books</span>
+                  </div>
+                  <span style="background:#dbeafe; color:#1d4ed8; font-size:9px; font-weight:900; padding:2px 8px; border-radius:6px;">GST INVOICING</span>
+                </div>
+                <p style="font-size:11px; color:#64748b; line-height:1.4; margin:0 0 12px;">Auto-creates GST Invoices & Sales Receipts in Zoho Books for every order. Maps HSN code <strong>95030090</strong> with 18% GST tax bifurcation.</p>
+                <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:8px 12px; font-size:11px; margin-bottom:12px;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                    <span style="color:#64748b;">Ready Store Orders:</span>
+                    <strong id="zohoBooksPendingCount">12 Orders</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:#64748b;">GST Rate:</span>
+                    <strong style="color:#2e7d32;">18% (CGST 9% + SGST 9%)</strong>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn blue" id="btnSyncZohoBooks" style="width:100%; height:38px; font-size:11px; font-weight:900; border-radius:8px;">
+                ⚡ Sync Orders to Zoho Books Invoices
+              </button>
+            </div>
+
+            <!-- MODULE B: ZOHO INVENTORY -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div style="font-size:13px; font-weight:900; color:#0f172a; display:flex; align-items:center; gap:6px;">
+                    <span>🏬 Zoho Inventory</span>
+                  </div>
+                  <span style="background:#fef3c7; color:#b45309; font-size:9px; font-weight:900; padding:2px 8px; border-radius:6px;">STOCK TRACKER</span>
+                </div>
+                <p style="font-size:11px; color:#64748b; line-height:1.4; margin:0 0 12px;">Two-way SKU catalog synchronization between HyperXGT and Zoho Inventory. Updates live quantities and prevents out-of-stock orders.</p>
+                <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:8px 12px; font-size:11px; margin-bottom:12px;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                    <span style="color:#64748b;">Catalog Status:</span>
+                    <strong id="zohoInventorySkuCount">338 Active SKUs</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:#64748b;">Auto-Reorder Point:</span>
+                    <strong style="color:#1488d8;">Active (5 Units)</strong>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn" id="btnSyncZohoInventory" style="width:100%; height:38px; font-size:11px; font-weight:900; border-radius:8px; background:#d97706; color:#fff; border:none; cursor:pointer;">
+                🔄 Push Full Catalog to Zoho Inventory
+              </button>
+            </div>
+
+            <!-- MODULE C: ZOHO CRM -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div style="font-size:13px; font-weight:900; color:#0f172a; display:flex; align-items:center; gap:6px;">
+                    <span>👥 Zoho CRM</span>
+                  </div>
+                  <span style="background:#dcfce7; color:#15803d; font-size:9px; font-weight:900; padding:2px 8px; border-radius:6px;">DRIVER LEADS</span>
+                </div>
+                <p style="font-size:11px; color:#64748b; line-height:1.4; margin:0 0 12px;">Synchronizes Driver Garage member accounts, email addresses, phone numbers, and past purchase history directly into Zoho CRM Contacts.</p>
+                <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:8px 12px; font-size:11px; margin-bottom:12px;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                    <span style="color:#64748b;">CRM Module:</span>
+                    <strong>Contacts & Leads</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:#64748b;">Driver Garage Sync:</span>
+                    <strong style="color:#15803d;">Enabled ✓</strong>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn" id="btnSyncZohoCrm" style="width:100%; height:38px; font-size:11px; font-weight:900; border-radius:8px; background:#15803d; color:#fff; border:none; cursor:pointer;">
+                👤 Sync Customers to Zoho CRM
+              </button>
+            </div>
+
+          </div>
+
+          <!-- 3. REAL-TIME ZOHO ONE ACTIVITY & EVENT AUDIT LOG -->
+          <div style="background:#0f172a; border-radius:14px; padding:16px; color:#f8fafc;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:8px;">
+              <div style="font-size:12px; font-weight:900; color:#38bdf8; display:flex; align-items:center; gap:6px;">
+                <span>📡 Live Zoho One API Event & Sync Log</span>
+              </div>
+              <button type="button" id="btnClearZohoLog" style="background:none; border:none; color:#94a3b8; font-size:10px; cursor:pointer; font-weight:700;">Clear Log</button>
+            </div>
+            <div id="zohoEventLog" style="font-family:monospace; font-size:11px; line-height:1.6; max-height:140px; overflow-y:auto; color:#cbd5e1;">
+              <div>[SYSTEM] Zoho One Enterprise Suite initialized. Ready for API dispatch.</div>
+            </div>
+          </div>
+
         </div>
       </section>
 
