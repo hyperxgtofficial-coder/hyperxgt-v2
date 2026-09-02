@@ -146,32 +146,26 @@ function parseImagesArray(p) {
   if (!p || p.no_image) return [];
   let list = [];
 
-  if (p.image && typeof p.image === "string" && p.image.trim()) {
-    list.push(p.image.trim());
-  }
-
-  if (Array.isArray(p.images) && p.images.length) {
-    p.images.map(x => String(x).trim()).filter(Boolean).forEach(img => {
-      if (!list.includes(img)) list.push(img);
-    });
-  } else if (typeof p.images === "string" && p.images.trim()) {
-    try {
-      const parsed = JSON.parse(p.images);
-      if (Array.isArray(parsed) && parsed.length) {
-        parsed.map(x => String(x).trim()).filter(Boolean).forEach(img => {
-          if (!list.includes(img)) list.push(img);
-        });
-      } else {
-        p.images.split(',').map(x => x.trim()).filter(Boolean).forEach(img => {
-          if (!list.includes(img)) list.push(img);
-        });
+  const addUrls = (raw) => {
+    if (!raw) return;
+    if (Array.isArray(raw)) {
+      raw.forEach(addUrls);
+    } else if (typeof raw === "string" && raw.trim()) {
+      const trimmed = raw.trim();
+      if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) return parsed.forEach(addUrls);
+        } catch(e) {}
       }
-    } catch(e) {
-      p.images.split(',').map(x => x.trim()).filter(Boolean).forEach(img => {
-        if (!list.includes(img)) list.push(img);
+      trimmed.split(',').map(x => x.trim()).filter(Boolean).forEach(u => {
+        if (u && u.length > 5 && !list.includes(u)) list.push(u);
       });
     }
-  }
+  };
+
+  if (p.images) addUrls(p.images);
+  if (p.image) addUrls(p.image);
 
   return [...new Set(list)].filter(x => x && x.length > 5);
 }

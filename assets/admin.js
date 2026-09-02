@@ -335,15 +335,18 @@ function initImageUploadHandler() {
       }
 
       if (uploadedPublicUrls.length) {
-        imgInput.value = uploadedPublicUrls[0];
         const existingExtra = galleryTextarea.value.trim() ? galleryTextarea.value.trim().split(',').map(x => x.trim()).filter(Boolean) : [];
-        const combined = [...new Set([...uploadedPublicUrls, ...existingExtra])];
+        const combined = [...new Set([...existingExtra, ...uploadedPublicUrls])];
         galleryTextarea.value = combined.join(', ');
 
+        if (!imgInput.value.trim() || !combined.includes(imgInput.value.trim())) {
+          imgInput.value = combined[0] || '';
+        }
+
         renderAdminGalleryPreview(combined, imgInput.value.trim());
-        toast(`✅ Uploaded ${uploadedPublicUrls.length} of ${files.length} photos! Gallery updated ✓`);
+        toast(`✅ Uploaded ${uploadedPublicUrls.length} photo${uploadedPublicUrls.length > 1 ? 's' : ''}! (${combined.length} total in gallery) ✓`);
       }
-      // Reset so same file can be re-uploaded if needed
+      // Reset so same files can be re-uploaded if needed
       fileInput.value = '';
     };
   }
@@ -855,7 +858,9 @@ function openEditModal(id) {
   $("#formSpeed").value = p.speed || "35 KM/H";
   $("#formDrive").value = p.drive || "4WD";
 
-  const allImgs = (p.images && p.images.length) ? p.images.filter(Boolean) : (p.image ? [p.image] : []);
+  const allImgs = (typeof parseImagesArray === 'function')
+    ? parseImagesArray(p)
+    : ((p.images && p.images.length) ? p.images.filter(Boolean) : (p.image ? p.image.split(',').map(x=>x.trim()).filter(Boolean) : []));
   const mainImg = p.image || allImgs[0] || "";
   const isNoImg = p.no_image === true && !mainImg && !allImgs.length;
   
@@ -1029,10 +1034,20 @@ function renderAdminProducts() {
     if (stock === 0) stockBadge = `<span style="background:#ffeeef;color:#ed1c24;font-weight:900;padding:3px 8px;border-radius:6px;font-size:10px">🔴 Out of Stock</span>`;
     else if (stock <= 5) stockBadge = `<span style="background:#fff8e1;color:#b78103;font-weight:900;padding:3px 8px;border-radius:6px;font-size:10px">🟡 ${stock} Left</span>`;
 
+    const pImgs = (typeof parseImagesArray === 'function') ? parseImagesArray(p) : (p.images || (p.image ? [p.image] : []));
+    const extraCount = pImgs.length > 1 ? pImgs.length - 1 : 0;
+
     return `
     <tr>
       <td><strong>${p.id}</strong></td>
-      <td>${(p.image && !p.no_image) ? `<img src="${p.image}" alt="${esc(p.name)}">` : `<div style="width:52px;height:44px;background:#f0f2f5;border-radius:6px;display:grid;place-items:center;font-size:10px;color:#aaa">📷</div>`}</td>
+      <td>
+        ${(p.image && !p.no_image) 
+          ? `<div style="position:relative;display:inline-block">
+               <img src="${p.image}" alt="${esc(p.name)}" style="display:block">
+               ${extraCount > 0 ? `<span style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.75);color:#fff;font-size:9px;font-weight:900;padding:1px 4px;border-radius:4px" title="${pImgs.length} photos in gallery">+${extraCount}</span>` : ''}
+             </div>` 
+          : `<div style="width:52px;height:44px;background:#f0f2f5;border-radius:6px;display:grid;place-items:center;font-size:10px;color:#aaa">📷</div>`}
+      </td>
       <td><code style="background:#edf2f7;padding:3px 7px;border-radius:6px;font-size:11px">${esc(p.sku)}</code></td>
       <td><strong style="color:#111;display:block;max-width:260px">${esc(p.name)}</strong></td>
       <td><span style="background:#eef4ff;color:#1488d8;font-weight:800;padding:3px 8px;border-radius:6px;font-size:10px">${esc(p.category)}</span></td>

@@ -44,32 +44,45 @@ function saveProductsToJsonDisk(arr) {
       const old = existingMap.get(String(p.id)) || {};
       const isExplicitNoImage = p.no_image === true || (p.image === '' && (!p.images || p.images.length === 0));
       
-      let img = '';
-      if (!isExplicitNoImage) {
-        if (p.image !== undefined && String(p.image).trim()) {
-          img = String(p.image).trim();
-        } else if (old.image && !old.no_image) {
-          img = String(old.image).trim();
-        }
-      }
-
       let imgs = [];
       if (!isExplicitNoImage) {
         if (Array.isArray(p.images) && p.images.length > 0) {
-          imgs = p.images.filter(Boolean);
-        } else if (Array.isArray(old.images) && old.images.length > 0 && !old.no_image) {
-          imgs = old.images.filter(Boolean);
-        } else if (img) {
-          imgs = [img];
+          p.images.forEach(x => {
+            if (typeof x === 'string') {
+              x.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                if (!imgs.includes(u)) imgs.push(u);
+              });
+            }
+          });
+        } else if (typeof p.images === 'string' && p.images.trim()) {
+          p.images.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+            if (!imgs.includes(u)) imgs.push(u);
+          });
+        }
+
+        if (p.image && typeof p.image === 'string' && p.image.trim()) {
+          p.image.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+            if (!imgs.includes(u)) imgs.push(u);
+          });
+        }
+
+        if (!imgs.length && old.image && !old.no_image) {
+          if (Array.isArray(old.images) && old.images.length) {
+            imgs = old.images.filter(Boolean);
+          } else if (typeof old.image === 'string') {
+            imgs = old.image.split(',').map(u => u.trim()).filter(Boolean);
+          }
         }
       }
+
+      const mainImg = imgs[0] || '';
 
       return {
         ...old,
         ...p,
-        image: img,
+        image: mainImg,
         images: imgs,
-        no_image: isExplicitNoImage || !img
+        no_image: isExplicitNoImage || !mainImg
       };
     });
 
@@ -167,27 +180,44 @@ module.exports = async (req, res) => {
           });
           if (dbRes.statusCode === 200 && Array.isArray(dbRes.body) && dbRes.body.length > 0) {
             // Map Supabase column names to frontend attributes
-            cachedProducts = dbRes.body.map(item => ({
-              id: Number(item.id),
-              sku: item.sku,
-              name: item.name,
-              category: item.category,
-              price: Number(item.price || 0),
-              mrp: Number(item.mrp || item.regular_price || item.price || 0),
-              stock: Number(item.stock !== undefined ? item.stock : 25),
-              gstRate: Number(item.gst_rate || 18),
-              taxMode: item.tax_mode || 'inclusive',
-              hsn: item.hsn || '95030090',
-              scale: item.scale || '1:16',
-              speed: item.speed || '35 KM/H',
-              drive: item.drive || '4WD',
-              image: item.image || '',
-              images: item.image ? [item.image] : [],
-              no_image: !item.image,
-              short_description: item.short_description || '',
-              full_description: item.full_description || '',
-              discount: item.mrp && item.price ? Math.round(((item.mrp - item.price) / item.mrp) * 100) : 0
-            }));
+            cachedProducts = dbRes.body.map(item => {
+              let rawImgs = [];
+              if (item.image && typeof item.image === 'string' && item.image.trim()) {
+                const trimmed = item.image.trim();
+                if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+                  try {
+                    const parsed = JSON.parse(trimmed);
+                    if (Array.isArray(parsed)) rawImgs = parsed.filter(Boolean);
+                  } catch(e) {}
+                }
+                if (!rawImgs.length) {
+                  rawImgs = trimmed.split(',').map(x => x.trim()).filter(Boolean);
+                }
+              }
+              const mainHeroImg = rawImgs[0] || '';
+
+              return {
+                id: Number(item.id),
+                sku: item.sku,
+                name: item.name,
+                category: item.category,
+                price: Number(item.price || 0),
+                mrp: Number(item.mrp || item.regular_price || item.price || 0),
+                stock: Number(item.stock !== undefined ? item.stock : 25),
+                gstRate: Number(item.gst_rate || 18),
+                taxMode: item.tax_mode || 'inclusive',
+                hsn: item.hsn || '95030090',
+                scale: item.scale || '1:16',
+                speed: item.speed || '35 KM/H',
+                drive: item.drive || '4WD',
+                image: mainHeroImg,
+                images: rawImgs,
+                no_image: !mainHeroImg,
+                short_description: item.short_description || '',
+                full_description: item.full_description || '',
+                discount: item.mrp && item.price ? Math.round(((item.mrp - item.price) / item.mrp) * 100) : 0
+              };
+            });
           }
         } catch(e) {}
       }
@@ -242,14 +272,30 @@ module.exports = async (req, res) => {
           } catch(e) {}
 
           const isExplicitNoImage = updatedProd.no_image === true || (updatedProd.image === '' && (!updatedProd.images || updatedProd.images.length === 0));
-          let finalImg = '';
+          let allImgs = [];
           if (!isExplicitNoImage) {
-            if (updatedProd.image !== undefined && String(updatedProd.image).trim()) {
-              finalImg = String(updatedProd.image).trim();
-            } else if (existingDbImg) {
-              finalImg = String(existingDbImg).trim();
+            if (Array.isArray(updatedProd.images) && updatedProd.images.length > 0) {
+              updatedProd.images.forEach(x => {
+                if (typeof x === 'string') {
+                  x.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                    if (!allImgs.includes(u)) allImgs.push(u);
+                  });
+                }
+              });
+            }
+            if (updatedProd.image && typeof updatedProd.image === 'string' && updatedProd.image.trim()) {
+              updatedProd.image.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                if (!allImgs.includes(u)) allImgs.push(u);
+              });
+            }
+            if (!allImgs.length && existingDbImg) {
+              existingDbImg.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                if (!allImgs.includes(u)) allImgs.push(u);
+              });
             }
           }
+
+          const finalSupabaseImg = isExplicitNoImage ? '' : allImgs.join(', ');
 
           const dbItem = {
             id: Number(updatedProd.id),
@@ -265,7 +311,7 @@ module.exports = async (req, res) => {
             scale: String(updatedProd.scale || '1:16'),
             speed: String(updatedProd.speed || '35 KM/H'),
             drive: String(updatedProd.drive || '4WD'),
-            image: finalImg,
+            image: finalSupabaseImg,
             short_description: String(updatedProd.short_description || ''),
             full_description: String(updatedProd.full_description || updatedProd.description || '')
           };
@@ -310,7 +356,28 @@ module.exports = async (req, res) => {
             const dbPayload = payload.map(p => {
               const dbItem = existingDbMap.get(String(p.id)) || {};
               const isNoImg = p.no_image === true || (p.image === '' && (!p.images || p.images.length === 0));
-              const imgVal = isNoImg ? '' : ((p.image && String(p.image).trim()) ? String(p.image).trim() : (dbItem.image || ''));
+              let pImgs = [];
+              if (!isNoImg) {
+                if (Array.isArray(p.images) && p.images.length > 0) {
+                  p.images.forEach(x => {
+                    if (typeof x === 'string') {
+                      x.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                        if (!pImgs.includes(u)) pImgs.push(u);
+                      });
+                    }
+                  });
+                }
+                if (p.image && typeof p.image === 'string' && p.image.trim()) {
+                  p.image.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                    if (!pImgs.includes(u)) pImgs.push(u);
+                  });
+                }
+                if (!pImgs.length && dbItem.image) {
+                  pImgs = String(dbItem.image).split(',').map(u => u.trim()).filter(Boolean);
+                }
+              }
+
+              const imgVal = isNoImg ? '' : pImgs.join(', ');
 
               return {
                 id: Number(p.id),
@@ -352,7 +419,24 @@ module.exports = async (req, res) => {
       if (supabaseServiceKey && supabaseUrl.includes("supabase")) {
         try {
           const isNoImg = newProd.no_image === true || (!newProd.image && (!newProd.images || newProd.images.length === 0));
-          const imgVal = isNoImg ? '' : String(newProd.image || '').trim();
+          let pImgs = [];
+          if (!isNoImg) {
+            if (Array.isArray(newProd.images) && newProd.images.length > 0) {
+              newProd.images.forEach(x => {
+                if (typeof x === 'string') {
+                  x.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                    if (!pImgs.includes(u)) pImgs.push(u);
+                  });
+                }
+              });
+            }
+            if (newProd.image && typeof newProd.image === 'string' && newProd.image.trim()) {
+              newProd.image.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
+                if (!pImgs.includes(u)) pImgs.push(u);
+              });
+            }
+          }
+          const imgVal = isNoImg ? '' : pImgs.join(', ');
 
           const dbItem = {
             id: Number(newProd.id),
