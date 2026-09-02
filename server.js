@@ -3,6 +3,24 @@ const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
 
+// Automatically load .env for local development
+const envFile = path.join(__dirname, '.env');
+if (fs.existsSync(envFile)) {
+  try {
+    const lines = fs.readFileSync(envFile, 'utf8').split('\n');
+    for (const l of lines) {
+      const line = l.trim();
+      if (!line || line.startsWith('#')) continue;
+      const idx = line.indexOf('=');
+      if (idx !== -1) {
+        const key = line.slice(0, idx).trim();
+        const val = line.slice(idx + 1).trim();
+        if (key && !process.env[key]) process.env[key] = val;
+      }
+    }
+  } catch(e) {}
+}
+
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = __dirname;
 const MAX_BODY_BYTES = 10 * 1024 * 1024; // matches the base64 image uploads used by /api/upload-image
