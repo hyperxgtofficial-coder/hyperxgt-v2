@@ -14,7 +14,7 @@ let inMemoryReviews = [
     prodName: "1:7 Citroen C3 WRC Brushless Rally Car",
     rating: 5,
     text: "Absolute monster of an RC car! Speeds over 60 km/h on gravel. Unboxing experience was top notch and delivery came in 2 days.",
-    mediaUrl: "assets/products/M-JX7303.webp",
+    mediaUrl: "assets/uploads/prod_1787920104060_6427.jpg",
     mediaType: "image",
     status: "Approved",
     couponCode: "UNBOX-94821",

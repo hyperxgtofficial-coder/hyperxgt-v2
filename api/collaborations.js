@@ -2,12 +2,12 @@
 const https = require('https');
 
 let inMemoryCollaborations = [
-  { id: 1, name: "Citroen Racing WRC", logo: "assets/products/M-JX7303.webp", link: "https://hyperxgt.com", order: 1, active: true },
-  { id: 2, name: "MJX Hyper Go", logo: "assets/products/SGSCY16307-G.webp", link: "https://hyperxgt.com", order: 2, active: true },
-  { id: 3, name: "HBX Racing", logo: "assets/products/H104020-R.webp", link: "https://hyperxgt.com", order: 3, active: true },
-  { id: 4, name: "WLtoys High Speed", logo: "assets/products/32JJ283MBG-W.webp", link: "https://hyperxgt.com", order: 4, active: true },
-  { id: 5, name: "FlySky Radio Systems", logo: "assets/products/H6401-P.webp", link: "https://hyperxgt.com", order: 5, active: true },
-  { id: 6, name: "Gens Ace Lipo Power", logo: "assets/products/H104020-R.webp", link: "https://hyperxgt.com", order: 6, active: true }
+  { id: 1, name: "Citroen Racing WRC", logo: "assets/hyperxgt-logo.png", link: "https://hyperxgt.com", order: 1, active: true },
+  { id: 2, name: "MJX Hyper Go", logo: "assets/hyperxgt-logo.png", link: "https://hyperxgt.com", order: 2, active: true },
+  { id: 3, name: "HBX Racing", logo: "assets/hyperxgt-logo.png", link: "https://hyperxgt.com", order: 3, active: true },
+  { id: 4, name: "WLtoys High Speed", logo: "assets/hyperxgt-logo.png", link: "https://hyperxgt.com", order: 4, active: true },
+  { id: 5, name: "FlySky Radio Systems", logo: "assets/hyperxgt-logo.png", link: "https://hyperxgt.com", order: 5, active: true },
+  { id: 6, name: "Gens Ace Lipo Power", logo: "assets/hyperxgt-logo.png", link: "https://hyperxgt.com", order: 6, active: true }
 ];
 
 function httpsRequest(urlStr, method, headers, bodyObj) {
