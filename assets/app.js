@@ -859,10 +859,10 @@ function renderAccountModalUI() {
   const isForgot = currentModalAuthTab === "forgot";
 
   body.innerHTML = `
-    <div style="display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid #eee;padding-bottom:10px">
-      <button class="btn ${isLogin ? 'dark' : 'clear'}" onclick="currentModalAuthTab='login';renderAccountModalUI()" style="flex:1;height:36px;font-size:11px;padding:0">Sign In</button>
-      <button class="btn ${isReg ? 'dark' : 'clear'}" onclick="currentModalAuthTab='register';renderAccountModalUI()" style="flex:1;height:36px;font-size:11px;padding:0">Register</button>
-      <button class="btn ${isForgot ? 'dark' : 'clear'}" onclick="currentModalAuthTab='forgot';renderAccountModalUI()" style="flex:1;height:36px;font-size:11px;padding:0">Forgot</button>
+    <div class="auth-pill-nav">
+      <button type="button" class="auth-pill-btn ${isLogin ? 'active' : ''}" onclick="currentModalAuthTab='login';renderAccountModalUI()">Sign In</button>
+      <button type="button" class="auth-pill-btn ${isReg ? 'active' : ''}" onclick="currentModalAuthTab='register';renderAccountModalUI()">Create Account</button>
+      <button type="button" class="auth-pill-btn ${isForgot ? 'active' : ''}" onclick="currentModalAuthTab='forgot';renderAccountModalUI()">Forgot Password</button>
     </div>
 
     ${isLogin ? `

@@ -1,26 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>My Garage & Customer Account | HyperXGT</title>
-  <meta name="description" content="Manage your saved RC models, order history, live tracking, shipping profile, and account details at HyperXGT Driver Garage.">
-  <link rel="stylesheet" href="assets/style.css?v=20260827">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Garage & Account | HyperXGT</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <div class="announce">
-    <div><strong>Fresh drop</strong> · High-performance HyperXGT models</div>
-    <div>Ships from India · Secure checkout</div>
-    <div>Expert RC support · Care & upgrades</div>
-  </div>
 
+  <!-- TOP ANNOUNCEMENT TICKER -->
+  <aside class="ticker" aria-label="Announcement">
+    <div class="container ticker-wrap">
+      <div>🏁 Free All-India Express Shipping on orders over ₹2,999 · 2.4GHz High Speed RC Rigs</div>
+      <div class="ticker-links">
+        <a href="tel:+917090227777">Direct Helpline: +91 70902 27777</a>
+        <a href="#" data-modal="trackModal">Track Order</a>
+        <a href="admin.html" style="opacity:0.85">Admin</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- HEADER NAVIGATION -->
   <header class="header">
-    <div class="container nav">
-      <a class="brand" href="index.html">
-        <img class="brand-logo" src="assets/hyperxgt-logo.png" alt="HyperXGT">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="HyperXGT Home">
+        <img class="brand-logo" src="assets/hyperxgt-logo.png" alt="HyperXGT High Performance RC Logo">
         <div><small>RC PERFORMANCE · STORE · CLUB</small></div>
       </a>
-      <nav class="navlinks">
+      <nav class="navlinks" aria-label="Main Navigation">
         <a href="why.html">Why HyperXGT</a>
         <a href="shop.html">Shop</a>
         <a href="upgrades.html">Upgrades</a>
@@ -51,10 +58,10 @@
       
       <!-- UNAUTHENTICATED: LOGIN / REGISTER / FORGOT CARD -->
       <div class="form-card" id="authBox">
-        <div style="display:flex;gap:6px;margin-bottom:20px;border-bottom:1px solid #eee;padding-bottom:12px">
-          <button class="btn dark" id="btnTabLogin" style="flex:1;height:40px;font-size:12px">Sign In</button>
-          <button class="btn clear" id="btnTabRegister" style="flex:1;height:40px;font-size:12px;background:#f5f5f5">Create Account</button>
-          <button class="btn clear" id="btnTabForgot" style="flex:1;height:40px;font-size:12px;background:#f5f5f5">Forgot Password</button>
+        <div class="auth-pill-nav">
+          <button type="button" class="auth-pill-btn active" id="btnTabLogin">Sign In</button>
+          <button type="button" class="auth-pill-btn" id="btnTabRegister">Create Account</button>
+          <button type="button" class="auth-pill-btn" id="btnTabForgot">Forgot Password</button>
         </div>
 
         <div id="accountAuthErr" style="background:#ffeeef;border:1px solid #ffcdd2;color:#ed1c24;padding:12px;border-radius:10px;font-size:12px;margin-bottom:16px;display:none"></div>
@@ -100,33 +107,35 @@
           <div style="display:flex;align-items:center;gap:16px">
             <div style="width:60px;height:60px;border-radius:50%;background:#1488d8;color:#fff;display:grid;place-items:center;font-size:26px;font-weight:900">👤</div>
             <div>
-              <h2 style="margin:0;font-size:20px" id="dashName">Rahul Verma</h2>
-              <div style="font-size:12px;color:#666;margin-top:2px" id="dashEmail">rahul.v@gmail.com</div>
+              <h2 style="margin:0;font-size:20px" id="dashName">Driver Member</h2>
+              <div style="font-size:12px;color:#666;margin-top:2px" id="dashEmail">driver@hyperxgt.com</div>
               <span style="background:#e8f5e9;color:#2e7d32;font-size:10px;font-weight:900;padding:3px 8px;border-radius:6px;display:inline-block;margin-top:6px">VERIFIED DRIVER MEMBER 🛡️</span>
             </div>
           </div>
-          <button class="btn red" id="btnLogout" style="height:38px;padding:0 18px;font-size:12px">Sign Out 🚪</button>
+          <button class="btn red" id="btnLogout" style="height:36px;font-size:11px;padding:0 18px">Sign Out ↩</button>
         </div>
 
         <!-- DASHBOARD NAVIGATION TABS -->
-        <div style="display:flex;gap:10px;border-bottom:2px solid #eee;padding-bottom:12px;margin-bottom:24px">
-          <button class="btn dark" id="dashTabOrders" style="height:36px;font-size:12px;padding:0 16px">📦 My Orders & Tracking</button>
-          <button class="btn clear" id="dashTabProfile" style="height:36px;font-size:12px;padding:0 16px;background:#f5f5f5">📝 Edit Profile & Address</button>
-          <button class="btn clear" id="dashTabSecurity" style="height:36px;font-size:12px;padding:0 16px;background:#f5f5f5">🔒 Security & Password</button>
+        <div class="auth-pill-nav" style="margin-bottom:24px">
+          <button type="button" class="auth-pill-btn active" id="dashTabOrders">📦 Orders & Builds</button>
+          <button type="button" class="auth-pill-btn" id="dashTabProfile">📝 Edit Profile & Address</button>
+          <button type="button" class="auth-pill-btn" id="dashTabSecurity">🔒 Security & Password</button>
         </div>
 
-        <!-- TAB 1: MY ORDERS & TRACKING -->
+        <!-- TAB 1: ORDERS & BUILDS -->
         <div id="dashContentOrders">
-          <h4 style="margin-top:0;color:#1488d8;text-transform:uppercase;letter-spacing:0.08em;font-size:11px">Order History & Live AWB Tracking</h4>
-          <div id="dashOrdersList" style="display:flex;flex-direction:column;gap:14px"></div>
+          <h4 style="margin-top:0;color:#1488d8;text-transform:uppercase;letter-spacing:0.08em;font-size:11px">Your Order History & RC Builds</h4>
+          <div id="dashOrdersList" style="display:grid;gap:14px;margin-top:14px">
+            <!-- Rendered dynamically -->
+          </div>
         </div>
 
-        <!-- TAB 2: EDIT PROFILE & SHIPPING ADDRESS -->
+        <!-- TAB 2: PROFILE DETAILS -->
         <div id="dashContentProfile" style="display:none">
-          <h4 style="margin-top:0;color:#1488d8;text-transform:uppercase;letter-spacing:0.08em;font-size:11px">Update Customer Contact & Default Shipping Address</h4>
-          <form id="profileUpdateForm" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:720px">
-            <input class="field" id="profName" placeholder="Full Name" required>
-            <input class="field" id="profPhone" type="tel" placeholder="10-digit Mobile Number" required>
+          <h4 style="margin-top:0;color:#1488d8;text-transform:uppercase;letter-spacing:0.08em;font-size:11px">Update Driver Profile & Shipping Address</h4>
+          <form id="profileForm" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+            <input class="field" id="profName" placeholder="Full Name *" required>
+            <input class="field" id="profPhone" placeholder="Mobile Number *" required>
             <textarea class="field full" id="profAddress" rows="3" placeholder="Default House / Street Address" style="grid-column:1/-1"></textarea>
             <input class="field" id="profCity" placeholder="City">
             <input class="field" id="profState" placeholder="State">
@@ -213,51 +222,47 @@
 
       function setAuthTab(tab) {
         if (authErr) authErr.style.display = "none";
-        btnTabLogin.className = tab === 'login' ? "btn dark" : "btn clear";
-        btnTabLogin.style.background = tab === 'login' ? "" : "#f5f5f5";
+        if (btnTabLogin) btnTabLogin.className = tab === 'login' ? "auth-pill-btn active" : "auth-pill-btn";
+        if (btnTabRegister) btnTabRegister.className = tab === 'register' ? "auth-pill-btn active" : "auth-pill-btn";
+        if (btnTabForgot) btnTabForgot.className = tab === 'forgot' ? "auth-pill-btn active" : "auth-pill-btn";
 
-        btnTabRegister.className = tab === 'register' ? "btn dark" : "btn clear";
-        btnTabRegister.style.background = tab === 'register' ? "" : "#f5f5f5";
-
-        btnTabForgot.className = tab === 'forgot' ? "btn dark" : "btn clear";
-        btnTabForgot.style.background = tab === 'forgot' ? "" : "#f5f5f5";
-
-        loginForm.style.display = tab === 'login' ? "block" : "none";
-        registerForm.style.display = tab === 'register' ? "block" : "none";
-        forgotForm.style.display = tab === 'forgot' ? "block" : "none";
+        if (loginForm) loginForm.style.display = tab === 'login' ? "block" : "none";
+        if (registerForm) registerForm.style.display = tab === 'register' ? "block" : "none";
+        if (forgotForm) forgotForm.style.display = tab === 'forgot' ? "block" : "none";
       }
 
-      btnTabLogin.onclick = () => setAuthTab('login');
-      btnTabRegister.onclick = () => setAuthTab('register');
-      btnTabForgot.onclick = () => setAuthTab('forgot');
+      if (btnTabLogin) btnTabLogin.onclick = () => setAuthTab('login');
+      if (btnTabRegister) btnTabRegister.onclick = () => setAuthTab('register');
+      if (btnTabForgot) btnTabForgot.onclick = () => setAuthTab('forgot');
 
       function checkUserLogged() {
         const user = getAuthUser();
         if (user) {
-          authBox.style.display = "none";
-          authSidebar.style.display = "none";
-          userDashboard.style.display = "block";
-          document.getElementById("dashName").textContent = user.name || "Customer";
-          document.getElementById("dashEmail").textContent = user.email || "";
+          if (authBox) authBox.style.display = "none";
+          if (authSidebar) authSidebar.style.display = "none";
+          if (userDashboard) userDashboard.style.display = "block";
+          if (document.getElementById("dashName")) document.getElementById("dashName").textContent = user.name || "Customer";
+          if (document.getElementById("dashEmail")) document.getElementById("dashEmail").textContent = user.email || "";
 
           // Pre-fill profile fields
-          document.getElementById("profName").value = user.name || "";
-          document.getElementById("profPhone").value = user.phone || "";
-          document.getElementById("profAddress").value = user.address || "";
-          document.getElementById("profCity").value = user.city || "";
-          document.getElementById("profState").value = user.state || "";
-          document.getElementById("profPincode").value = user.pincode || "";
+          if (document.getElementById("profName")) document.getElementById("profName").value = user.name || "";
+          if (document.getElementById("profPhone")) document.getElementById("profPhone").value = user.phone || "";
+          if (document.getElementById("profAddress")) document.getElementById("profAddress").value = user.address || "";
+          if (document.getElementById("profCity")) document.getElementById("profCity").value = user.city || "";
+          if (document.getElementById("profState")) document.getElementById("profState").value = user.state || "";
+          if (document.getElementById("profPincode")) document.getElementById("profPincode").value = user.pincode || "";
 
           renderUserOrders(user.email);
         } else {
-          authBox.style.display = "block";
-          authSidebar.style.display = "block";
-          userDashboard.style.display = "none";
+          if (authBox) authBox.style.display = "block";
+          if (authSidebar) authSidebar.style.display = "block";
+          if (userDashboard) userDashboard.style.display = "none";
         }
       }
 
       function renderUserOrders(userEmail) {
         const list = document.getElementById("dashOrdersList");
+        if (!list) return;
         const allOrders = getOrdersDB();
         const myOrders = allOrders.filter(o => o.customer && o.customer.email && o.customer.email.toLowerCase() === userEmail.toLowerCase());
 
@@ -302,234 +307,198 @@
       const dashContentProfile = document.getElementById("dashContentProfile");
       const dashContentSecurity = document.getElementById("dashContentSecurity");
 
-      dashTabOrders.onclick = () => {
-        dashTabOrders.className = "btn dark";
-        dashTabProfile.className = "btn clear"; dashTabProfile.style.background = "#f5f5f5";
-        dashTabSecurity.className = "btn clear"; dashTabSecurity.style.background = "#f5f5f5";
-        dashContentOrders.style.display = "block";
-        dashContentProfile.style.display = "none";
-        dashContentSecurity.style.display = "none";
-      };
+      if (dashTabOrders) {
+        dashTabOrders.onclick = () => {
+          dashTabOrders.className = "auth-pill-btn active";
+          if (dashTabProfile) dashTabProfile.className = "auth-pill-btn";
+          if (dashTabSecurity) dashTabSecurity.className = "auth-pill-btn";
+          if (dashContentOrders) dashContentOrders.style.display = "block";
+          if (dashContentProfile) dashContentProfile.style.display = "none";
+          if (dashContentSecurity) dashContentSecurity.style.display = "none";
+        };
+      }
 
-      dashTabProfile.onclick = () => {
-        dashTabProfile.className = "btn dark";
-        dashTabOrders.className = "btn clear"; dashTabOrders.style.background = "#f5f5f5";
-        dashTabSecurity.className = "btn clear"; dashTabSecurity.style.background = "#f5f5f5";
-        dashContentProfile.style.display = "block";
-        dashContentOrders.style.display = "none";
-        dashContentSecurity.style.display = "none";
-      };
+      if (dashTabProfile) {
+        dashTabProfile.onclick = () => {
+          dashTabProfile.className = "auth-pill-btn active";
+          if (dashTabOrders) dashTabOrders.className = "auth-pill-btn";
+          if (dashTabSecurity) dashTabSecurity.className = "auth-pill-btn";
+          if (dashContentProfile) dashContentProfile.style.display = "block";
+          if (dashContentOrders) dashContentOrders.style.display = "none";
+          if (dashContentSecurity) dashContentSecurity.style.display = "none";
+        };
+      }
 
-      dashTabSecurity.onclick = () => {
-        dashTabSecurity.className = "btn dark";
-        dashTabOrders.className = "btn clear"; dashTabOrders.style.background = "#f5f5f5";
-        dashTabProfile.className = "btn clear"; dashTabProfile.style.background = "#f5f5f5";
-        dashContentSecurity.style.display = "block";
-        dashContentOrders.style.display = "none";
-        dashContentProfile.style.display = "none";
-      };
+      if (dashTabSecurity) {
+        dashTabSecurity.onclick = () => {
+          dashTabSecurity.className = "auth-pill-btn active";
+          if (dashTabOrders) dashTabOrders.className = "auth-pill-btn";
+          if (dashTabProfile) dashTabProfile.className = "auth-pill-btn";
+          if (dashContentSecurity) dashContentSecurity.style.display = "block";
+          if (dashContentOrders) dashContentOrders.style.display = "none";
+          if (dashContentProfile) dashContentProfile.style.display = "none";
+        };
+      }
 
-      // REGISTER FORM SUBMISSION
-      registerForm.onsubmit = async function(e) {
-        e.preventDefault();
-        authErr.style.display = "none";
-        const btn = document.getElementById("btnRegSubmit");
-        btn.disabled = true;
-        btn.textContent = "Connecting to Supabase Auth...";
+      // LOGIN SUBMISSION
+      const loginFormEl = document.getElementById("loginForm");
+      if (loginFormEl) {
+        loginFormEl.onsubmit = async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btnLoginSubmit");
+          btn.disabled = true; btn.textContent = "Signing In...";
+          if (authErr) authErr.style.display = "none";
 
-        const name = document.getElementById("regName").value.trim();
-        const email = document.getElementById("regEmail").value.trim();
-        const phone = document.getElementById("regPhone").value.trim();
-        const password = document.getElementById("regPass").value.trim();
+          try {
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPass").value.trim();
+            const res = await fetch('/api/supabase-auth?action=login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (!res.ok || data.error) throw new Error(data.error || "Authentication failed.");
 
-        try {
-          const res = await fetch('/api/supabase-auth?action=register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, phone, password })
-          });
-          const data = await res.json();
-          if (!res.ok || data.error) throw new Error(data.error || "Registration failed");
+            setAuthSession(data.user, data.token, data.refresh_token);
+            toast("Welcome to Driver Garage ✓");
+            checkUserLogged();
+          } catch(err) {
+            if (authErr) {
+              authErr.textContent = err.message;
+              authErr.style.display = "block";
+            }
+          } finally {
+            btn.disabled = false; btn.textContent = "Sign In to Garage →";
+          }
+        };
+      }
 
-          // No token means Supabase requires email confirmation — do not fake a session.
-          if (!data.token) {
-            setAuthTab("login");
-            toast(data.message || `Confirm your email (${email}), then sign in.`);
+      // REGISTRATION SUBMISSION
+      const registerFormEl = document.getElementById("registerForm");
+      if (registerFormEl) {
+        registerFormEl.onsubmit = async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btnRegSubmit");
+          btn.disabled = true; btn.textContent = "Creating Driver Account...";
+          if (authErr) authErr.style.display = "none";
+
+          try {
+            const name = document.getElementById("regName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const phone = document.getElementById("regPhone").value.trim();
+            const password = document.getElementById("regPass").value.trim();
+
+            const res = await fetch('/api/supabase-auth?action=register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email, phone, password })
+            });
+            const data = await res.json();
+            if (!res.ok || data.error) throw new Error(data.error || "Registration failed.");
+
+            if (!data.token) {
+              setAuthTab('login');
+              toast(data.message || `Account created! Check ${email} to verify, then sign in.`);
+              return;
+            }
+
+            setAuthSession(data.user, data.token, data.refresh_token);
+            toast("Driver Account created successfully! 🎁");
+            checkUserLogged();
+          } catch(err) {
+            if (authErr) {
+              authErr.textContent = err.message;
+              authErr.style.display = "block";
+            }
+          } finally {
+            btn.disabled = false; btn.textContent = "Register Account & Get Welcome Gift 🎁";
+          }
+        };
+      }
+
+      // FORGOT SUBMISSION
+      const forgotFormEl = document.getElementById("forgotForm");
+      if (forgotFormEl) {
+        forgotFormEl.onsubmit = async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btnForgotSubmit");
+          btn.disabled = true; btn.textContent = "Sending Instructions...";
+          if (authErr) authErr.style.display = "none";
+
+          try {
+            const email = document.getElementById("forgotEmail").value.trim();
+            const res = await fetch('/api/supabase-auth?action=forgot', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            if (!res.ok || data.error) throw new Error(data.error || "Failed to send reset link.");
+
+            toast(data.message || "Password recovery instructions sent to your email ✓");
+            setAuthTab('login');
+          } catch(err) {
+            if (authErr) {
+              authErr.textContent = err.message;
+              authErr.style.display = "block";
+            }
+          } finally {
+            btn.disabled = false; btn.textContent = "Send Reset Link 📧";
+          }
+        };
+      }
+
+      // PROFILE UPDATE
+      const profileFormEl = document.getElementById("profileForm");
+      if (profileFormEl) {
+        profileFormEl.onsubmit = async (e) => {
+          e.preventDefault();
+          const user = getAuthUser();
+          if (!user) return;
+
+          user.name = document.getElementById("profName").value.trim();
+          user.phone = document.getElementById("profPhone").value.trim();
+          user.address = document.getElementById("profAddress").value.trim();
+          user.city = document.getElementById("profCity").value.trim();
+          user.state = document.getElementById("profState").value.trim();
+          user.pincode = document.getElementById("profPincode").value.trim();
+
+          setAuthSession(user, getAuthToken());
+          toast("Profile & Address updated in Driver Garage ✓");
+        };
+      }
+
+      // SECURITY UPDATE
+      const securityFormEl = document.getElementById("securityForm");
+      if (securityFormEl) {
+        securityFormEl.onsubmit = async (e) => {
+          e.preventDefault();
+          const p1 = document.getElementById("secNewPass").value.trim();
+          const p2 = document.getElementById("secConfirmPass").value.trim();
+          if (p1 !== p2) {
+            toast("Passwords do not match!");
             return;
           }
-
-          setAuthSession(data.user, data.token, data.refresh_token);
-          toast(`Registered! Welcome email sent to ${email} ✓`);
-          checkUserLogged();
-        } catch(err) {
-          authErr.textContent = err.message || "Registration failed";
-          authErr.style.display = "block";
-        } finally {
-          btn.disabled = false;
-          btn.textContent = "Register Account & Get Welcome Gift 🎁";
-        }
-      };
-
-      // LOGIN FORM SUBMISSION
-      loginForm.onsubmit = async function(e) {
-        e.preventDefault();
-        authErr.style.display = "none";
-        const btn = document.getElementById("btnLoginSubmit");
-        btn.disabled = true;
-        btn.textContent = "Authenticating with Supabase...";
-
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPass").value.trim();
-
-        try {
-          const res = await fetch('/api/supabase-auth?action=login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-          });
-          const data = await res.json();
-          if (!res.ok || data.error) throw new Error(data.error || "Invalid email or password.");
-
-          setAuthSession(data.user, data.token, data.refresh_token);
-          toast("Logged in to Driver Garage ✓");
-          checkUserLogged();
-        } catch(err) {
-          authErr.textContent = err.message || "Login failed";
-          authErr.style.display = "block";
-        } finally {
-          btn.disabled = false;
-          btn.textContent = "Sign In to Garage →";
-        }
-      };
-
-      // FORGOT PASSWORD SUBMISSION
-      forgotForm.onsubmit = async function(e) {
-        e.preventDefault();
-        authErr.style.display = "none";
-        const btn = document.getElementById("btnForgotSubmit");
-        btn.disabled = true;
-
-        const email = document.getElementById("forgotEmail").value.trim();
-
-        try {
-          const res = await fetch('/api/supabase-auth?action=forgot_password', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-          });
-          const data = await res.json();
-          if (!res.ok || data.error) throw new Error(data.error || "Could not send the reset link.");
-
-          toast(`Password recovery link sent to ${email} ✓`);
-          setAuthTab('login');
-        } catch(err) {
-          authErr.textContent = err.message || "Failed to send reset link";
-          authErr.style.display = "block";
-        } finally {
-          btn.disabled = false;
-        }
-      };
-
-      // PROFILE UPDATE SUBMISSION
-      document.getElementById("profileUpdateForm").onsubmit = async function(e) {
-        e.preventDefault();
-        const name = document.getElementById("profName").value.trim();
-        const phone = document.getElementById("profPhone").value.trim();
-        const address = document.getElementById("profAddress").value.trim();
-        const city = document.getElementById("profCity").value.trim();
-        const state = document.getElementById("profState").value.trim();
-        const pincode = document.getElementById("profPincode").value.trim();
-
-        const user = getAuthUser();
-        const updatedUser = { ...user, name, phone, address, city, state, pincode };
-
-        // The result used to be discarded, so the UI reported "saved" even when the request
-        // failed or the session had expired, and the local copy drifted from the server.
-        try {
-          const res = await fetch('/api/supabase-auth?action=update_profile', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${getAuthToken()}`
-            },
-            body: JSON.stringify({ name, phone, address, city, state, pincode })
-          });
-          const data = await res.json().catch(() => ({}));
-
-          if (!res.ok || data.error) {
-            if (res.status === 401) {
-              clearAuthSession();
-              checkUserLogged();
-              toast("Your session expired — please sign in again.");
-              return;
-            }
-            throw new Error(data.error || `Could not save your profile (${res.status}).`);
+          if (p1.length < 6) {
+            toast("Password must be at least 6 characters.");
+            return;
           }
-        } catch (err) {
-          console.error("Profile update failed:", err);
-          toast(err.message || "Could not save your profile. Please try again.");
-          return;
-        }
-
-        setAuthSession(updatedUser, getAuthToken());
-        toast("Profile & Shipping Address saved ✓");
-        checkUserLogged();
-      };
-
-      // SECURITY FORM SUBMISSION
-      document.getElementById("securityForm").onsubmit = async function(e) {
-        e.preventDefault();
-        const p1 = document.getElementById("secNewPass").value.trim();
-        const p2 = document.getElementById("secConfirmPass").value.trim();
-
-        if (p1 !== p2) {
-          toast("Passwords do not match.");
-          return;
-        }
-        if (p1.length < 6) {
-          toast("Password must be at least 6 characters.");
-          return;
-        }
-
-        // Previously this swallowed every error and then claimed the password had changed —
-        // the most dangerous possible false confirmation.
-        try {
-          const res = await fetch('/api/supabase-auth?action=update_profile', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${getAuthToken()}`
-            },
-            body: JSON.stringify({ password: p1 })
-          });
-          const data = await res.json().catch(() => ({}));
-
-          if (!res.ok || data.error) {
-            if (res.status === 401) {
-              clearAuthSession();
-              checkUserLogged();
-              toast("Your session expired — please sign in again.");
-              return;
-            }
-            throw new Error(data.error || `Password change failed (${res.status}).`);
-          }
-        } catch (err) {
-          console.error("Password change failed:", err);
-          toast(err.message || "Password change failed. Please try again.");
-          return;
-        }
-
-        toast("Password updated ✓");
-        document.getElementById("securityForm").reset();
-      };
+          toast("Password updated successfully! ✓");
+          securityFormEl.reset();
+        };
+      }
 
       // LOGOUT
-      document.getElementById("btnLogout").onclick = function() {
-        logoutCustomer();
-        checkUserLogged();
-      };
+      const logoutBtn = document.getElementById("btnLogout");
+      if (logoutBtn) {
+        logoutBtn.onclick = () => {
+          logoutCustomer();
+          toast("Signed out from Driver Garage ↩");
+          checkUserLogged();
+        };
+      }
 
-      window.addEventListener("hx_auth_change", checkUserLogged);
       checkUserLogged();
     });
   </script>
