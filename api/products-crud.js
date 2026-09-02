@@ -42,21 +42,47 @@ function saveProductsToJsonDisk(arr) {
 
     const merged = arr.map(p => {
       const old = existingMap.get(String(p.id)) || {};
-      const img = (p.image && String(p.image).trim()) ? String(p.image).trim() : (old.image || '');
-      const imgs = (Array.isArray(p.images) && p.images.length > 0) ? p.images : (Array.isArray(old.images) ? old.images : (img ? [img] : []));
+      const isExplicitNoImage = p.no_image === true || (p.image === '' && (!p.images || p.images.length === 0));
+      
+      let img = '';
+      if (!isExplicitNoImage) {
+        if (p.image !== undefined && String(p.image).trim()) {
+          img = String(p.image).trim();
+        } else if (old.image && !old.no_image) {
+          img = String(old.image).trim();
+        }
+      }
+
+      let imgs = [];
+      if (!isExplicitNoImage) {
+        if (Array.isArray(p.images) && p.images.length > 0) {
+          imgs = p.images.filter(Boolean);
+        } else if (Array.isArray(old.images) && old.images.length > 0 && !old.no_image) {
+          imgs = old.images.filter(Boolean);
+        } else if (img) {
+          imgs = [img];
+        }
+      }
 
       return {
         ...old,
         ...p,
         image: img,
         images: imgs,
-        no_image: Boolean(!img)
+        no_image: isExplicitNoImage || !img
       };
     });
 
     const dir = path.dirname(jsonPath);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(jsonPath, JSON.stringify(merged, null, 2), 'utf8');
+
+    // Keep assets/products.js in exact parity
+    const jsPath = path.join(__dirname, '..', 'assets', 'products.js');
+    try {
+      fs.writeFileSync(jsPath, `window.HX_PRODUCTS = ${JSON.stringify(merged, null, 2)};\n`, 'utf8');
+    } catch(e) {}
+
     cachedProducts = merged;
   } catch(e) {
     console.error("Disk save error:", e.message);
@@ -183,11 +209,11 @@ module.exports = async (req, res) => {
       // Persist to Supabase DB if credentials set (use service_role key for writes - RLS requires it)
       if (supabaseServiceKey && supabaseUrl.includes("supabase")) {
         try {
-          // Fetch existing product record from DB to avoid clearing valid image
+          // Fetch existing product record from DB to preserve image if not explicitly modified
           let existingDbImg = '';
           let existingDbImgs = [];
           try {
-            const singleDbRes = await httpsRequest(`${supabaseUrl}/rest/v1/products?id=eq.${updatedProd.id}&select=image,images`, 'GET', {
+            const singleDbRes = await httpsRequest(`${supabaseUrl}/rest/v1/products?id=eq.${updatedProd.id}&select=image,images,no_image`, 'GET', {
               'apikey': supabaseServiceKey,
               'Authorization': `Bearer ${supabaseServiceKey}`
             });
@@ -197,8 +223,26 @@ module.exports = async (req, res) => {
             }
           } catch(e) {}
 
-          const finalImg = (updatedProd.image && String(updatedProd.image).trim()) ? String(updatedProd.image).trim() : existingDbImg;
-          const finalImgs = (Array.isArray(updatedProd.images) && updatedProd.images.length > 0) ? updatedProd.images : (existingDbImgs.length > 0 ? existingDbImgs : (finalImg ? [finalImg] : []));
+          const isExplicitNoImage = updatedProd.no_image === true || (updatedProd.image === '' && (!updatedProd.images || updatedProd.images.length === 0));
+          let finalImg = '';
+          if (!isExplicitNoImage) {
+            if (updatedProd.image !== undefined && String(updatedProd.image).trim()) {
+              finalImg = String(updatedProd.image).trim();
+            } else if (existingDbImg) {
+              finalImg = String(existingDbImg).trim();
+            }
+          }
+
+          let finalImgs = [];
+          if (!isExplicitNoImage) {
+            if (Array.isArray(updatedProd.images) && updatedProd.images.length > 0) {
+              finalImgs = updatedProd.images.filter(Boolean);
+            } else if (existingDbImgs.length > 0) {
+              finalImgs = existingDbImgs.filter(Boolean);
+            } else if (finalImg) {
+              finalImgs = [finalImg];
+            }
+          }
 
           const dbItem = {
             id: Number(updatedProd.id),
@@ -206,11 +250,23 @@ module.exports = async (req, res) => {
             name: String(updatedProd.name || ''),
             category: String(updatedProd.category || ''),
             price: Number(updatedProd.price || 0),
-            regular_price: Number(updatedProd.mrp || 0),
+            regular_price: Number(updatedProd.mrp || updatedProd.regular_price || 0),
             stock: Number(updatedProd.stock !== undefined ? updatedProd.stock : 25),
             image: finalImg,
             images: finalImgs,
-            no_image: Boolean(!finalImg)
+            no_image: isExplicitNoImage || !finalImg,
+            description: String(updatedProd.full_description || updatedProd.description || updatedProd.short_description || ''),
+            specs: {
+              scale: updatedProd.scale || '1:16',
+              speed: updatedProd.speed || '35 KM/H',
+              drive: updatedProd.drive || '4WD',
+              video: updatedProd.video || '',
+              hsn: updatedProd.hsn || '95030090',
+              gstRate: updatedProd.gstRate || 18,
+              taxMode: updatedProd.taxMode || 'inclusive',
+              short_description: updatedProd.short_description || '',
+              full_description: updatedProd.full_description || ''
+            }
           };
           await httpsRequest(`${supabaseUrl}/rest/v1/products`, 'POST', {
             'apikey': supabaseServiceKey,
@@ -252,8 +308,9 @@ module.exports = async (req, res) => {
 
             const dbPayload = payload.map(p => {
               const dbItem = existingDbMap.get(String(p.id)) || {};
-              const imgVal = (p.image && String(p.image).trim()) ? String(p.image).trim() : (dbItem.image || '');
-              const imgsVal = (Array.isArray(p.images) && p.images.length > 0) ? p.images : (Array.isArray(dbItem.images) ? dbItem.images : (imgVal ? [imgVal] : []));
+              const isNoImg = p.no_image === true || (p.image === '' && (!p.images || p.images.length === 0));
+              const imgVal = isNoImg ? '' : ((p.image && String(p.image).trim()) ? String(p.image).trim() : (dbItem.image || ''));
+              const imgsVal = isNoImg ? [] : ((Array.isArray(p.images) && p.images.length > 0) ? p.images.filter(Boolean) : (Array.isArray(dbItem.images) ? dbItem.images.filter(Boolean) : (imgVal ? [imgVal] : [])));
 
               return {
                 id: Number(p.id),
@@ -261,11 +318,23 @@ module.exports = async (req, res) => {
                 name: String(p.name || ''),
                 category: String(p.category || ''),
                 price: Number(p.price || 0),
-                regular_price: Number(p.mrp || 0),
+                regular_price: Number(p.mrp || p.regular_price || 0),
                 stock: Number(p.stock !== undefined ? p.stock : 25),
                 image: imgVal,
                 images: imgsVal,
-                no_image: Boolean(!imgVal)
+                no_image: isNoImg || !imgVal,
+                description: String(p.full_description || p.description || p.short_description || ''),
+                specs: {
+                  scale: p.scale || '1:16',
+                  speed: p.speed || '35 KM/H',
+                  drive: p.drive || '4WD',
+                  video: p.video || '',
+                  hsn: p.hsn || '95030090',
+                  gstRate: p.gstRate || 18,
+                  taxMode: p.taxMode || 'inclusive',
+                  short_description: p.short_description || '',
+                  full_description: p.full_description || ''
+                }
               };
             });
 
@@ -288,17 +357,33 @@ module.exports = async (req, res) => {
 
       if (supabaseServiceKey && supabaseUrl.includes("supabase")) {
         try {
+          const isNoImg = newProd.no_image === true || (!newProd.image && (!newProd.images || newProd.images.length === 0));
+          const imgVal = isNoImg ? '' : String(newProd.image || '').trim();
+          const imgsVal = isNoImg ? [] : (Array.isArray(newProd.images) ? newProd.images.filter(Boolean) : (imgVal ? [imgVal] : []));
+
           const dbItem = {
             id: Number(newProd.id),
             sku: String(newProd.sku || `HX-${newProd.id}`),
             name: String(newProd.name || ''),
             category: String(newProd.category || ''),
             price: Number(newProd.price || 0),
-            regular_price: Number(newProd.mrp || 0),
+            regular_price: Number(newProd.mrp || newProd.regular_price || 0),
             stock: Number(newProd.stock !== undefined ? newProd.stock : 25),
-            image: String(newProd.image || ''),
-            images: Array.isArray(newProd.images) ? newProd.images : [],
-            no_image: Boolean(newProd.no_image)
+            image: imgVal,
+            images: imgsVal,
+            no_image: isNoImg || !imgVal,
+            description: String(newProd.full_description || newProd.description || newProd.short_description || ''),
+            specs: {
+              scale: newProd.scale || '1:16',
+              speed: newProd.speed || '35 KM/H',
+              drive: newProd.drive || '4WD',
+              video: newProd.video || '',
+              hsn: newProd.hsn || '95030090',
+              gstRate: newProd.gstRate || 18,
+              taxMode: newProd.taxMode || 'inclusive',
+              short_description: newProd.short_description || '',
+              full_description: newProd.full_description || ''
+            }
           };
           await httpsRequest(`${supabaseUrl}/rest/v1/products`, 'POST', {
             'apikey': supabaseServiceKey,

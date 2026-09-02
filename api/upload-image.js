@@ -63,8 +63,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Base64 media string is required' });
     }
 
-    // The prefix strip was image-only, so video uploads kept their "data:video/mp4;base64,"
-    // header inside the payload and came back double-prefixed and mislabelled as an image.
+    // Strip data-URL prefix and detect actual MIME from it (handles video, webp, png, etc.)
     const dataUrlMatch = /^data:([\w.+-]+\/[\w.+-]+)?;base64,/.exec(base64);
     const cleanBase64 = dataUrlMatch ? base64.slice(dataUrlMatch[0].length) : base64;
     const mimeType = (dataUrlMatch && dataUrlMatch[1]) || contentType || 'image/jpeg';
@@ -74,20 +73,26 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Media payload could not be decoded' });
     }
 
-    const supabaseUrl = (process.env.SUPABASE_URL || "https://hyperxgt-db.supabase.co").replace(/\/$/, '');
+    // Derive extension from real MIME type (not original filename which may be .jpg for webp output)
+    const mimeExtMap = {
+      'image/jpeg': 'jpg', 'image/jpg': 'jpg', 'image/png': 'png',
+      'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg',
+      'video/mp4': 'mp4', 'video/webm': 'webm', 'video/ogg': 'ogg', 'video/quicktime': 'mov'
+    };
+    const extFromMime = mimeExtMap[mimeType] || (filename ? filename.split('.').pop() : 'jpg');
+    const uniqueName = `prod_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}.${extFromMime}`;
+
+    const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\/$/, '');
     const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
 
-    const ext = filename ? filename.split('.').pop() : 'jpg';
-    const uniqueName = `prod_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}.${ext}`;
-
     let publicUrl = "";
 
-    // 1. UPLOAD TO SUPABASE STORAGE BUCKET ('products')
-    if ((supabaseServiceKey || supabaseAnonKey) && supabaseUrl.includes("supabase")) {
+    // 1. UPLOAD TO SUPABASE STORAGE BUCKET ('products') — requires env vars to be configured
+    if (supabaseUrl && supabaseUrl.includes("supabase") && (supabaseServiceKey || supabaseAnonKey)) {
       try {
-        const uploadUrl = `${supabaseUrl}/storage/v1/object/products/${uniqueName}`;
         const activeKey = supabaseServiceKey || supabaseAnonKey;
+        const uploadUrl = `${supabaseUrl}/storage/v1/object/products/${uniqueName}`;
         const headers = {
           'apikey': activeKey,
           'Authorization': `Bearer ${activeKey}`,
@@ -98,13 +103,17 @@ module.exports = async (req, res) => {
         const upRes = await httpsUpload(uploadUrl, headers, buffer);
         if (upRes.statusCode === 200 || upRes.statusCode === 201) {
           publicUrl = `${supabaseUrl}/storage/v1/object/public/products/${uniqueName}`;
+        } else {
+          console.error("Supabase Storage Upload failed:", upRes.statusCode, JSON.stringify(upRes.body).slice(0, 200));
         }
       } catch(e) {
         console.error("Supabase Storage Upload Error:", e.message);
       }
+    } else {
+      console.log("Supabase not configured — falling back to local disk storage.");
     }
 
-    // Fallback: If Supabase Storage bucket isn't configured, save file to assets/uploads/ on local disk
+    // 2. FALLBACK: Save to assets/uploads/ on local disk (works on localhost; on Vercel set SUPABASE_* env vars)
     if (!publicUrl) {
       try {
         const fs = require('fs');
@@ -116,8 +125,10 @@ module.exports = async (req, res) => {
         const localFilePath = path.join(uploadsDir, uniqueName);
         fs.writeFileSync(localFilePath, buffer);
         publicUrl = `assets/uploads/${uniqueName}`;
+        console.log("Saved to local disk:", publicUrl, `(${Math.round(buffer.length / 1024)} KB)`);
       } catch(err) {
         console.error("Local disk storage write error:", err.message);
+        // Last resort: return data URL so image is not lost (but large)
         publicUrl = `data:${mimeType};base64,${cleanBase64}`;
       }
     }
@@ -125,7 +136,8 @@ module.exports = async (req, res) => {
     return res.status(200).json({
       success: true,
       url: publicUrl,
-      filename: uniqueName
+      filename: uniqueName,
+      storage: publicUrl.startsWith('http') ? 'supabase' : publicUrl.startsWith('data:') ? 'inline-base64' : 'local-disk'
     });
 
   } catch (err) {

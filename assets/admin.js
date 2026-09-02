@@ -234,7 +234,7 @@ window.setAsHeroImageByIdx = function(idx) {
   }
 };
 
-function compressImageFile(file, maxWidth = 1000, maxHeight = 1000, quality = 0.84) {
+function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.88) {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -255,8 +255,27 @@ function compressImageFile(file, maxWidth = 1000, maxHeight = 1000, quality = 0.
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d');
+        // White background for JPEGs (prevents black bleed on transparency)
+        const isPng = file.type === 'image/png' || file.name.toLowerCase().endsWith('.png');
+        if (!isPng) {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, width, height);
+        }
         ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        // Use WebP if supported (best quality:size ratio), fallback to PNG for transparency, JPEG for photos
+        const supportsWebP = canvas.toDataURL('image/webp').startsWith('data:image/webp');
+        let outputMime, outputQuality;
+        if (supportsWebP) {
+          outputMime = 'image/webp';
+          outputQuality = quality;
+        } else if (isPng) {
+          outputMime = 'image/png';
+          outputQuality = 1;
+        } else {
+          outputMime = 'image/jpeg';
+          outputQuality = quality;
+        }
+        resolve(canvas.toDataURL(outputMime, outputQuality));
       };
       img.onerror = () => resolve(e.target.result || '');
       img.src = e.target.result;
@@ -283,6 +302,9 @@ function initImageUploadHandler() {
         const file = files[i];
         try {
           const base64 = await compressImageFile(file);
+          // Detect actual MIME from compressed data URL header
+          const mimeMatch = /^data:([\w./+-]+);base64,/.exec(base64);
+          const detectedMime = (mimeMatch && mimeMatch[1]) || file.type || 'image/jpeg';
 
           const apiRes = await fetch('/api/upload-image', {
             method: 'POST',
@@ -290,17 +312,25 @@ function initImageUploadHandler() {
             body: JSON.stringify({
               base64,
               filename: file.name,
-              contentType: 'image/jpeg'
+              contentType: detectedMime
             })
           });
+          if (!apiRes.ok) {
+            const errData = await apiRes.json().catch(() => ({}));
+            console.error(`Upload failed for ${file.name}:`, errData.error || apiRes.status);
+            toast(`⚠️ Upload failed for "${file.name}": ${errData.error || 'Server error'}`);
+            continue;
+          }
           const data = await apiRes.json();
           if (data && data.url) {
             uploadedPublicUrls.push(data.url);
           } else {
+            // Fallback: keep in-memory base64 so gallery still shows image
             uploadedPublicUrls.push(base64);
           }
         } catch(err) {
           console.error("Upload error:", err.message);
+          toast(`⚠️ Network error uploading "${file.name}"`);
         }
       }
 
@@ -311,9 +341,24 @@ function initImageUploadHandler() {
         galleryTextarea.value = combined.join(', ');
 
         renderAdminGalleryPreview(combined, imgInput.value.trim());
-        toast(`Uploaded ${uploadedPublicUrls.length} images! Main hero photo & gallery updated ✓`);
+        toast(`✅ Uploaded ${uploadedPublicUrls.length} of ${files.length} photos! Gallery updated ✓`);
       }
+      // Reset so same file can be re-uploaded if needed
+      fileInput.value = '';
     };
+  }
+
+  // Live preview when admin manually pastes/types a URL into the hero image field
+  if (imgInput) {
+    imgInput.addEventListener('input', function() {
+      const url = this.value.trim();
+      if (!url) return;
+      const existingList = galleryTextarea && galleryTextarea.value.trim()
+        ? galleryTextarea.value.trim().split(',').map(x => x.trim()).filter(Boolean)
+        : [];
+      if (!existingList.includes(url)) existingList.unshift(url);
+      renderAdminGalleryPreview(existingList, url);
+    });
   }
 }
 
@@ -326,6 +371,14 @@ function initVideoUploadHandler() {
     videoFileInput.onchange = async function(e) {
       const file = e.target.files[0];
       if (!file) return;
+
+      // Block oversized videos (>50 MB) — Vercel payload limit is 4.5 MB serverless, disk fallback handles larger
+      const MAX_VIDEO_MB = 50;
+      if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
+        toast(`⚠️ Video too large (${Math.round(file.size/1024/1024)} MB). Max ${MAX_VIDEO_MB} MB. Use a YouTube URL instead.`);
+        videoFileInput.value = '';
+        return;
+      }
 
       toast("Uploading product action video...");
       try {
