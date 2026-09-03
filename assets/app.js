@@ -1535,6 +1535,39 @@ function initHeroBannerLive() {
       if (data.sideCard2Title && $("h3", sideCards[1])) $("h3", sideCards[1]).innerHTML = data.sideCard2Title.replace(/\n/g, "<br>");
       if (data.sideCard2Link) sideCards[1].href = data.sideCard2Link;
     }
+
+    // 10. "Find your kind of fast" Terrain Cards Section (#shop)
+    const terrainSection = $("#shop");
+    if (terrainSection) {
+      if (data.terrainSectionEyebrow && $(".section-head .eyebrow", terrainSection)) {
+        $(".section-head .eyebrow", terrainSection).textContent = data.terrainSectionEyebrow;
+      }
+      if (data.terrainSectionTitle && $(".section-head h2", terrainSection)) {
+        $(".section-head h2", terrainSection).textContent = data.terrainSectionTitle;
+      }
+      if (data.terrainSectionDesc && $(".section-head p", terrainSection)) {
+        $(".section-head p", terrainSection).textContent = data.terrainSectionDesc;
+      }
+
+      const collCards = $$(".collection-band .collection", terrainSection);
+      if (collCards.length >= 2) {
+        // Terrain Card 1 (Crawlers & Off Road)
+        if (data.terrainCard1Link) collCards[0].href = data.terrainCard1Link;
+        if (data.terrainCard1Image && $("img", collCards[0])) $("img", collCards[0]).src = data.terrainCard1Image;
+        if (data.terrainCard1Eyebrow && $(".copy .eyebrow", collCards[0])) $(".copy .eyebrow", collCards[0]).textContent = data.terrainCard1Eyebrow;
+        if (data.terrainCard1Title && $(".copy h3", collCards[0])) $(".copy h3", collCards[0]).textContent = data.terrainCard1Title;
+        if (data.terrainCard1Desc && $(".copy p", collCards[0])) $(".copy p", collCards[0]).textContent = data.terrainCard1Desc;
+        if (data.terrainCard1BtnText && $(".copy .textlink", collCards[0])) $(".copy .textlink", collCards[0]).textContent = data.terrainCard1BtnText;
+
+        // Terrain Card 2 (Racing & Speed)
+        if (data.terrainCard2Link) collCards[1].href = data.terrainCard2Link;
+        if (data.terrainCard2Image && $("img", collCards[1])) $("img", collCards[1]).src = data.terrainCard2Image;
+        if (data.terrainCard2Eyebrow && $(".copy .eyebrow", collCards[1])) $(".copy .eyebrow", collCards[1]).textContent = data.terrainCard2Eyebrow;
+        if (data.terrainCard2Title && $(".copy h3", collCards[1])) $(".copy h3", collCards[1]).textContent = data.terrainCard2Title;
+        if (data.terrainCard2Desc && $(".copy p", collCards[1])) $(".copy p", collCards[1]).textContent = data.terrainCard2Desc;
+        if (data.terrainCard2BtnText && $(".copy .textlink", collCards[1])) $(".copy .textlink", collCards[1]).textContent = data.terrainCard2BtnText;
+      }
+    }
   };
 
   // 1. Instant load from local cache

@@ -912,6 +912,163 @@
 
           </div>
 
+          <!-- SECTION 2: CHOOSE YOUR TERRAIN / FIND YOUR KIND OF FAST CARDS -->
+          <div style="margin-top:32px; padding-top:28px; border-top:2px dashed var(--line)">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
+              <div>
+                <h3 style="font-size:18px; margin:0 0 4px; color:#111; display:flex; align-items:center; gap:8px">
+                  <span>🏔️</span> "Choose Your Terrain — Find Your Kind of Fast" Cards
+                </h3>
+                <p style="font-size:12px; color:#666; margin:0">Customize the two large terrain highlight banners (Crawlers &amp; Off-Road vs Racing &amp; Speed) displayed on the homepage.</p>
+              </div>
+            </div>
+
+            <!-- LIVE TERRAIN CARDS PREVIEW -->
+            <div style="background:#f4f5f7; border-radius:18px; padding:22px; margin-bottom:22px">
+              <div style="font-size:11px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:#1488d8; margin-bottom:12px">👁️ Live Terrain Cards Preview</div>
+              
+              <div style="margin-bottom:14px">
+                <div id="previewTerrainEyebrow" style="font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.12em; color:#1488d8">Choose your terrain</div>
+                <h3 id="previewTerrainTitle" style="font-size:22px; font-weight:900; margin:4px 0 6px; color:#111">Find your kind of fast</h3>
+                <p id="previewTerrainDesc" style="font-size:12px; color:#666; margin:0; max-width:600px">Shop the full catalogue by driving style, terrain, scale, price and technical specifications.</p>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+                <!-- Preview Card 1 -->
+                <div style="position:relative; border-radius:16px; overflow:hidden; min-height:220px; background:#111; display:flex; flex-direction:column; justify-content:flex-end; padding:20px; color:#fff; box-shadow:0 6px 20px rgba(0,0,0,0.15)">
+                  <img id="previewTerrainCard1Img" src="assets/uploads/prod_1787927140240_2945.png" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.85">
+                  <div style="position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)"></div>
+                  <div style="position:relative; z-index:2">
+                    <div id="previewTerrainCard1Eyebrow" style="font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:.1em; color:#4f78ff">Crawlers &amp; off road</div>
+                    <h4 id="previewTerrainCard1Title" style="font-size:20px; font-weight:900; margin:4px 0 6px">Built for dirt.</h4>
+                    <p id="previewTerrainCard1Desc" style="font-size:11px; color:#ccc; margin:0 0 10px; line-height:1.4">4WD torque, all-terrain control and scale-ready rigs for technical surfaces and trail driving.</p>
+                    <span id="previewTerrainCard1Btn" style="font-size:11px; font-weight:800; color:#fff; text-decoration:underline">Shop off road →</span>
+                  </div>
+                </div>
+
+                <!-- Preview Card 2 -->
+                <div style="position:relative; border-radius:16px; overflow:hidden; min-height:220px; background:#111; display:flex; flex-direction:column; justify-content:flex-end; padding:20px; color:#fff; box-shadow:0 6px 20px rgba(0,0,0,0.15)">
+                  <img id="previewTerrainCard2Img" src="assets/uploads/prod_1787920104060_6427.jpg" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.85">
+                  <div style="position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)"></div>
+                  <div style="position:relative; z-index:2">
+                    <div id="previewTerrainCard2Eyebrow" style="font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:.1em; color:#4f78ff">Racing &amp; speed</div>
+                    <h4 id="previewTerrainCard2Title" style="font-size:20px; font-weight:900; margin:4px 0 6px">Own the apex.</h4>
+                    <p id="previewTerrainCard2Desc" style="font-size:11px; color:#ccc; margin:0 0 10px; line-height:1.4">Responsive 2.4GHz systems, stable chassis designs and speed-focused platforms for track and tarmac.</p>
+                    <span id="previewTerrainCard2Btn" style="font-size:11px; font-weight:800; color:#fff; text-decoration:underline">Shop racing →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TERRAIN SECTION HEADING FORM -->
+            <div style="background:#fbfbfd; border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:20px">
+              <h4 style="font-size:14px; margin:0 0 14px; color:#111">🏷️ Section Header Information</h4>
+              <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:14px; margin-bottom:12px">
+                <div>
+                  <label class="form-label">Section Eyebrow</label>
+                  <input class="field" id="heroFormTerrainEyebrow" placeholder="Choose your terrain">
+                </div>
+                <div>
+                  <label class="form-label">Section Title</label>
+                  <input class="field" id="heroFormTerrainTitle" placeholder="Find your kind of fast">
+                </div>
+              </div>
+              <div>
+                <label class="form-label">Section Subtitle / Description</label>
+                <input class="field" id="heroFormTerrainDesc" placeholder="Shop the full catalogue by driving style, terrain, scale, price and technical specifications.">
+              </div>
+            </div>
+
+            <!-- TERRAIN 2 CARDS EDITING GRID -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
+              
+              <!-- TERRAIN CARD 1 -->
+              <div style="background:#fbfbfd; border:1px solid var(--line); border-radius:16px; padding:20px">
+                <h4 style="font-size:15px; margin:0 0 14px; color:#1488d8">🚙 Card 1: Crawlers &amp; Off Road</h4>
+                
+                <div style="margin-bottom:12px">
+                  <label class="form-label">Card Eyebrow</label>
+                  <input class="field" id="heroFormTerrainCard1Eyebrow" placeholder="Crawlers & off road">
+                </div>
+
+                <div style="margin-bottom:12px">
+                  <label class="form-label">Card Heading / Title *</label>
+                  <input class="field" id="heroFormTerrainCard1Title" placeholder="Built for dirt.">
+                </div>
+
+                <div style="margin-bottom:12px">
+                  <label class="form-label">Card Narrative Description</label>
+                  <textarea class="field" id="heroFormTerrainCard1Desc" style="height:65px; padding-top:8px" placeholder="4WD torque, all-terrain control and scale-ready rigs..."></textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px">
+                  <div>
+                    <label class="form-label">Button Text</label>
+                    <input class="field" id="heroFormTerrainCard1BtnText" placeholder="Shop off road →">
+                  </div>
+                  <div>
+                    <label class="form-label">Destination Link URL</label>
+                    <input class="field" id="heroFormTerrainCard1Link" placeholder="shop.html?cat=Off%20Road%20Crawlers">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="form-label">Card Background Image</label>
+                  <div style="display:flex; gap:8px">
+                    <input class="field" id="heroFormTerrainCard1Image" placeholder="assets/uploads/prod_1787927140240_2945.png" style="margin:0; flex:1">
+                    <label class="btn" style="background:#111; color:#fff; height:48px; display:inline-flex; align-items:center; cursor:pointer; font-size:11px; padding:0 12px; border-radius:10px">
+                      <span>📤 Upload</span>
+                      <input type="file" id="heroTerrainCard1FileInput" accept="image/*" style="display:none">
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TERRAIN CARD 2 -->
+              <div style="background:#fbfbfd; border:1px solid var(--line); border-radius:16px; padding:20px">
+                <h4 style="font-size:15px; margin:0 0 14px; color:#ed1c24">🏎️ Card 2: Racing &amp; Speed</h4>
+                
+                <div style="margin-bottom:12px">
+                  <label class="form-label">Card Eyebrow</label>
+                  <input class="field" id="heroFormTerrainCard2Eyebrow" placeholder="Racing & speed">
+                </div>
+
+                <div style="margin-bottom:12px">
+                  <label class="form-label">Card Heading / Title *</label>
+                  <input class="field" id="heroFormTerrainCard2Title" placeholder="Own the apex.">
+                </div>
+
+                <div style="margin-bottom:12px">
+                  <label class="form-label">Card Narrative Description</label>
+                  <textarea class="field" id="heroFormTerrainCard2Desc" style="height:65px; padding-top:8px" placeholder="Responsive 2.4GHz systems, stable chassis designs..."></textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px">
+                  <div>
+                    <label class="form-label">Button Text</label>
+                    <input class="field" id="heroFormTerrainCard2BtnText" placeholder="Shop racing →">
+                  </div>
+                  <div>
+                    <label class="form-label">Destination Link URL</label>
+                    <input class="field" id="heroFormTerrainCard2Link" placeholder="shop.html?cat=Racing%20Cars">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="form-label">Card Background Image</label>
+                  <div style="display:flex; gap:8px">
+                    <input class="field" id="heroFormTerrainCard2Image" placeholder="assets/uploads/prod_1787920104060_6427.jpg" style="margin:0; flex:1">
+                    <label class="btn" style="background:#111; color:#fff; height:48px; display:inline-flex; align-items:center; cursor:pointer; font-size:11px; padding:0 12px; border-radius:10px">
+                      <span>📤 Upload</span>
+                      <input type="file" id="heroTerrainCard2FileInput" accept="image/*" style="display:none">
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
           <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:flex-end; gap:12px">
             <button class="btn" id="btnResetHeroSettingsBottom" style="background:#f1f3f5; color:#555; height:48px; font-size:12px">🔄 Reset Defaults</button>
             <button class="btn blue" id="btnSaveHeroSettingsBottom" style="height:48px; font-size:13px; padding:0 28px">💾 Save &amp; Publish Live ✓</button>

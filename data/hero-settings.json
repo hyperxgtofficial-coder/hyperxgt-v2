@@ -22,5 +22,20 @@
   "sideCard2Category": "Drift collection",
   "sideCard2Title": "Slide with precision.",
   "sideCard2Link": "shop.html?cat=Drift%20Cars",
-  "sideCard2Image": "assets/uploads/prod_1787920104060_6427.jpg"
+  "sideCard2Image": "assets/uploads/prod_1787920104060_6427.jpg",
+  "terrainSectionEyebrow": "Choose your terrain",
+  "terrainSectionTitle": "Find your kind of fast",
+  "terrainSectionDesc": "Shop the full catalogue by driving style, terrain, scale, price and technical specifications.",
+  "terrainCard1Eyebrow": "Crawlers & off road",
+  "terrainCard1Title": "Built for dirt.",
+  "terrainCard1Desc": "4WD torque, all-terrain control and scale-ready rigs for technical surfaces and trail driving.",
+  "terrainCard1BtnText": "Shop off road →",
+  "terrainCard1Link": "shop.html?cat=Off%20Road%20Crawlers",
+  "terrainCard1Image": "assets/uploads/prod_1787927140240_2945.png",
+  "terrainCard2Eyebrow": "Racing & speed",
+  "terrainCard2Title": "Own the apex.",
+  "terrainCard2Desc": "Responsive 2.4GHz systems, stable chassis designs and speed-focused platforms for track and tarmac.",
+  "terrainCard2BtnText": "Shop racing →",
+  "terrainCard2Link": "shop.html?cat=Racing%20Cars",
+  "terrainCard2Image": "assets/uploads/prod_1787920104060_6427.jpg"
 }

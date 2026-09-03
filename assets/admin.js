@@ -1927,6 +1927,9 @@ function initZohoOneIntegration() {
 // ==========================================
 // HOMEPAGE HERO & BANNER STUDIO CONTROLLER
 // ==========================================
+// ==========================================
+// HOMEPAGE HERO & BANNER STUDIO CONTROLLER
+// ==========================================
 function initHeroStudio() {
   const defaultSettings = {
     eyebrow: "HyperXGT · Flagship 1:7 Scale Rally Machine",
@@ -1952,7 +1955,22 @@ function initHeroStudio() {
     sideCard2Category: "Drift collection",
     sideCard2Title: "Slide with precision.",
     sideCard2Link: "shop.html?cat=Drift%20Cars",
-    sideCard2Image: "assets/uploads/prod_1787920104060_6427.jpg"
+    sideCard2Image: "assets/uploads/prod_1787920104060_6427.jpg",
+    terrainSectionEyebrow: "Choose your terrain",
+    terrainSectionTitle: "Find your kind of fast",
+    terrainSectionDesc: "Shop the full catalogue by driving style, terrain, scale, price and technical specifications.",
+    terrainCard1Eyebrow: "Crawlers & off road",
+    terrainCard1Title: "Built for dirt.",
+    terrainCard1Desc: "4WD torque, all-terrain control and scale-ready rigs for technical surfaces and trail driving.",
+    terrainCard1BtnText: "Shop off road →",
+    terrainCard1Link: "shop.html?cat=Off%20Road%20Crawlers",
+    terrainCard1Image: "assets/uploads/prod_1787927140240_2945.png",
+    terrainCard2Eyebrow: "Racing & speed",
+    terrainCard2Title: "Own the apex.",
+    terrainCard2Desc: "Responsive 2.4GHz systems, stable chassis designs and speed-focused platforms for track and tarmac.",
+    terrainCard2BtnText: "Shop racing →",
+    terrainCard2Link: "shop.html?cat=Racing%20Cars",
+    terrainCard2Image: "assets/uploads/prod_1787920104060_6427.jpg"
   };
 
   const syncPreviewFromForm = () => {
@@ -1976,6 +1994,24 @@ function initHeroStudio() {
     if ($("#previewBadge2Sub")) $("#previewBadge2Sub").textContent = $("#heroFormBadge2Sub")?.value || defaultSettings.badge2Sub;
     if ($("#previewBadge3Label")) $("#previewBadge3Label").textContent = $("#heroFormBadge3Label")?.value || defaultSettings.badge3Label;
     if ($("#previewBadge3Sub")) $("#previewBadge3Sub").textContent = $("#heroFormBadge3Sub")?.value || defaultSettings.badge3Sub;
+
+    if ($("#previewTerrainEyebrow")) $("#previewTerrainEyebrow").textContent = $("#heroFormTerrainEyebrow")?.value || defaultSettings.terrainSectionEyebrow;
+    if ($("#previewTerrainTitle")) $("#previewTerrainTitle").textContent = $("#heroFormTerrainTitle")?.value || defaultSettings.terrainSectionTitle;
+    if ($("#previewTerrainDesc")) $("#previewTerrainDesc").textContent = $("#heroFormTerrainDesc")?.value || defaultSettings.terrainSectionDesc;
+
+    if ($("#previewTerrainCard1Eyebrow")) $("#previewTerrainCard1Eyebrow").textContent = $("#heroFormTerrainCard1Eyebrow")?.value || defaultSettings.terrainCard1Eyebrow;
+    if ($("#previewTerrainCard1Title")) $("#previewTerrainCard1Title").textContent = $("#heroFormTerrainCard1Title")?.value || defaultSettings.terrainCard1Title;
+    if ($("#previewTerrainCard1Desc")) $("#previewTerrainCard1Desc").textContent = $("#heroFormTerrainCard1Desc")?.value || defaultSettings.terrainCard1Desc;
+    if ($("#previewTerrainCard1Btn")) $("#previewTerrainCard1Btn").textContent = $("#heroFormTerrainCard1BtnText")?.value || defaultSettings.terrainCard1BtnText;
+    const tImg1 = $("#heroFormTerrainCard1Image")?.value || defaultSettings.terrainCard1Image;
+    if ($("#previewTerrainCard1Img")) $("#previewTerrainCard1Img").src = tImg1;
+
+    if ($("#previewTerrainCard2Eyebrow")) $("#previewTerrainCard2Eyebrow").textContent = $("#heroFormTerrainCard2Eyebrow")?.value || defaultSettings.terrainCard2Eyebrow;
+    if ($("#previewTerrainCard2Title")) $("#previewTerrainCard2Title").textContent = $("#heroFormTerrainCard2Title")?.value || defaultSettings.terrainCard2Title;
+    if ($("#previewTerrainCard2Desc")) $("#previewTerrainCard2Desc").textContent = $("#heroFormTerrainCard2Desc")?.value || defaultSettings.terrainCard2Desc;
+    if ($("#previewTerrainCard2Btn")) $("#previewTerrainCard2Btn").textContent = $("#heroFormTerrainCard2BtnText")?.value || defaultSettings.terrainCard2BtnText;
+    const tImg2 = $("#heroFormTerrainCard2Image")?.value || defaultSettings.terrainCard2Image;
+    if ($("#previewTerrainCard2Img")) $("#previewTerrainCard2Img").src = tImg2;
   };
 
   const populateForm = (data) => {
@@ -2007,6 +2043,24 @@ function initHeroStudio() {
     if ($("#heroFormCard2Link")) $("#heroFormCard2Link").value = s.sideCard2Link || "";
     if ($("#heroFormCard2Img")) $("#heroFormCard2Img").value = s.sideCard2Image || "";
 
+    if ($("#heroFormTerrainEyebrow")) $("#heroFormTerrainEyebrow").value = s.terrainSectionEyebrow || "";
+    if ($("#heroFormTerrainTitle")) $("#heroFormTerrainTitle").value = s.terrainSectionTitle || "";
+    if ($("#heroFormTerrainDesc")) $("#heroFormTerrainDesc").value = s.terrainSectionDesc || "";
+
+    if ($("#heroFormTerrainCard1Eyebrow")) $("#heroFormTerrainCard1Eyebrow").value = s.terrainCard1Eyebrow || "";
+    if ($("#heroFormTerrainCard1Title")) $("#heroFormTerrainCard1Title").value = s.terrainCard1Title || "";
+    if ($("#heroFormTerrainCard1Desc")) $("#heroFormTerrainCard1Desc").value = s.terrainCard1Desc || "";
+    if ($("#heroFormTerrainCard1BtnText")) $("#heroFormTerrainCard1BtnText").value = s.terrainCard1BtnText || "";
+    if ($("#heroFormTerrainCard1Link")) $("#heroFormTerrainCard1Link").value = s.terrainCard1Link || "";
+    if ($("#heroFormTerrainCard1Image")) $("#heroFormTerrainCard1Image").value = s.terrainCard1Image || "";
+
+    if ($("#heroFormTerrainCard2Eyebrow")) $("#heroFormTerrainCard2Eyebrow").value = s.terrainCard2Eyebrow || "";
+    if ($("#heroFormTerrainCard2Title")) $("#heroFormTerrainCard2Title").value = s.terrainCard2Title || "";
+    if ($("#heroFormTerrainCard2Desc")) $("#heroFormTerrainCard2Desc").value = s.terrainCard2Desc || "";
+    if ($("#heroFormTerrainCard2BtnText")) $("#heroFormTerrainCard2BtnText").value = s.terrainCard2BtnText || "";
+    if ($("#heroFormTerrainCard2Link")) $("#heroFormTerrainCard2Link").value = s.terrainCard2Link || "";
+    if ($("#heroFormTerrainCard2Image")) $("#heroFormTerrainCard2Image").value = s.terrainCard2Image || "";
+
     syncPreviewFromForm();
   };
 
@@ -2035,7 +2089,14 @@ function initHeroStudio() {
     "#heroFormPrimaryText", "#heroFormPrimaryUrl", "#heroFormSecondaryText", "#heroFormSecondaryUrl",
     "#heroFormBgImage", "#heroFormShowAmbassador", "#heroFormAmbassadorImage",
     "#heroFormBadge1Label", "#heroFormBadge1Sub", "#heroFormBadge2Label", "#heroFormBadge2Sub",
-    "#heroFormBadge3Label", "#heroFormBadge3Sub"
+    "#heroFormBadge3Label", "#heroFormBadge3Sub",
+    "#heroFormCard1Cat", "#heroFormCard1Title", "#heroFormCard1Link", "#heroFormCard1Img",
+    "#heroFormCard2Cat", "#heroFormCard2Title", "#heroFormCard2Link", "#heroFormCard2Img",
+    "#heroFormTerrainEyebrow", "#heroFormTerrainTitle", "#heroFormTerrainDesc",
+    "#heroFormTerrainCard1Eyebrow", "#heroFormTerrainCard1Title", "#heroFormTerrainCard1Desc",
+    "#heroFormTerrainCard1BtnText", "#heroFormTerrainCard1Link", "#heroFormTerrainCard1Image",
+    "#heroFormTerrainCard2Eyebrow", "#heroFormTerrainCard2Title", "#heroFormTerrainCard2Desc",
+    "#heroFormTerrainCard2BtnText", "#heroFormTerrainCard2Link", "#heroFormTerrainCard2Image"
   ];
   inputs.forEach(sel => {
     const el = $(sel);
@@ -2080,6 +2141,8 @@ function initHeroStudio() {
   handleSingleUpload($("#heroAmbassadorFileInput"), $("#heroFormAmbassadorImage"));
   handleSingleUpload($("#heroCard1FileInput"), $("#heroFormCard1Img"));
   handleSingleUpload($("#heroCard2FileInput"), $("#heroFormCard2Img"));
+  handleSingleUpload($("#heroTerrainCard1FileInput"), $("#heroFormTerrainCard1Image"));
+  handleSingleUpload($("#heroTerrainCard2FileInput"), $("#heroFormTerrainCard2Image"));
 
   // Save handler
   const saveHeroSettings = async () => {
@@ -2107,7 +2170,22 @@ function initHeroStudio() {
       sideCard2Category: $("#heroFormCard2Cat")?.value.trim() || defaultSettings.sideCard2Category,
       sideCard2Title: $("#heroFormCard2Title")?.value.trim() || defaultSettings.sideCard2Title,
       sideCard2Link: $("#heroFormCard2Link")?.value.trim() || defaultSettings.sideCard2Link,
-      sideCard2Image: $("#heroFormCard2Img")?.value.trim() || defaultSettings.sideCard2Image
+      sideCard2Image: $("#heroFormCard2Img")?.value.trim() || defaultSettings.sideCard2Image,
+      terrainSectionEyebrow: $("#heroFormTerrainEyebrow")?.value.trim() || defaultSettings.terrainSectionEyebrow,
+      terrainSectionTitle: $("#heroFormTerrainTitle")?.value.trim() || defaultSettings.terrainSectionTitle,
+      terrainSectionDesc: $("#heroFormTerrainDesc")?.value.trim() || defaultSettings.terrainSectionDesc,
+      terrainCard1Eyebrow: $("#heroFormTerrainCard1Eyebrow")?.value.trim() || defaultSettings.terrainCard1Eyebrow,
+      terrainCard1Title: $("#heroFormTerrainCard1Title")?.value.trim() || defaultSettings.terrainCard1Title,
+      terrainCard1Desc: $("#heroFormTerrainCard1Desc")?.value.trim() || defaultSettings.terrainCard1Desc,
+      terrainCard1BtnText: $("#heroFormTerrainCard1BtnText")?.value.trim() || defaultSettings.terrainCard1BtnText,
+      terrainCard1Link: $("#heroFormTerrainCard1Link")?.value.trim() || defaultSettings.terrainCard1Link,
+      terrainCard1Image: $("#heroFormTerrainCard1Image")?.value.trim() || defaultSettings.terrainCard1Image,
+      terrainCard2Eyebrow: $("#heroFormTerrainCard2Eyebrow")?.value.trim() || defaultSettings.terrainCard2Eyebrow,
+      terrainCard2Title: $("#heroFormTerrainCard2Title")?.value.trim() || defaultSettings.terrainCard2Title,
+      terrainCard2Desc: $("#heroFormTerrainCard2Desc")?.value.trim() || defaultSettings.terrainCard2Desc,
+      terrainCard2BtnText: $("#heroFormTerrainCard2BtnText")?.value.trim() || defaultSettings.terrainCard2BtnText,
+      terrainCard2Link: $("#heroFormTerrainCard2Link")?.value.trim() || defaultSettings.terrainCard2Link,
+      terrainCard2Image: $("#heroFormTerrainCard2Image")?.value.trim() || defaultSettings.terrainCard2Image
     };
 
     const adminKey = localStorage.getItem("hx_admin_auth") || "hx_admin_sec_2026_super_key";
@@ -2129,7 +2207,7 @@ function initHeroStudio() {
       const data = await res.json();
       if (data && data.status === "ok") {
         try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
-        toast("🎉 Homepage Hero Banner saved and published to live store!");
+        toast("🎉 Homepage Showcase & Terrain Cards saved and published live!");
       } else {
         toast("Saved locally. Server error: " + (data.error || "Unknown"));
       }
@@ -2145,7 +2223,7 @@ function initHeroStudio() {
   if (btnSave2) btnSave2.onclick = saveHeroSettings;
 
   const resetHeroSettings = () => {
-    if (confirm("Reset Homepage Hero Banner to factory defaults?")) {
+    if (confirm("Reset Homepage Hero Banner & Terrain Cards to factory defaults?")) {
       populateForm(defaultSettings);
       saveHeroSettings();
     }
