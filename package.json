@@ -13,5 +13,8 @@
     "check:handlers": "node scripts/check-handlers.js",
     "check:pages": "bash scripts/check-pages.sh",
     "check": "npm run check:syntax && npm run check:handlers"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
   }
 }
