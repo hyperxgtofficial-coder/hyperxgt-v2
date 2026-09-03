@@ -1457,7 +1457,106 @@ function shopInit() {
   render();
 }
 
+// DYNAMIC HOMEPAGE HERO BANNER SYNCHRONIZER
+function initHeroBannerLive() {
+  const heroMain = $(".hero-main.ambassador-hero, .hero-main");
+  if (!heroMain) return;
+
+  const applyHeroData = (data) => {
+    if (!data) return;
+    
+    // 1. Eyebrow
+    const eyebrowEl = $(".hero-copy .eyebrow", heroMain);
+    if (eyebrowEl && data.eyebrow) eyebrowEl.textContent = data.eyebrow;
+
+    // 2. Headline
+    const h1El = $(".hero-copy h1", heroMain);
+    if (h1El && data.title) h1El.textContent = data.title;
+
+    // 3. Narrative Description
+    const pEl = $(".hero-copy p", heroMain);
+    if (pEl && data.description) pEl.textContent = data.description;
+
+    // 4. Primary CTA Button
+    const primaryBtn = $(".hero-ctas .btn.white", heroMain);
+    if (primaryBtn) {
+      if (data.primaryBtnText) primaryBtn.textContent = data.primaryBtnText;
+      if (data.primaryBtnUrl) primaryBtn.href = data.primaryBtnUrl;
+    }
+
+    // 5. Secondary CTA Button
+    const secondaryBtn = $(".hero-ctas .btn.clear", heroMain);
+    if (secondaryBtn) {
+      if (data.secondaryBtnText) secondaryBtn.textContent = data.secondaryBtnText;
+      if (data.secondaryBtnUrl) secondaryBtn.href = data.secondaryBtnUrl;
+    }
+
+    // 6. Background Car Image
+    const bgCarImg = $("img.hero-bg-car", heroMain);
+    if (bgCarImg && data.bgImage) {
+      bgCarImg.src = data.bgImage;
+    }
+
+    // 7. Brand Ambassador Showcase
+    const ambLayer = $(".ambassador-layer", heroMain);
+    if (ambLayer) {
+      if (data.showAmbassador === false || data.showAmbassador === "false") {
+        ambLayer.style.display = "none";
+      } else {
+        ambLayer.style.display = "block";
+        const ambImg = $("img", ambLayer);
+        if (ambImg && data.ambassadorImage) ambImg.src = data.ambassadorImage;
+      }
+    }
+
+    // 8. Performance Badges
+    const heroNotes = $$(".hero-note > div", heroMain);
+    if (heroNotes.length >= 3) {
+      if (data.badge1Label && $("strong", heroNotes[0])) $("strong", heroNotes[0]).textContent = data.badge1Label;
+      if (data.badge1Sub && $("span", heroNotes[0])) $("span", heroNotes[0]).textContent = data.badge1Sub;
+      if (data.badge2Label && $("strong", heroNotes[1])) $("strong", heroNotes[1]).textContent = data.badge2Label;
+      if (data.badge2Sub && $("span", heroNotes[1])) $("span", heroNotes[1]).textContent = data.badge2Sub;
+      if (data.badge3Label && $("strong", heroNotes[2])) $("strong", heroNotes[2]).textContent = data.badge3Label;
+      if (data.badge3Sub && $("span", heroNotes[2])) $("span", heroNotes[2]).textContent = data.badge3Sub;
+    }
+
+    // 9. Side Feature Cards
+    const sideCards = $$(".hero-side .side-card");
+    if (sideCards.length >= 2) {
+      // Side Card 1
+      if (data.sideCard1Image && $("img", sideCards[0])) $("img", sideCards[0]).src = data.sideCard1Image;
+      if (data.sideCard1Category && $("small", sideCards[0])) $("small", sideCards[0]).textContent = data.sideCard1Category;
+      if (data.sideCard1Title && $("h3", sideCards[0])) $("h3", sideCards[0]).innerHTML = data.sideCard1Title.replace(/\n/g, "<br>");
+      if (data.sideCard1Link) sideCards[0].href = data.sideCard1Link;
+
+      // Side Card 2
+      if (data.sideCard2Image && $("img", sideCards[1])) $("img", sideCards[1]).src = data.sideCard2Image;
+      if (data.sideCard2Category && $("small", sideCards[1])) $("small", sideCards[1]).textContent = data.sideCard2Category;
+      if (data.sideCard2Title && $("h3", sideCards[1])) $("h3", sideCards[1]).innerHTML = data.sideCard2Title.replace(/\n/g, "<br>");
+      if (data.sideCard2Link) sideCards[1].href = data.sideCard2Link;
+    }
+  };
+
+  // 1. Instant load from local cache
+  try {
+    const cached = localStorage.getItem("hx_hero_settings");
+    if (cached) applyHeroData(JSON.parse(cached));
+  } catch(e) {}
+
+  // 2. Background sync from server API
+  fetch("/api/integrations?service=hero")
+    .then(r => r.json())
+    .then(res => {
+      if (res && res.status === "ok" && res.data) {
+        applyHeroData(res.data);
+        try { localStorage.setItem("hx_hero_settings", JSON.stringify(res.data)); } catch(e) {}
+      }
+    })
+    .catch(() => {});
+}
+
 function homeInit() {
+  initHeroBannerLive();
   const root = $("#homeProducts");
   if (!root) return;
   function show(cat = "All") {

@@ -1924,6 +1924,238 @@ function initZohoOneIntegration() {
   }
 }
 
+// ==========================================
+// HOMEPAGE HERO & BANNER STUDIO CONTROLLER
+// ==========================================
+function initHeroStudio() {
+  const defaultSettings = {
+    eyebrow: "HyperXGT · Flagship 1:7 Scale Rally Machine",
+    title: "1:7 Citroen WRC Rally Car.",
+    description: "60+ KM/H 4WD Brushless 6S-capable performance. Explore 338 catalogue models across racing, drift, monster trucks, crawlers, buggies and collectables.",
+    primaryBtnText: "Explore Flagship (₹69,999) →",
+    primaryBtnUrl: "product.html?id=71",
+    secondaryBtnText: "Shop Catalogue",
+    secondaryBtnUrl: "shop.html",
+    bgImage: "assets/products/M-JX7303.webp",
+    showAmbassador: true,
+    ambassadorImage: "assets/hyperxgt-brand-ambassador.png",
+    badge1Label: "1:7 Scale",
+    badge1Sub: "WRC Rally",
+    badge2Label: "60+ KM/H",
+    badge2Sub: "Brushless 4WD",
+    badge3Label: "338",
+    badge3Sub: "Catalogue Models",
+    sideCard1Category: "Collectables",
+    sideCard1Title: "Mini RC.\nBig character.",
+    sideCard1Link: "shop.html?cat=Collectables",
+    sideCard1Image: "assets/uploads/prod_1787927140240_2945.png",
+    sideCard2Category: "Drift collection",
+    sideCard2Title: "Slide with precision.",
+    sideCard2Link: "shop.html?cat=Drift%20Cars",
+    sideCard2Image: "assets/uploads/prod_1787920104060_6427.jpg"
+  };
+
+  const syncPreviewFromForm = () => {
+    if ($("#previewEyebrow")) $("#previewEyebrow").textContent = $("#heroFormEyebrow")?.value || defaultSettings.eyebrow;
+    if ($("#previewTitle")) $("#previewTitle").textContent = $("#heroFormTitle")?.value || defaultSettings.title;
+    if ($("#previewDesc")) $("#previewDesc").textContent = $("#heroFormDescription")?.value || defaultSettings.description;
+    if ($("#previewPrimaryBtn")) $("#previewPrimaryBtn").textContent = $("#heroFormPrimaryText")?.value || defaultSettings.primaryBtnText;
+    if ($("#previewSecondaryBtn")) $("#previewSecondaryBtn").textContent = $("#heroFormSecondaryText")?.value || defaultSettings.secondaryBtnText;
+    
+    const bgUrl = $("#heroFormBgImage")?.value || defaultSettings.bgImage;
+    if ($("#previewHeroBgCar")) $("#previewHeroBgCar").src = bgUrl;
+
+    const showAmb = $("#heroFormShowAmbassador")?.checked ?? defaultSettings.showAmbassador;
+    if ($("#previewAmbassadorWrap")) $("#previewAmbassadorWrap").style.display = showAmb ? "block" : "none";
+    const ambUrl = $("#heroFormAmbassadorImage")?.value || defaultSettings.ambassadorImage;
+    if ($("#previewAmbassadorImg")) $("#previewAmbassadorImg").src = ambUrl;
+
+    if ($("#previewBadge1Label")) $("#previewBadge1Label").textContent = $("#heroFormBadge1Label")?.value || defaultSettings.badge1Label;
+    if ($("#previewBadge1Sub")) $("#previewBadge1Sub").textContent = $("#heroFormBadge1Sub")?.value || defaultSettings.badge1Sub;
+    if ($("#previewBadge2Label")) $("#previewBadge2Label").textContent = $("#heroFormBadge2Label")?.value || defaultSettings.badge2Label;
+    if ($("#previewBadge2Sub")) $("#previewBadge2Sub").textContent = $("#heroFormBadge2Sub")?.value || defaultSettings.badge2Sub;
+    if ($("#previewBadge3Label")) $("#previewBadge3Label").textContent = $("#heroFormBadge3Label")?.value || defaultSettings.badge3Label;
+    if ($("#previewBadge3Sub")) $("#previewBadge3Sub").textContent = $("#heroFormBadge3Sub")?.value || defaultSettings.badge3Sub;
+  };
+
+  const populateForm = (data) => {
+    const s = { ...defaultSettings, ...(data || {}) };
+    if ($("#heroFormEyebrow")) $("#heroFormEyebrow").value = s.eyebrow;
+    if ($("#heroFormTitle")) $("#heroFormTitle").value = s.title;
+    if ($("#heroFormDescription")) $("#heroFormDescription").value = s.description;
+    if ($("#heroFormPrimaryText")) $("#heroFormPrimaryText").value = s.primaryBtnText;
+    if ($("#heroFormPrimaryUrl")) $("#heroFormPrimaryUrl").value = s.primaryBtnUrl;
+    if ($("#heroFormSecondaryText")) $("#heroFormSecondaryText").value = s.secondaryBtnText;
+    if ($("#heroFormSecondaryUrl")) $("#heroFormSecondaryUrl").value = s.secondaryBtnUrl;
+    if ($("#heroFormBgImage")) $("#heroFormBgImage").value = s.bgImage;
+    if ($("#heroFormShowAmbassador")) $("#heroFormShowAmbassador").checked = s.showAmbassador !== false && s.showAmbassador !== "false";
+    if ($("#heroFormAmbassadorImage")) $("#heroFormAmbassadorImage").value = s.ambassadorImage;
+    if ($("#heroFormBadge1Label")) $("#heroFormBadge1Label").value = s.badge1Label;
+    if ($("#heroFormBadge1Sub")) $("#heroFormBadge1Sub").value = s.badge1Sub;
+    if ($("#heroFormBadge2Label")) $("#heroFormBadge2Label").value = s.badge2Label;
+    if ($("#heroFormBadge2Sub")) $("#heroFormBadge2Sub").value = s.badge2Sub;
+    if ($("#heroFormBadge3Label")) $("#heroFormBadge3Label").value = s.badge3Label;
+    if ($("#heroFormBadge3Sub")) $("#heroFormBadge3Sub").value = s.badge3Sub;
+
+    if ($("#heroFormCard1Cat")) $("#heroFormCard1Cat").value = s.sideCard1Category || "";
+    if ($("#heroFormCard1Title")) $("#heroFormCard1Title").value = s.sideCard1Title || "";
+    if ($("#heroFormCard1Link")) $("#heroFormCard1Link").value = s.sideCard1Link || "";
+    if ($("#heroFormCard1Img")) $("#heroFormCard1Img").value = s.sideCard1Image || "";
+
+    if ($("#heroFormCard2Cat")) $("#heroFormCard2Cat").value = s.sideCard2Category || "";
+    if ($("#heroFormCard2Title")) $("#heroFormCard2Title").value = s.sideCard2Title || "";
+    if ($("#heroFormCard2Link")) $("#heroFormCard2Link").value = s.sideCard2Link || "";
+    if ($("#heroFormCard2Img")) $("#heroFormCard2Img").value = s.sideCard2Image || "";
+
+    syncPreviewFromForm();
+  };
+
+  // Load from cache then API
+  try {
+    const cached = localStorage.getItem("hx_hero_settings");
+    if (cached) populateForm(JSON.parse(cached));
+    else populateForm(defaultSettings);
+  } catch(e) {
+    populateForm(defaultSettings);
+  }
+
+  fetch("/api/integrations?service=hero")
+    .then(r => r.json())
+    .then(res => {
+      if (res && res.status === "ok" && res.data) {
+        populateForm(res.data);
+        try { localStorage.setItem("hx_hero_settings", JSON.stringify(res.data)); } catch(e) {}
+      }
+    })
+    .catch(() => {});
+
+  // Bind live input listeners for real-time preview
+  const inputs = [
+    "#heroFormEyebrow", "#heroFormTitle", "#heroFormDescription",
+    "#heroFormPrimaryText", "#heroFormPrimaryUrl", "#heroFormSecondaryText", "#heroFormSecondaryUrl",
+    "#heroFormBgImage", "#heroFormShowAmbassador", "#heroFormAmbassadorImage",
+    "#heroFormBadge1Label", "#heroFormBadge1Sub", "#heroFormBadge2Label", "#heroFormBadge2Sub",
+    "#heroFormBadge3Label", "#heroFormBadge3Sub"
+  ];
+  inputs.forEach(sel => {
+    const el = $(sel);
+    if (el) {
+      el.addEventListener("input", syncPreviewFromForm);
+      el.addEventListener("change", syncPreviewFromForm);
+    }
+  });
+
+  // Helper for single image uploads in Hero Studio
+  const handleSingleUpload = (inputEl, targetInputEl) => {
+    if (!inputEl || !targetInputEl) return;
+    inputEl.onchange = async () => {
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+      toast("Uploading image to server...");
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const res = await fetch("/api/upload-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename: file.name, data: reader.result })
+          });
+          const data = await res.json();
+          if (data && data.url) {
+            targetInputEl.value = data.url;
+            syncPreviewFromForm();
+            toast("✓ Image uploaded and applied!");
+          } else {
+            toast("Upload failed: " + (data.error || "Unknown error"));
+          }
+        } catch(err) {
+          toast("Upload failed: " + err.message);
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+  };
+
+  handleSingleUpload($("#heroBgFileInput"), $("#heroFormBgImage"));
+  handleSingleUpload($("#heroAmbassadorFileInput"), $("#heroFormAmbassadorImage"));
+  handleSingleUpload($("#heroCard1FileInput"), $("#heroFormCard1Img"));
+  handleSingleUpload($("#heroCard2FileInput"), $("#heroFormCard2Img"));
+
+  // Save handler
+  const saveHeroSettings = async () => {
+    const payload = {
+      eyebrow: $("#heroFormEyebrow")?.value.trim() || defaultSettings.eyebrow,
+      title: $("#heroFormTitle")?.value.trim() || defaultSettings.title,
+      description: $("#heroFormDescription")?.value.trim() || defaultSettings.description,
+      primaryBtnText: $("#heroFormPrimaryText")?.value.trim() || defaultSettings.primaryBtnText,
+      primaryBtnUrl: $("#heroFormPrimaryUrl")?.value.trim() || defaultSettings.primaryBtnUrl,
+      secondaryBtnText: $("#heroFormSecondaryText")?.value.trim() || defaultSettings.secondaryBtnText,
+      secondaryBtnUrl: $("#heroFormSecondaryUrl")?.value.trim() || defaultSettings.secondaryBtnUrl,
+      bgImage: $("#heroFormBgImage")?.value.trim() || defaultSettings.bgImage,
+      showAmbassador: $("#heroFormShowAmbassador")?.checked ?? true,
+      ambassadorImage: $("#heroFormAmbassadorImage")?.value.trim() || defaultSettings.ambassadorImage,
+      badge1Label: $("#heroFormBadge1Label")?.value.trim() || defaultSettings.badge1Label,
+      badge1Sub: $("#heroFormBadge1Sub")?.value.trim() || defaultSettings.badge1Sub,
+      badge2Label: $("#heroFormBadge2Label")?.value.trim() || defaultSettings.badge2Label,
+      badge2Sub: $("#heroFormBadge2Sub")?.value.trim() || defaultSettings.badge2Sub,
+      badge3Label: $("#heroFormBadge3Label")?.value.trim() || defaultSettings.badge3Label,
+      badge3Sub: $("#heroFormBadge3Sub")?.value.trim() || defaultSettings.badge3Sub,
+      sideCard1Category: $("#heroFormCard1Cat")?.value.trim() || defaultSettings.sideCard1Category,
+      sideCard1Title: $("#heroFormCard1Title")?.value.trim() || defaultSettings.sideCard1Title,
+      sideCard1Link: $("#heroFormCard1Link")?.value.trim() || defaultSettings.sideCard1Link,
+      sideCard1Image: $("#heroFormCard1Img")?.value.trim() || defaultSettings.sideCard1Image,
+      sideCard2Category: $("#heroFormCard2Cat")?.value.trim() || defaultSettings.sideCard2Category,
+      sideCard2Title: $("#heroFormCard2Title")?.value.trim() || defaultSettings.sideCard2Title,
+      sideCard2Link: $("#heroFormCard2Link")?.value.trim() || defaultSettings.sideCard2Link,
+      sideCard2Image: $("#heroFormCard2Img")?.value.trim() || defaultSettings.sideCard2Image
+    };
+
+    const adminKey = localStorage.getItem("hx_admin_auth") || "hx_admin_sec_2026_super_key";
+
+    try {
+      const res = await fetch("/api/integrations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": adminKey,
+          "Authorization": `Bearer ${adminKey}`
+        },
+        body: JSON.stringify({
+          service: "hero",
+          action: "save",
+          data: payload
+        })
+      });
+      const data = await res.json();
+      if (data && data.status === "ok") {
+        try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
+        toast("🎉 Homepage Hero Banner saved and published to live store!");
+      } else {
+        toast("Saved locally. Server error: " + (data.error || "Unknown"));
+      }
+    } catch(err) {
+      try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
+      toast("✓ Saved to local cache!");
+    }
+  };
+
+  const btnSave1 = $("#btnSaveHeroSettings");
+  if (btnSave1) btnSave1.onclick = saveHeroSettings;
+  const btnSave2 = $("#btnSaveHeroSettingsBottom");
+  if (btnSave2) btnSave2.onclick = saveHeroSettings;
+
+  const resetHeroSettings = () => {
+    if (confirm("Reset Homepage Hero Banner to factory defaults?")) {
+      populateForm(defaultSettings);
+      saveHeroSettings();
+    }
+  };
+  const btnReset1 = $("#btnResetHeroSettings");
+  if (btnReset1) btnReset1.onclick = resetHeroSettings;
+  const btnReset2 = $("#btnResetHeroSettingsBottom");
+  if (btnReset2) btnReset2.onclick = resetHeroSettings;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initAdminAuth();
   initAdminTabs();
@@ -1941,6 +2173,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDatabaseSyncHub();
   initSocialPublisher();
   initZohoOneIntegration();
+  initHeroStudio();
 
   const openAddBtn = $("#btnOpenAddModal");
   if (openAddBtn) openAddBtn.onclick = openAddModal;

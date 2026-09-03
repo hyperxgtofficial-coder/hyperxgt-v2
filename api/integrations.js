@@ -263,6 +263,88 @@ async function handleShiprocketRequest(req, res, action) {
 }
 
 // ==========================================
+// 3. HOMEPAGE HERO & BANNER STUDIO ENGINE
+// ==========================================
+const fs = require('fs');
+const path = require('path');
+
+let cachedHeroSettings = null;
+
+function getHeroSettingsDisk() {
+  if (cachedHeroSettings) return cachedHeroSettings;
+  try {
+    const filePath = path.join(__dirname, '..', 'data', 'hero-settings.json');
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      cachedHeroSettings = JSON.parse(content);
+      return cachedHeroSettings;
+    }
+  } catch(e) {}
+  return {
+    eyebrow: "HyperXGT · Flagship 1:7 Scale Rally Machine",
+    title: "1:7 Citroen WRC Rally Car.",
+    description: "60+ KM/H 4WD Brushless 6S-capable performance. Explore 338 catalogue models across racing, drift, monster trucks, crawlers, buggies and collectables.",
+    primaryBtnText: "Explore Flagship (₹69,999) →",
+    primaryBtnUrl: "product.html?id=71",
+    secondaryBtnText: "Shop Catalogue",
+    secondaryBtnUrl: "shop.html",
+    bgImage: "assets/products/M-JX7303.webp",
+    showAmbassador: true,
+    ambassadorImage: "assets/hyperxgt-brand-ambassador.png",
+    badge1Label: "1:7 Scale",
+    badge1Sub: "WRC Rally",
+    badge2Label: "60+ KM/H",
+    badge2Sub: "Brushless 4WD",
+    badge3Label: "338",
+    badge3Sub: "Catalogue Models",
+    sideCard1Category: "Collectables",
+    sideCard1Title: "Mini RC.\nBig character.",
+    sideCard1Link: "shop.html?cat=Collectables",
+    sideCard1Image: "assets/uploads/prod_1787927140240_2945.png",
+    sideCard2Category: "Drift collection",
+    sideCard2Title: "Slide with precision.",
+    sideCard2Link: "shop.html?cat=Drift%20Cars",
+    sideCard2Image: "assets/uploads/prod_1787920104060_6427.jpg"
+  };
+}
+
+async function handleHeroRequest(req, res, action) {
+  if (req.method === 'GET' || action === 'get') {
+    const data = getHeroSettingsDisk();
+    return res.status(200).json({ status: 'ok', data });
+  }
+
+  if (req.method === 'POST' || action === 'save') {
+    if (!verifyAdminAuth(req)) {
+      return res.status(401).json({ error: "Unauthorized: Admin privileges required" });
+    }
+
+    const payload = req.body && req.body.data ? req.body.data : req.body;
+    if (!payload || typeof payload !== 'object') {
+      return res.status(400).json({ error: "Invalid hero settings payload" });
+    }
+
+    const current = getHeroSettingsDisk();
+    const updated = {
+      ...current,
+      ...payload
+    };
+
+    cachedHeroSettings = updated;
+    try {
+      const filePath = path.join(__dirname, '..', 'data', 'hero-settings.json');
+      fs.writeFileSync(filePath, JSON.stringify(updated, null, 2), 'utf8');
+    } catch(e) {
+      console.warn("Could not write hero-settings to disk:", e.message);
+    }
+
+    return res.status(200).json({ status: 'ok', message: 'Homepage Hero Banner updated successfully!', data: updated });
+  }
+
+  return res.status(400).json({ error: 'Unsupported action' });
+}
+
+// ==========================================
 // MAIN SERVERLESS ROUTER
 // ==========================================
 module.exports = async (req, res) => {
@@ -272,8 +354,13 @@ module.exports = async (req, res) => {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  const isHero = req.url.includes('/hero') || req.query.service === 'hero' || req.query.module === 'hero' || (req.body && req.body.service === 'hero');
   const isZoho = req.url.includes('/zoho') || req.query.service === 'zoho' || req.query.module === 'zoho' || (req.body && req.body.service === 'zoho');
   const action = req.query.action || (req.body && req.body.action) || 'status';
+
+  if (isHero) {
+    return await handleHeroRequest(req, res, action);
+  }
 
   if (isZoho) {
     if (!verifyAdminAuth(req)) {

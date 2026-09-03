@@ -69,7 +69,8 @@
 
       <!-- TABS NAVBAR -->
       <div class="admin-tabs">
-        <button class="admin-tab" data-tab="products">Product Inventory & GST Manager</button>
+        <button class="admin-tab active" data-tab="products">Product Inventory & GST Manager</button>
+        <button class="admin-tab" data-tab="hero">🎨 Homepage & Hero Studio</button>
         <button class="admin-tab" data-tab="orders">Orders & Logistics Center</button>
         <button class="admin-tab" data-tab="reviews">💬 Reviews & Unboxing Approvals</button>
         <button class="admin-tab" data-tab="collaborations">🤝 Brand Collaborations</button>
@@ -700,6 +701,220 @@
             - DELETE /api/products-crud?id=X (Delete Product)<br>
             - POST /api/create-order (Create Order)<br>
             - GET /api/track-order (Track Shipment)
+          </div>
+        </div>
+      </section>
+
+      <!-- HOMEPAGE & HERO BANNER STUDIO SECTION -->
+      <section id="tab-hero" class="tab-content">
+        <div style="background:#fff; border:1px solid var(--line); border-radius:18px; padding:24px; margin-bottom:24px">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px">
+            <div>
+              <h2 style="font-size:22px; margin:0 0 6px; color:#111">🎨 Homepage Hero &amp; Showcase Studio</h2>
+              <p style="font-size:12px; color:#666; margin:0">Directly customize the top hero banner, headlines, CTA buttons, background car image, brand ambassador overlay, performance stats, and side feature cards in real time.</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center">
+              <a href="index.html" target="_blank" class="btn clear" style="height:44px; display:inline-flex; align-items:center; gap:6px; font-size:12px">👁️ View Live Store ↗</a>
+              <button class="btn" id="btnResetHeroSettings" style="background:#f1f3f5; color:#555; height:44px; font-size:12px">🔄 Reset Defaults</button>
+              <button class="btn blue" id="btnSaveHeroSettings" style="height:44px; font-size:12px">💾 Save &amp; Publish Live ✓</button>
+            </div>
+          </div>
+
+          <!-- REAL-TIME INTERACTIVE HERO PREVIEW -->
+          <div style="margin-bottom:28px">
+            <div style="font-size:11px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:#1488d8; margin-bottom:10px">👁️ Real-Time Live Preview</div>
+            <div id="heroLivePreviewBox" style="position:relative; border-radius:20px; overflow:hidden; background:#101216; color:#fff; min-height:280px; display:flex; flex-direction:column; justify-content:flex-end; padding:32px; box-shadow:0 10px 30px rgba(0,0,0,0.25)">
+              <img id="previewHeroBgCar" src="assets/products/M-JX7303.webp" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; z-index:0; opacity:0.85">
+              <div style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(8,9,12,0.92) 0%, rgba(8,9,12,0.65) 50%, rgba(8,9,12,0.15) 80%), linear-gradient(0deg, rgba(8,9,12,0.85) 0%, transparent 45%); z-index:1"></div>
+              
+              <div id="previewAmbassadorWrap" style="position:absolute; right:0; top:0; bottom:0; width:45%; overflow:hidden; z-index:2; pointer-events:none; -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 30%); mask-image:linear-gradient(to right, transparent 0%, #000 30%)">
+                <img id="previewAmbassadorImg" src="assets/hyperxgt-brand-ambassador.png" style="width:100%; height:100%; object-fit:cover; object-position:center 18%">
+              </div>
+
+              <div style="position:relative; z-index:3; max-width:520px">
+                <div id="previewEyebrow" style="font-size:9.5px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#4f78ff">HyperXGT · Flagship 1:7 Scale Rally Machine</div>
+                <h2 id="previewTitle" style="font-size:32px; font-weight:900; line-height:1; letter-spacing:-.04em; margin:8px 0 10px; color:#fff">1:7 Citroen WRC Rally Car.</h2>
+                <p id="previewDesc" style="font-size:12px; color:#dadce4; line-height:1.5; margin:0 0 16px; max-width:440px">60+ KM/H 4WD Brushless 6S-capable performance. Explore 338 catalogue models across racing, drift, monster trucks, crawlers, buggies and collectables.</p>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span id="previewPrimaryBtn" class="btn white" style="height:36px; padding:0 16px; font-size:11px; min-height:0">Explore Flagship (₹69,999) →</span>
+                  <span id="previewSecondaryBtn" class="btn clear" style="height:36px; padding:0 16px; font-size:11px; min-height:0">Shop Catalogue</span>
+                </div>
+                <div style="display:flex; gap:18px; margin-top:18px; border-top:1px solid rgba(255,255,255,0.15); padding-top:12px">
+                  <div><strong id="previewBadge1Label" style="font-size:14px; display:block">1:7 Scale</strong><span id="previewBadge1Sub" style="font-size:8px; color:#aaa; text-transform:uppercase">WRC Rally</span></div>
+                  <div><strong id="previewBadge2Label" style="font-size:14px; display:block">60+ KM/H</strong><span id="previewBadge2Sub" style="font-size:8px; color:#aaa; text-transform:uppercase">Brushless 4WD</span></div>
+                  <div><strong id="previewBadge3Label" style="font-size:14px; display:block">338</strong><span id="previewBadge3Sub" style="font-size:8px; color:#aaa; text-transform:uppercase">Catalogue Models</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EDITING FORM CONTROLS -->
+          <div style="display:grid; grid-template-columns:1.2fr .8fr; gap:24px">
+            
+            <!-- LEFT COLUMN: MAIN HERO CONTROLS -->
+            <div style="background:#fbfbfd; border:1px solid var(--line); border-radius:16px; padding:20px">
+              <h3 style="font-size:16px; margin:0 0 16px; color:#111; display:flex; align-items:center; gap:8px">
+                <span>🏎️</span> Main Hero Banner Settings
+              </h3>
+
+              <div style="margin-bottom:14px">
+                <label class="form-label">Hero Top Eyebrow Tag</label>
+                <input class="field" id="heroFormEyebrow" placeholder="HyperXGT · Flagship 1:7 Scale Rally Machine">
+              </div>
+
+              <div style="margin-bottom:14px">
+                <label class="form-label">Main Headline / Vehicle Title *</label>
+                <input class="field" id="heroFormTitle" placeholder="1:7 Citroen WRC Rally Car.">
+              </div>
+
+              <div style="margin-bottom:14px">
+                <label class="form-label">Narrative Subtitle / Description *</label>
+                <textarea class="field" id="heroFormDescription" style="height:70px; padding-top:10px" placeholder="60+ KM/H 4WD Brushless 6S-capable performance..."></textarea>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px">
+                <div>
+                  <label class="form-label">Primary Button Text</label>
+                  <input class="field" id="heroFormPrimaryText" placeholder="Explore Flagship (₹69,999) →">
+                </div>
+                <div>
+                  <label class="form-label">Primary Button Link URL</label>
+                  <input class="field" id="heroFormPrimaryUrl" placeholder="product.html?id=71">
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px">
+                <div>
+                  <label class="form-label">Secondary Button Text</label>
+                  <input class="field" id="heroFormSecondaryText" placeholder="Shop Catalogue">
+                </div>
+                <div>
+                  <label class="form-label">Secondary Button Link URL</label>
+                  <input class="field" id="heroFormSecondaryUrl" placeholder="shop.html">
+                </div>
+              </div>
+
+              <!-- HERO BACKGROUND CAR IMAGE -->
+              <div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px">
+                <label class="form-label" style="color:#1488d8; margin-bottom:6px">🖼️ Hero Background Vehicle Image</label>
+                <div style="display:flex; gap:10px; align-items:center">
+                  <input class="field" id="heroFormBgImage" placeholder="assets/products/M-JX7303.webp" style="flex:1; margin:0">
+                  <label class="btn" style="background:#111; color:#fff; height:48px; display:inline-flex; align-items:center; cursor:pointer; font-size:11px; padding:0 14px; border-radius:10px">
+                    <span>📤 Upload Image</span>
+                    <input type="file" id="heroBgFileInput" accept="image/*" style="display:none">
+                  </label>
+                </div>
+                <div style="font-size:10px; color:#777; margin-top:6px">Default is <code>assets/products/M-JX7303.webp</code> (1:7 Citroen WRC). You can upload any high-res banner image.</div>
+              </div>
+
+              <!-- BRAND AMBASSADOR SETTINGS -->
+              <div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+                  <label class="form-label" style="color:#7b2cbf; margin:0">👤 Brand Ambassador Overlay</label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:800; cursor:pointer">
+                    <input type="checkbox" id="heroFormShowAmbassador" checked>
+                    <span>Show Ambassador</span>
+                  </label>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center; margin-top:8px">
+                  <input class="field" id="heroFormAmbassadorImage" placeholder="assets/hyperxgt-brand-ambassador.png" style="flex:1; margin:0">
+                  <label class="btn" style="background:#7b2cbf; color:#fff; height:48px; display:inline-flex; align-items:center; cursor:pointer; font-size:11px; padding:0 14px; border-radius:10px">
+                    <span>📤 Change Photo</span>
+                    <input type="file" id="heroAmbassadorFileInput" accept="image/*" style="display:none">
+                  </label>
+                </div>
+              </div>
+
+              <!-- 3 STAT BADGES -->
+              <div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px">
+                <label class="form-label" style="margin-bottom:10px">⚡ 3 Bottom Performance Stat Badges</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px">
+                  <div>
+                    <span style="font-size:10px; color:#888; font-weight:800">Badge 1</span>
+                    <input class="field" id="heroFormBadge1Label" placeholder="1:7 Scale" style="margin:4px 0">
+                    <input class="field" id="heroFormBadge1Sub" placeholder="WRC Rally" style="margin:0; font-size:11px">
+                  </div>
+                  <div>
+                    <span style="font-size:10px; color:#888; font-weight:800">Badge 2</span>
+                    <input class="field" id="heroFormBadge2Label" placeholder="60+ KM/H" style="margin:4px 0">
+                    <input class="field" id="heroFormBadge2Sub" placeholder="Brushless 4WD" style="margin:0; font-size:11px">
+                  </div>
+                  <div>
+                    <span style="font-size:10px; color:#888; font-weight:800">Badge 3</span>
+                    <input class="field" id="heroFormBadge3Label" placeholder="338" style="margin:4px 0">
+                    <input class="field" id="heroFormBadge3Sub" placeholder="Catalogue Models" style="margin:0; font-size:11px">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN: SIDE FEATURE CARDS -->
+            <div style="background:#fbfbfd; border:1px solid var(--line); border-radius:16px; padding:20px">
+              <h3 style="font-size:16px; margin:0 0 16px; color:#111; display:flex; align-items:center; gap:8px">
+                <span>🎴</span> Side Feature Cards (Hero Right)
+              </h3>
+
+              <!-- SIDE CARD 1 -->
+              <div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:18px">
+                <div style="font-size:12px; font-weight:900; color:#1488d8; margin-bottom:10px">Top Side Card (Collectables)</div>
+                <div style="margin-bottom:10px">
+                  <label class="form-label">Category Tag</label>
+                  <input class="field" id="heroFormCard1Cat" placeholder="Collectables">
+                </div>
+                <div style="margin-bottom:10px">
+                  <label class="form-label">Card Title (Newlines allowed)</label>
+                  <textarea class="field" id="heroFormCard1Title" style="height:55px; padding-top:8px" placeholder="Mini RC.&#10;Big character."></textarea>
+                </div>
+                <div style="margin-bottom:10px">
+                  <label class="form-label">Destination Link URL</label>
+                  <input class="field" id="heroFormCard1Link" placeholder="shop.html?cat=Collectables">
+                </div>
+                <div>
+                  <label class="form-label">Card Image</label>
+                  <div style="display:flex; gap:8px">
+                    <input class="field" id="heroFormCard1Img" placeholder="assets/uploads/prod_1787927140240_2945.png" style="margin:0; flex:1">
+                    <label class="btn" style="background:#111; color:#fff; height:48px; display:inline-flex; align-items:center; cursor:pointer; font-size:11px; padding:0 12px; border-radius:10px">
+                      <span>📤 Upload</span>
+                      <input type="file" id="heroCard1FileInput" accept="image/*" style="display:none">
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SIDE CARD 2 -->
+              <div style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px">
+                <div style="font-size:12px; font-weight:900; color:#ed1c24; margin-bottom:10px">Bottom Side Card (Drift)</div>
+                <div style="margin-bottom:10px">
+                  <label class="form-label">Category Tag</label>
+                  <input class="field" id="heroFormCard2Cat" placeholder="Drift collection">
+                </div>
+                <div style="margin-bottom:10px">
+                  <label class="form-label">Card Title (Newlines allowed)</label>
+                  <textarea class="field" id="heroFormCard2Title" style="height:55px; padding-top:8px" placeholder="Slide with precision."></textarea>
+                </div>
+                <div style="margin-bottom:10px">
+                  <label class="form-label">Destination Link URL</label>
+                  <input class="field" id="heroFormCard2Link" placeholder="shop.html?cat=Drift%20Cars">
+                </div>
+                <div>
+                  <label class="form-label">Card Image</label>
+                  <div style="display:flex; gap:8px">
+                    <input class="field" id="heroFormCard2Img" placeholder="assets/uploads/prod_1787920104060_6427.jpg" style="margin:0; flex:1">
+                    <label class="btn" style="background:#111; color:#fff; height:48px; display:inline-flex; align-items:center; cursor:pointer; font-size:11px; padding:0 12px; border-radius:10px">
+                      <span>📤 Upload</span>
+                      <input type="file" id="heroCard2FileInput" accept="image/*" style="display:none">
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:flex-end; gap:12px">
+            <button class="btn" id="btnResetHeroSettingsBottom" style="background:#f1f3f5; color:#555; height:48px; font-size:12px">🔄 Reset Defaults</button>
+            <button class="btn blue" id="btnSaveHeroSettingsBottom" style="height:48px; font-size:13px; padding:0 28px">💾 Save &amp; Publish Live ✓</button>
           </div>
         </div>
       </section>
