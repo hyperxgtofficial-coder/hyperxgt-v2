@@ -193,11 +193,21 @@ document.addEventListener("click", function(e) {
   }
 });
 
-// Close open modals when pressing 'Escape'
+// Close open modals when pressing 'Escape' or open on Enter/Space
 document.addEventListener("keydown", function(e) {
   if (e.key === "Escape" || e.keyCode === 27) {
     const openEls = document.querySelectorAll(".modal.open, .drawer.open");
     openEls.forEach(el => window.closeEl(el));
+    return;
+  }
+  if (e.key === "Enter" || e.key === " ") {
+    if (document.activeElement && document.activeElement.hasAttribute("data-modal")) {
+      const modalId = document.activeElement.getAttribute("data-modal");
+      if (modalId && modalId !== "#") {
+        e.preventDefault();
+        window.openModal(modalId);
+      }
+    }
   }
 });
 

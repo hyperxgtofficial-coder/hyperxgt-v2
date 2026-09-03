@@ -263,10 +263,22 @@
             <h2>Your RC support should be as serious as your RC.</h2>
             <p>Customer login, shipment tracking, repair tickets, compatible parts and upgrade requests belong in one clean service hub.</p>
             <div class="support-list">
-              <div class="support-item"><b>My Garage</b><span>Saved RC models & order history</span></div>
-              <div class="support-item"><b>Track Shipment</b><span>Order tracking flow included</span></div>
-              <div class="support-item"><b>Repair & Care</b><span>Raise service and upgrade requests</span></div>
-              <div class="support-item"><b>Catalogue Specs</b><span>SKU, scale, speed, drive & more</span></div>
+              <div class="support-item" data-modal="accountModal" onclick="openModal('accountModal')" role="button" tabindex="0">
+                <div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#fff">My Garage</b><span style="font-size:14px;color:#4f78ff;margin:0">↗</span></div>
+                <span>Saved RC models &amp; order history</span>
+              </div>
+              <div class="support-item" data-modal="trackModal" onclick="openModal('trackModal')" role="button" tabindex="0">
+                <div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#fff">Track Shipment</b><span style="font-size:14px;color:#4f78ff;margin:0">↗</span></div>
+                <span>Order tracking flow included</span>
+              </div>
+              <div class="support-item" data-modal="supportModal" onclick="openModal('supportModal')" role="button" tabindex="0">
+                <div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#fff">Repair &amp; Care</b><span style="font-size:14px;color:#ed1c24;margin:0">↗</span></div>
+                <span>Raise service and upgrade requests</span>
+              </div>
+              <div class="support-item" data-modal="searchModal" onclick="openModal('searchModal')" role="button" tabindex="0">
+                <div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#fff">Catalogue Specs</b><span style="font-size:14px;color:#1488d8;margin:0">↗</span></div>
+                <span>SKU, scale, speed, drive &amp; more</span>
+              </div>
             </div>
           </div>
           <div class="service-stack">
