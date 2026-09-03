@@ -1328,24 +1328,72 @@ function shopInit() {
         pager.innerHTML = "";
       } else {
         let pagerHTML = "";
+        
+        // Prev button
         if (currentPage > 1) {
-          pagerHTML += `<button class="pill" onclick="goToShopPage(${currentPage - 1})">‹ Prev</button>`;
+          pagerHTML += `<button class="page-btn page-nav-btn" onclick="goToShopPage(${currentPage - 1})">← Prev</button>`;
+        } else {
+          pagerHTML += `<button class="page-btn page-nav-btn disabled" disabled>← Prev</button>`;
         }
-        for (let i = 1; i <= totalPages; i++) {
-          pagerHTML += `<button class="pill ${i === currentPage ? 'active' : ''}" onclick="goToShopPage(${i})">${i}</button>`;
-        }
+        
+        // Sliding window page numbers & ellipsis
+        const items = getPaginationItems(currentPage, totalPages);
+        items.forEach(item => {
+          if (item === "...") {
+            pagerHTML += `<span class="page-ellipsis">…</span>`;
+          } else {
+            const isActive = item === currentPage;
+            pagerHTML += `<button class="page-btn page-num ${isActive ? 'active' : ''}" onclick="goToShopPage(${item})">${item}</button>`;
+          }
+        });
+        
+        // Next button
         if (currentPage < totalPages) {
-          pagerHTML += `<button class="pill" onclick="goToShopPage(${currentPage + 1})">Next ›</button>`;
+          pagerHTML += `<button class="page-btn page-nav-btn" onclick="goToShopPage(${currentPage + 1})">Next →</button>`;
+        } else {
+          pagerHTML += `<button class="page-btn page-nav-btn disabled" disabled>Next →</button>`;
         }
+        
         pager.innerHTML = pagerHTML;
       }
     }
   }
 
+  function getPaginationItems(currentPage, totalPages) {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const delta = 2;
+    const range = [];
+    const rangeWithDots = [];
+    let l;
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
+        range.push(i);
+      }
+    }
+
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push('...');
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+    return rangeWithDots;
+  }
+
   window.goToShopPage = function(pNum) {
     currentPage = pNum;
     render();
-    window.scrollTo({ top: grid.offsetTop - 120, behavior: 'smooth' });
+    const target = grid || $("#shopGrid") || document.body;
+    const topPos = target.getBoundingClientRect().top + window.pageYOffset - 110;
+    window.scrollTo({ top: Math.max(0, topPos), behavior: 'smooth' });
   };
 
   // shopInit() runs again whenever live backend products arrive, so bind filters only once —
