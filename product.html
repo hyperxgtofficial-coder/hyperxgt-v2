@@ -116,7 +116,7 @@
     <div class="drawer-panel">
       <div class="drawer-head">
         <div><b>Your Cart</b><div style="font-size:10px;color:#888">HyperXGT</div></div>
-        <button class="x">×</button>
+        <button class="x" onclick="closeEl(this)" aria-label="Close">×</button>
       </div>
       <div id="cartItems" class="cart-empty">Your cart is empty.<br><small>Add a product to start your build.</small></div>
       <div id="cartSummary" style="display:none;margin-top:22px">
@@ -128,7 +128,7 @@
   <div class="modal" id="searchModal">
     <div class="shade"></div>
     <div class="modal-box">
-      <div class="drawer-head"><b>Search HyperXGT</b><button class="x">×</button></div>
+      <div class="drawer-head"><b>Search HyperXGT</b><button class="x" onclick="closeEl(this)" aria-label="Close">×</button></div>
       <h3>What are you looking for?</h3>
       <input class="field" id="searchField" placeholder="Search SKU, 4WD, 1:14, brushless, drift...">
       <div id="searchResults" style="font-size:11px;color:#666;margin-top:10px">Try: drift, racing, off road, 1:14</div>
@@ -138,7 +138,7 @@
   <div class="modal" id="trackModal">
     <div class="shade"></div>
     <div class="modal-box">
-      <div class="drawer-head"><b>Track My Order</b><button class="x">×</button></div>
+      <div class="drawer-head"><b>Track My Order</b><button class="x" onclick="closeEl(this)" aria-label="Close">×</button></div>
       <h3>Where is my RC?</h3>
       <input class="field" id="trackOrder" placeholder="Order number, e.g. HX-10482">
       <input class="field" placeholder="Email or mobile number">
@@ -153,7 +153,7 @@
   <div class="modal" id="supportModal">
     <div class="shade"></div>
     <div class="modal-box">
-      <div class="drawer-head"><b>Care & Support</b><button class="x">×</button></div>
+      <div class="drawer-head"><b>Care & Support</b><button class="x" onclick="closeEl(this)" aria-label="Close">×</button></div>
       <h3>Start a service request</h3>
       <input class="field" placeholder="Order / serial number">
       <select class="field">
@@ -171,7 +171,7 @@
   <div class="modal" id="affiliateModal">
     <div class="shade"></div>
     <div class="modal-box">
-      <div class="drawer-head"><b>Affiliate Program</b><button class="x">×</button></div>
+      <div class="drawer-head"><b>Affiliate Program</b><button class="x" onclick="closeEl(this)" aria-label="Close">×</button></div>
       <h3>Earn with HyperXGT</h3>
       <input class="field" placeholder="Name">
       <input class="field" placeholder="Email">

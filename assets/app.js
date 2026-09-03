@@ -135,7 +135,17 @@ window.openModal = function(id) {
 };
 
 window.closeEl = function(el) {
-  const modal = (el && el.nodeType) ? el.closest(".modal,.drawer") : (typeof el === "string" ? $("#" + el) : null);
+  if (!el) {
+    document.querySelectorAll(".modal.open, .drawer.open").forEach(m => {
+      m.classList.remove("open");
+      m.style.display = "";
+      m.style.visibility = "";
+      m.style.opacity = "";
+      m.style.pointerEvents = "";
+    });
+    return;
+  }
+  const modal = (el && el.nodeType) ? (el.classList.contains("modal") || el.classList.contains("drawer") ? el : el.closest(".modal,.drawer")) : (typeof el === "string" ? $("#" + el) : null);
   if (modal) {
     modal.classList.remove("open");
     modal.style.display = "";
@@ -151,6 +161,45 @@ window.closeEl = function(el) {
     }
   }
 };
+
+// Universal click delegation for modal opening, closing (x button & shade backdrop)
+document.addEventListener("click", function(e) {
+  // 1. Click on Close button (.x or elements inside .x or [data-close])
+  const closeBtn = e.target.closest(".x, [data-close], .close-modal");
+  if (closeBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.closeEl(closeBtn);
+    return;
+  }
+
+  // 2. Click on Backdrop / Shade
+  const shade = e.target.closest(".shade");
+  if (shade && shade.parentElement && (shade.parentElement.classList.contains("modal") || shade.parentElement.classList.contains("drawer"))) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.closeEl(shade.parentElement);
+    return;
+  }
+
+  // 3. Click on Modal Trigger [data-modal]
+  const modalTrigger = e.target.closest("[data-modal]");
+  if (modalTrigger) {
+    const modalId = modalTrigger.getAttribute("data-modal");
+    if (modalId && modalId !== "#") {
+      e.preventDefault();
+      window.openModal(modalId);
+    }
+  }
+});
+
+// Close open modals when pressing 'Escape'
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape" || e.keyCode === 27) {
+    const openEls = document.querySelectorAll(".modal.open, .drawer.open");
+    openEls.forEach(el => window.closeEl(el));
+  }
+});
 
 function toast(msg) {
   const t = $("#toast");
@@ -675,9 +724,9 @@ function ensureGlobalModalsAndDrawers() {
     // /api/track-order verifies ownership, so it needs the email or phone on the order
     // as well as the order number. Collecting only the order number always returned 400.
     div.innerHTML = `
-      <div class="shade"></div>
+      <div class="shade" onclick="closeEl(this)"></div>
       <div class="modal-box">
-        <div class="drawer-head"><b>Track My Order</b><button class="x">×</button></div>
+        <div class="drawer-head"><b>Track My Order</b><button class="x" onclick="closeEl(this)" aria-label="Close">×</button></div>
         <h3 style="font-size:22px;margin:12px 0 16px">Where is my RC?</h3>
         <input class="field" id="trackOrder" placeholder="Order number, e.g. HX-10482" style="margin-bottom:10px">
         <input class="field" id="trackContact" placeholder="Email or mobile used on the order">
@@ -693,9 +742,9 @@ function ensureGlobalModalsAndDrawers() {
     div.className = "modal";
     div.id = "searchModal";
     div.innerHTML = `
-      <div class="shade"></div>
+      <div class="shade" onclick="closeEl(this)"></div>
       <div class="modal-box">
-        <div class="drawer-head"><b>Search HyperXGT</b><button class="x">×</button></div>
+        <div class="drawer-head"><b>Search HyperXGT</b><button class="x" onclick="closeEl(this)" aria-label="Close">×</button></div>
         <h3 style="font-size:22px;margin:12px 0 16px">What are you looking for?</h3>
         <input class="field" id="searchField" placeholder="Search SKU, 4WD, 1:14, brushless, drift...">
         <div id="searchResults" style="font-size:11px;color:#666;margin-top:10px">Try: drift, racing, off road, 1:14</div>
@@ -739,11 +788,11 @@ function ensureGlobalModalsAndDrawers() {
     div.className = "drawer";
     div.id = "cartDrawer";
     div.innerHTML = `
-      <div class="shade"></div>
+      <div class="shade" onclick="closeEl(this)"></div>
       <div class="drawer-panel">
         <div class="drawer-head">
           <div><b>Your Cart</b><div style="font-size:10px;color:#888">HyperXGT Store</div></div>
-          <button class="x">×</button>
+          <button class="x" onclick="closeEl(this)" aria-label="Close">×</button>
         </div>
         <div id="cartItems" class="cart-empty">Your cart is empty.</div>
         <div id="cartSummary" style="display:none;margin-top:22px">
@@ -761,9 +810,9 @@ function ensureGlobalModalsAndDrawers() {
     div.className = "modal";
     div.id = "reviewModal";
     div.innerHTML = `
-      <div class="shade"></div>
+      <div class="shade" onclick="closeEl(this)"></div>
       <div class="modal-box" style="width:min(600px,92vw)">
-        <div class="drawer-head"><b>Submit Review &amp; Unboxing Content</b><button class="x">×</button></div>
+        <div class="drawer-head"><b>Submit Review &amp; Unboxing Content</b><button class="x" onclick="closeEl(this)" aria-label="Close">×</button></div>
         <div style="background:#e8f5e9;border:1px solid #a5d6a7;padding:14px;border-radius:12px;margin:16px 0;font-size:12px;color:#1b5e20;font-weight:700">
           🎉 Submit your review, testimonial, or unboxing video/photo and get a <strong>10% OFF Coupon</strong> upon admin approval!
         </div>
