@@ -83,8 +83,6 @@ const $ = (q, r = document) => r.querySelector(q);
 const $$ = (q, r = document) => [...r.querySelectorAll(q)];
 const INR = n => "₹" + Number(n || 0).toLocaleString("en-IN");
 const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
-// Blocks javascript:/vbscript: and other active schemes before a URL reaches an href or src.
-// Relative paths (assets/…) are allowed through unchanged.
 const safeUrl = (u, fallback = "") => {
   const raw = String(u ?? "").trim();
   if (!raw) return fallback;
@@ -92,6 +90,27 @@ const safeUrl = (u, fallback = "") => {
   if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) return fallback; // any other scheme is rejected
   return esc(raw);
 };
+
+// Formats multi-line text into HTML paragraphs/breaks or preserves custom HTML markup
+function formatDescriptionHTML(raw, fallback = "") {
+  const content = (raw && String(raw).trim()) ? String(raw).trim() : fallback;
+  if (!content) return "";
+
+  // If content contains standard HTML block/formatting tags, allow safe rendering
+  const hasHtmlTags = /<\/?(p|div|br|h[1-6]|ul|ol|li|strong|b|em|i|table|span|blockquote)/i.test(content);
+  if (hasHtmlTags) {
+    return content;
+  }
+
+  // Split by double newlines into distinct paragraphs, and single newlines into <br>
+  const paragraphs = content.split(/\r?\n\s*\r?\n/);
+  return paragraphs.map(p => {
+    const lines = p.split(/\r?\n/).map(l => esc(l.trim())).filter(Boolean).join("<br>");
+    return lines ? `<p style="margin:0 0 14px 0;line-height:1.75">${lines}</p>` : "";
+  }).filter(Boolean).join("");
+}
+window.formatDescriptionHTML = formatDescriptionHTML;
+
 window.openModal = function(id) {
   if (!id) return;
   if (id === "accountModal") {
@@ -1514,8 +1533,8 @@ function productInit() {
           ⚡ Low Stock. Secure yours before the next factory restock batch.
         </div>
 
-        <div style="color:#444; font-size: 14px; line-height: 1.7; margin-bottom: 24px; background:#f9fafb; padding:18px; border-radius:14px; border:1px solid #eaedf2">
-          ${p.short_description || `The official HyperXGT ${esc(p.scale)} ${esc(p.category)} is a high-performance RC platform engineered for enthusiasts who demand extreme speed, rock-crawling torque, and scale realism.`}
+        <div class="product-short-desc" style="color:#444; font-size: 14px; line-height: 1.7; margin-bottom: 24px; background:#f9fafb; padding:18px; border-radius:14px; border:1px solid #eaedf2">
+          ${formatDescriptionHTML(p.short_description, `The official HyperXGT ${esc(p.scale || '1:16')} ${esc(p.category || 'RC Car')} is a high-performance RC platform engineered for enthusiasts who demand extreme speed, rock-crawling torque, and scale realism.`)}
         </div>
 
         <div class="modal-row" style="align-items: center; margin-bottom: 24px;">
@@ -1535,27 +1554,31 @@ function productInit() {
       </div>
     </div>
 
-    <!-- IN-DEPTH YOUCLIQ-STYLE TECHNICAL DESCRIPTION & SPECIFICATIONS SECTION -->
+    <!-- IN-DEPTH TECHNICAL DESCRIPTION & SPECIFICATIONS SECTION -->
     <div style="grid-column:1/-1;margin-top:60px;border-top:1px solid var(--line);padding-top:48px">
       
       <div style="display:grid;grid-template-columns:1.2fr .8fr;gap:40px">
         
-        <!-- DETAILED NARRATIVE DESCRIPTION (YOUCLIQ REFERENCE) -->
+        <!-- DETAILED NARRATIVE DESCRIPTION -->
         <div>
           <div class="eyebrow" style="color:#1488d8">In-Depth Vehicle Overview</div>
-          <h2 style="font-size:28px;margin:8px 0 20px;color:#111">Engineered for Technical Mastery</h2>
+          <h2 style="font-size:28px;margin:8px 0 20px;color:#111">Technical Details & Field Guide</h2>
           
-          <div style="font-size:14px;line-height:1.8;color:#333">
-            <p>${esc(p.full_description || p.short_description || `The HyperXGT ${p.name} combines advanced RC technology with heavy-duty structural chassis design. Built for hobbyists who demand durability, scale precision, and raw performance across all terrains.`)}</p>
+          <div class="product-full-desc" style="font-size:14px;line-height:1.8;color:#333">
+            ${p.full_description ? `
+              ${formatDescriptionHTML(p.full_description)}
+            ` : `
+              <p>${formatDescriptionHTML(p.short_description || `The HyperXGT ${p.name} combines advanced RC technology with heavy-duty structural chassis design. Built for hobbyists who demand durability, scale precision, and raw performance across all terrains.`)}</p>
 
-            <h3 style="font-size:18px;margin-top:24px;color:#111">⚡ Drivetrain & Motor Performance</h3>
-            <p>Powered by a high-torque <strong>${esc(p.motor || 'Brushless Performance Motor')}</strong> and <strong>${esc(p.drive || '4WD')} Drive System</strong>, this model produces instantaneous power delivery. The engineered drivetrain features hardened metal differential gears to withstand heavy bashing, high-speed speed runs, and steep incline rock climbing.</p>
+              <h3 style="font-size:18px;margin-top:24px;color:#111">⚡ Drivetrain & Motor Performance</h3>
+              <p>Powered by a high-torque <strong>${esc(p.motor || 'Brushless Performance Motor')}</strong> and <strong>${esc(p.drive || '4WD')} Drive System</strong>, this model produces instantaneous power delivery. The engineered drivetrain features hardened metal differential gears to withstand heavy bashing, high-speed speed runs, and steep incline rock climbing.</p>
 
-            <h3 style="font-size:18px;margin-top:24px;color:#111">🕹️ 2.4GHz Anti-Interference Radio Control</h3>
-            <p>Equipped with a 2.4GHz pro-proportional transmitter system offering an operating range of up to 120+ meters. Enjoy smooth, responsive throttle modulation and pinpoint steering control without signal overlap when driving alongside multiple RC vehicles.</p>
+              <h3 style="font-size:18px;margin-top:24px;color:#111">🕹️ 2.4GHz Anti-Interference Radio Control</h3>
+              <p>Equipped with a 2.4GHz pro-proportional transmitter system offering an operating range of up to 120+ meters. Enjoy smooth, responsive throttle modulation and pinpoint steering control without signal overlap when driving alongside multiple RC vehicles.</p>
 
-            <h3 style="font-size:18px;margin-top:24px;color:#111">🛡️ All-Terrain Suspension & Chassis Articulation</h3>
-            <p>Independent oil-filled shock absorbers and long-travel suspension arms absorb bumps on rough dirt tracks, rocky trails, and high-impact jumps while preserving chassis balance and ground clearance.</p>
+              <h3 style="font-size:18px;margin-top:24px;color:#111">🛡️ All-Terrain Suspension & Chassis Articulation</h3>
+              <p>Independent oil-filled shock absorbers and long-travel suspension arms absorb bumps on rough dirt tracks, rocky trails, and high-impact jumps while preserving chassis balance and ground clearance.</p>
+            `}
           </div>
 
           <!-- KEY HIGHLIGHT BULLETS LIST -->

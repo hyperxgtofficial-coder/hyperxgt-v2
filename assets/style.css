@@ -752,4 +752,30 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
+/* Product Description Typography & Multi-line Preserving */
+.product-short-desc, .product-full-desc {
+  word-break: break-word;
+}
+.product-short-desc p, .product-full-desc p {
+  margin: 0 0 14px 0;
+  line-height: 1.8;
+}
+.product-short-desc p:last-child, .product-full-desc p:last-child {
+  margin-bottom: 0;
+}
+.product-full-desc h1, .product-full-desc h2, .product-full-desc h3, .product-full-desc h4 {
+  color: #111;
+  margin: 22px 0 10px 0;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.product-full-desc ul, .product-full-desc ol {
+  margin: 10px 0 18px 20px;
+  line-height: 1.8;
+}
+.product-full-desc li {
+  margin-bottom: 6px;
+}
+
+
 
