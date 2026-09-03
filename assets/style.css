@@ -38,8 +38,11 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
 .tabs{display:flex;gap:8px;flex-wrap:wrap}.pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;font-size:10px;font-weight:900}.pill.active{background:#111;color:#fff;border-color:#111}
 .products{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.product-card{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;transition:.25s;position:relative}.product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 .product-media{aspect-ratio:1.1/1;position:relative;background:#f8f8f8;overflow:hidden;display:flex;align-items:center;justify-content:center}.product-media img{width:100%;height:100%;object-fit:contain;object-position:center center;padding:24px 12px 10px 12px;transition:.3s}.product-card:hover img{transform:scale(1.035)}
-.tag{position:absolute;z-index:2;left:12px;top:12px;background:#111;color:#fff;border-radius:999px;font-size:9px;padding:6px 10px;font-weight:900;letter-spacing:.07em}.sale-tag{left:auto;right:52px;background:var(--red)}
-.wish{position:absolute;z-index:2;right:12px;top:12px;width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--line);font-size:18px}.wish.on{background:#111;color:#fff}
+.product-badges{position:absolute;top:10px;left:10px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:4px;max-width:calc(100% - 48px);pointer-events:none}
+.tag{display:inline-flex;align-items:center;background:#111;color:#fff;border-radius:999px;font-size:9px;padding:4px 8px;font-weight:900;letter-spacing:.05em;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 5px rgba(0,0,0,.18);pointer-events:auto}
+.tag.sale-tag{background:var(--red);color:#fff}
+.wish{position:absolute;z-index:3;right:10px;top:10px;width:32px;height:32px;border-radius:50%;background:#fff;border:1px solid var(--line);font-size:16px;display:grid;place-items:center;cursor:pointer;transition:all .2s ease;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.wish.on{background:#111;color:#fff;border-color:#111}
 .product-meta{padding:18px 18px 20px}.sku{font-size:8px;color:#999ca2;font-weight:900;letter-spacing:.13em}.product-meta h3{font-size:15px;margin:8px 0 7px;line-height:1.25;min-height:40px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.product-meta p{font-size:11px;color:var(--muted);min-height:20px;margin:4px 0 0}.price{display:flex;gap:9px;align-items:center;margin-top:10px}.price strong{font-size:16px}.price del{font-size:11px;color:#999}.product-actions{display:flex;gap:7px;margin-top:14px}.mini-btn{flex:1;min-height:38px;border-radius:999px;border:1px solid #dedfe3;background:#fff;font-size:10px;font-weight:900}.mini-btn.solid{background:#111;color:#fff;border-color:#111}
 .mob-link{font-size:13px;font-weight:800;color:#111;padding:10px 12px;border-radius:10px;background:#f8f9fa;display:flex;align-items:center;justify-content:space-between;transition:.2s;text-decoration:none}.mob-link:hover{background:#eef4ff;color:#1488d8}
 .collection-band{display:grid;grid-template-columns:1fr 1fr;gap:18px}.collection{min-height:460px;border-radius:26px;overflow:hidden;position:relative;background:#111}.collection img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.collection:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.78),transparent 68%)}.collection .copy{position:absolute;z-index:2;left:38px;right:38px;bottom:36px;color:#fff}.collection h3{font-size:38px;letter-spacing:-.045em;margin:6px 0 10px}.collection p{font-size:12px;max-width:450px;color:#e0e1e3}
@@ -418,7 +421,26 @@ a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}b
     aspect-ratio: 1.15/1;
   }
   .product-media img {
-    padding: 24px 8px 8px 8px;
+    padding: 22px 8px 8px 8px;
+  }
+  .product-badges {
+    top: 8px !important;
+    left: 8px !important;
+    gap: 3px !important;
+    max-width: calc(100% - 44px) !important;
+  }
+  .tag {
+    font-size: 8px !important;
+    padding: 3px 6px !important;
+    letter-spacing: .02em !important;
+    line-height: 1.2 !important;
+  }
+  .wish {
+    top: 8px !important;
+    right: 8px !important;
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
   }
   .product-meta {
     padding: 12px 10px;

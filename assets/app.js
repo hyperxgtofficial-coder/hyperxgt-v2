@@ -489,8 +489,10 @@ function productCard(p) {
   return `<article class="product-card">
     <div class="product-media">
       <a href="product.html?id=${p.id}">${(p.image && p.image.trim()) ? `<img loading="lazy" src="${p.image.trim()}" alt="${esc(p.name)}">` : `<div style="width:100%;height:180px;background:#f8f9fa;border-radius:12px;display:grid;place-items:center;color:#888;font-size:12px;font-weight:800">📷 Photo Coming Soon</div>`}</a>
-      <span class="tag">${esc(p.category)}</span>
-      ${p.discount ? `<span class="tag sale-tag">${p.discount}% OFF</span>` : ""}
+      <div class="product-badges">
+        ${p.discount ? `<span class="tag sale-tag">${p.discount}% OFF</span>` : ""}
+        <span class="tag cat-tag">${esc(p.category)}</span>
+      </div>
       <button class="wish ${w ? "on" : ""}" data-wish="${p.id}" onclick="toggleWish(${idArg(p.id)})">${w ? "♥" : "♡"}</button>
     </div>
     <div class="product-meta">
