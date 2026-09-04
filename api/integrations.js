@@ -414,6 +414,122 @@ async function handleHeroRequest(req, res, action) {
 }
 
 // ==========================================
+// 4. TYPOGRAPHY & FONT STUDIO ENGINE
+// ==========================================
+let cachedTypographySettings = null;
+
+function getTypographySettingsDisk() {
+  if (cachedTypographySettings) return cachedTypographySettings;
+  try {
+    const filePath = path.join(__dirname, '..', 'data', 'typography-settings.json');
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      cachedTypographySettings = JSON.parse(content);
+      return cachedTypographySettings;
+    }
+  } catch(e) {}
+  return {
+    fontPrimary: 'Inter',
+    fontHeading: 'Inter',
+    baseFontSize: '16px',
+    heroH1Size: 'clamp(48px, 6vw, 92px)',
+    sectionH2Size: '46px',
+    prodTitleSize: '28px',
+    cardH3Size: '15px',
+    prodPriceSize: '34px',
+    letterSpacingBase: '0px',
+    letterSpacingHeading: '-0.03em',
+    headingTransform: 'none',
+    bodyLineHeight: '1.45',
+    fontWeightHeading: '800'
+  };
+}
+
+async function getTypographySettingsFromSupabase() {
+  const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\/$/, '');
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return null;
+
+  try {
+    const res = await httpsRequest(`${supabaseUrl}/rest/v1/collaborations?id=eq.99998&select=link`, 'GET', {
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`
+    });
+    if (res.statusCode === 200 && Array.isArray(res.body) && res.body.length > 0 && res.body[0].link) {
+      const parsed = JSON.parse(res.body[0].link);
+      return parsed;
+    }
+  } catch(e) {}
+  return null;
+}
+
+async function saveTypographySettingsToSupabase(settings) {
+  const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\/$/, '');
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return false;
+
+  try {
+    const payload = {
+      id: 99998,
+      name: 'store_typography_settings',
+      link: JSON.stringify(settings),
+      active: true,
+      display_order: 998
+    };
+    const res = await httpsRequest(`${supabaseUrl}/rest/v1/collaborations`, 'POST', {
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`,
+      'Prefer': 'resolution=merge-duplicates,return=representation'
+    }, payload);
+    return res.statusCode === 200 || res.statusCode === 201;
+  } catch(e) {
+    return false;
+  }
+}
+
+async function handleTypographyRequest(req, res, action) {
+  if (req.method === 'GET' || action === 'get') {
+    const supabaseData = await getTypographySettingsFromSupabase();
+    if (supabaseData) {
+      cachedTypographySettings = supabaseData;
+      return res.status(200).json({ status: 'ok', data: supabaseData, source: 'supabase' });
+    }
+    const data = getTypographySettingsDisk();
+    return res.status(200).json({ status: 'ok', data, source: 'disk' });
+  }
+
+  if (req.method === 'POST' || action === 'save') {
+    if (!verifyAdminAuth(req)) {
+      return res.status(401).json({ error: "Unauthorized: Admin privileges required" });
+    }
+
+    const payload = req.body && req.body.data ? req.body.data : req.body;
+    if (!payload || typeof payload !== 'object') {
+      return res.status(400).json({ error: "Invalid typography settings payload" });
+    }
+
+    const current = (await getTypographySettingsFromSupabase()) || getTypographySettingsDisk();
+    const updated = {
+      ...current,
+      ...payload
+    };
+
+    cachedTypographySettings = updated;
+
+    await saveTypographySettingsToSupabase(updated);
+
+    try {
+      const filePath = path.join(__dirname, '..', 'data', 'typography-settings.json');
+      fs.writeFileSync(filePath, JSON.stringify(updated, null, 2), 'utf8');
+    } catch(e) {}
+
+    return res.status(200).json({ status: 'ok', message: 'Typography & Font Styles published live to entire store!', data: updated });
+  }
+
+  return res.status(400).json({ error: 'Unsupported action' });
+}
+
+// ==========================================
 // MAIN SERVERLESS ROUTER
 // ==========================================
 module.exports = async (req, res) => {
@@ -424,11 +540,16 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const isHero = req.url.includes('/hero') || req.query.service === 'hero' || req.query.module === 'hero' || (req.body && req.body.service === 'hero');
+  const isTypography = req.url.includes('/typography') || req.query.service === 'typography' || req.query.module === 'typography' || (req.body && req.body.service === 'typography');
   const isZoho = req.url.includes('/zoho') || req.query.service === 'zoho' || req.query.module === 'zoho' || (req.body && req.body.service === 'zoho');
   const action = req.query.action || (req.body && req.body.action) || 'status';
 
   if (isHero) {
     return await handleHeroRequest(req, res, action);
+  }
+
+  if (isTypography) {
+    return await handleTypographyRequest(req, res, action);
   }
 
   if (isZoho) {

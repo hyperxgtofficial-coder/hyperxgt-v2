@@ -2332,6 +2332,300 @@ function initHeroStudio() {
   if (btnReset2) btnReset2.onclick = resetHeroSettings;
 }
 
+// ====================================================================
+// TYPOGRAPHY, FONT STYLES & LETTER SIZES STUDIO CONTROLLER
+// ====================================================================
+const defaultTypographySettings = {
+  fontPrimary: 'Inter',
+  fontHeading: 'Outfit',
+  baseFontSize: '16px',
+  heroH1Size: 'clamp(48px, 6vw, 92px)',
+  sectionH2Size: '46px',
+  prodTitleSize: '28px',
+  cardH3Size: '15px',
+  prodPriceSize: '34px',
+  letterSpacingBase: '0px',
+  letterSpacingHeading: '-0.03em',
+  headingTransform: 'none',
+  bodyLineHeight: '1.45',
+  fontWeightHeading: '800'
+};
+
+const typoPresets = {
+  racing: {
+    fontPrimary: 'Rajdhani',
+    fontHeading: 'Rajdhani',
+    baseFontSize: '17px',
+    heroH1Size: 'clamp(56px, 7vw, 108px)',
+    sectionH2Size: '52px',
+    prodTitleSize: '32px',
+    cardH3Size: '16px',
+    prodPriceSize: '38px',
+    letterSpacingBase: '0.02em',
+    letterSpacingHeading: '0.04em',
+    headingTransform: 'uppercase',
+    bodyLineHeight: '1.45',
+    fontWeightHeading: '800'
+  },
+  modern: {
+    fontPrimary: 'Inter',
+    fontHeading: 'Outfit',
+    baseFontSize: '16px',
+    heroH1Size: 'clamp(48px, 6vw, 92px)',
+    sectionH2Size: '46px',
+    prodTitleSize: '28px',
+    cardH3Size: '15px',
+    prodPriceSize: '34px',
+    letterSpacingBase: '0px',
+    letterSpacingHeading: '-0.03em',
+    headingTransform: 'none',
+    bodyLineHeight: '1.45',
+    fontWeightHeading: '800'
+  },
+  futuristic: {
+    fontPrimary: 'Plus Jakarta Sans',
+    fontHeading: 'Orbitron',
+    baseFontSize: '16px',
+    heroH1Size: 'clamp(48px, 6vw, 92px)',
+    sectionH2Size: '46px',
+    prodTitleSize: '28px',
+    cardH3Size: '15px',
+    prodPriceSize: '34px',
+    letterSpacingBase: '0.02em',
+    letterSpacingHeading: '0.06em',
+    headingTransform: 'uppercase',
+    bodyLineHeight: '1.6',
+    fontWeightHeading: '800'
+  },
+  punchy: {
+    fontPrimary: 'Montserrat',
+    fontHeading: 'Montserrat',
+    baseFontSize: '16px',
+    heroH1Size: 'clamp(56px, 7vw, 108px)',
+    sectionH2Size: '52px',
+    prodTitleSize: '32px',
+    cardH3Size: '16px',
+    prodPriceSize: '38px',
+    letterSpacingBase: '-0.01em',
+    letterSpacingHeading: '-0.04em',
+    headingTransform: 'uppercase',
+    bodyLineHeight: '1.45',
+    fontWeightHeading: '900'
+  },
+  luxury: {
+    fontPrimary: 'Poppins',
+    fontHeading: 'Syne',
+    baseFontSize: '16px',
+    heroH1Size: 'clamp(48px, 6vw, 92px)',
+    sectionH2Size: '46px',
+    prodTitleSize: '30px',
+    cardH3Size: '15px',
+    prodPriceSize: '34px',
+    letterSpacingBase: '0.01em',
+    letterSpacingHeading: '-0.02em',
+    headingTransform: 'none',
+    bodyLineHeight: '1.6',
+    fontWeightHeading: '800'
+  }
+};
+
+window.applyTypoPreset = function(presetKey) {
+  const p = typoPresets[presetKey];
+  if (!p) return;
+  populateTypographyForm(p);
+  updateLiveTypographyPreview();
+  toast(`Applied preset "${presetKey.toUpperCase()}"! Click Save to publish live ✓`);
+};
+
+function populateTypographyForm(t) {
+  if (!t) return;
+  const setVal = (id, val) => {
+    const el = $(id);
+    if (el && val !== undefined) el.value = val;
+  };
+
+  if ($("#typoFontHeading")) {
+    const headingVal = t.fontHeading || 'Outfit';
+    const opts = Array.from($("#typoFontHeading").options).map(o => o.value);
+    if (opts.includes(headingVal)) {
+      $("#typoFontHeading").value = headingVal;
+      if ($("#typoCustomFontRow")) $("#typoCustomFontRow").style.display = 'none';
+    } else {
+      $("#typoFontHeading").value = 'custom';
+      if ($("#typoCustomFontInput")) $("#typoCustomFontInput").value = headingVal;
+      if ($("#typoCustomFontRow")) $("#typoCustomFontRow").style.display = 'block';
+    }
+  }
+
+  setVal("#typoFontPrimary", t.fontPrimary || 'Inter');
+  setVal("#typoFontWeightHeading", t.fontWeightHeading || '800');
+  setVal("#typoHeadingTransform", t.headingTransform || 'none');
+  setVal("#typoBaseFontSize", t.baseFontSize || '16px');
+  setVal("#typoHeroH1Size", t.heroH1Size || 'clamp(48px, 6vw, 92px)');
+  setVal("#typoSectionH2Size", t.sectionH2Size || '46px');
+  setVal("#typoProdTitleSize", t.prodTitleSize || '28px');
+  setVal("#typoCardH3Size", t.cardH3Size || '15px');
+  setVal("#typoProdPriceSize", t.prodPriceSize || '34px');
+  setVal("#typoLetterSpacingHeading", t.letterSpacingHeading || '-0.03em');
+  setVal("#typoLetterSpacingBase", t.letterSpacingBase || '0px');
+  setVal("#typoBodyLineHeight", t.bodyLineHeight || '1.45');
+}
+
+function getTypographyFormData() {
+  let fontHeading = $("#typoFontHeading")?.value || 'Outfit';
+  if (fontHeading === 'custom') {
+    fontHeading = $("#typoCustomFontInput")?.value.trim() || 'Outfit';
+  }
+
+  let fontPrimary = $("#typoFontPrimary")?.value || 'Inter';
+  if (fontPrimary === 'custom') {
+    fontPrimary = $("#typoCustomFontInput")?.value.trim() || 'Inter';
+  }
+
+  return {
+    fontPrimary,
+    fontHeading,
+    baseFontSize: $("#typoBaseFontSize")?.value || '16px',
+    heroH1Size: $("#typoHeroH1Size")?.value || 'clamp(48px, 6vw, 92px)',
+    sectionH2Size: $("#typoSectionH2Size")?.value || '46px',
+    prodTitleSize: $("#typoProdTitleSize")?.value || '28px',
+    cardH3Size: $("#typoCardH3Size")?.value || '15px',
+    prodPriceSize: $("#typoProdPriceSize")?.value || '34px',
+    letterSpacingBase: $("#typoLetterSpacingBase")?.value || '0px',
+    letterSpacingHeading: $("#typoLetterSpacingHeading")?.value || '-0.03em',
+    headingTransform: $("#typoHeadingTransform")?.value || 'none',
+    bodyLineHeight: $("#typoBodyLineHeight")?.value || '1.45',
+    fontWeightHeading: $("#typoFontWeightHeading")?.value || '800'
+  };
+}
+
+function updateLiveTypographyPreview() {
+  const data = getTypographyFormData();
+  const box = $("#typoLivePreviewBox");
+  if (!box) return;
+
+  const fontHeading = data.fontHeading;
+  const fontPrimary = data.fontPrimary;
+
+  if ($("#previewActiveFontTag")) {
+    $("#previewActiveFontTag").textContent = `${fontHeading} + ${fontPrimary}`;
+  }
+
+  // Update preview container styles
+  box.style.fontFamily = `'${fontPrimary}', ui-sans-serif, sans-serif`;
+  box.style.fontSize = data.baseFontSize;
+  box.style.letterSpacing = data.letterSpacingBase;
+  box.style.lineHeight = data.bodyLineHeight;
+
+  const prevHero = $("#prevHeroTitle");
+  if (prevHero) {
+    prevHero.style.fontFamily = `'${fontHeading}', ui-sans-serif, sans-serif`;
+    prevHero.style.fontWeight = data.fontWeightHeading;
+    prevHero.style.letterSpacing = data.letterSpacingHeading;
+    prevHero.style.textTransform = data.headingTransform;
+  }
+
+  const prevProd = $("#prevProdTitle");
+  if (prevProd) {
+    prevProd.style.fontFamily = `'${fontHeading}', ui-sans-serif, sans-serif`;
+    prevProd.style.fontWeight = data.fontWeightHeading;
+  }
+
+  const prevPrice = $("#prevPrice");
+  if (prevPrice) {
+    prevPrice.style.fontFamily = `'${fontHeading}', ui-sans-serif, sans-serif`;
+  }
+
+  // Apply to current document root as well
+  if (typeof applyTypographySettings === 'function') {
+    applyTypographySettings(data);
+  }
+}
+
+async function initTypographyStudio() {
+  try {
+    const res = await fetch("/api/integrations?service=typography&action=get");
+    const json = await res.json();
+    if (res.ok && json.data) {
+      populateTypographyForm(json.data);
+      updateLiveTypographyPreview();
+    } else {
+      const local = localStorage.getItem("hx_typography_settings");
+      if (local) populateTypographyForm(JSON.parse(local));
+      else populateTypographyForm(defaultTypographySettings);
+      updateLiveTypographyPreview();
+    }
+  } catch(e) {
+    populateTypographyForm(defaultTypographySettings);
+    updateLiveTypographyPreview();
+  }
+
+  // Bind live change listeners to all typography inputs
+  const inputs = [
+    "#typoFontHeading", "#typoFontPrimary", "#typoCustomFontInput",
+    "#typoFontWeightHeading", "#typoHeadingTransform", "#typoBaseFontSize",
+    "#typoHeroH1Size", "#typoSectionH2Size", "#typoProdTitleSize",
+    "#typoCardH3Size", "#typoProdPriceSize", "#typoLetterSpacingHeading",
+    "#typoLetterSpacingBase", "#typoBodyLineHeight"
+  ];
+
+  inputs.forEach(sel => {
+    const el = $(sel);
+    if (el) {
+      el.addEventListener("input", updateLiveTypographyPreview);
+      el.addEventListener("change", () => {
+        if (sel === "#typoFontHeading" || sel === "#typoFontPrimary") {
+          const isCustom = $("#typoFontHeading")?.value === 'custom' || $("#typoFontPrimary")?.value === 'custom';
+          if ($("#typoCustomFontRow")) $("#typoCustomFontRow").style.display = isCustom ? 'block' : 'none';
+        }
+        updateLiveTypographyPreview();
+      });
+    }
+  });
+
+  const saveTypoSettings = async () => {
+    const payload = getTypographyFormData();
+    try {
+      const res = await fetch("/api/integrations", {
+        method: "POST",
+        headers: getAdminHeaders(),
+        body: JSON.stringify({
+          service: "typography",
+          action: "save",
+          data: payload,
+          adminKey: getAdminToken()
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data && data.status === "ok") {
+        try { localStorage.setItem("hx_typography_settings", JSON.stringify(payload)); } catch(e) {}
+        toast("🎉 Typography, font styles & letter sizes saved and published live!");
+      } else {
+        try { localStorage.setItem("hx_typography_settings", JSON.stringify(payload)); } catch(e) {}
+        toast("Saved locally. Server status: " + (data.error || "Updated"));
+      }
+    } catch(err) {
+      try { localStorage.setItem("hx_typography_settings", JSON.stringify(payload)); } catch(e) {}
+      toast("✓ Typography saved to local cache!");
+    }
+  };
+
+  const btnSave1 = $("#btnSaveTypography");
+  if (btnSave1) btnSave1.onclick = saveTypoSettings;
+  const btnSave2 = $("#btnSaveTypographySide");
+  if (btnSave2) btnSave2.onclick = saveTypoSettings;
+
+  const resetTypoSettings = () => {
+    if (confirm("Reset Typography and Letter Sizes to HyperXGT defaults?")) {
+      populateTypographyForm(defaultTypographySettings);
+      updateLiveTypographyPreview();
+      saveTypoSettings();
+    }
+  };
+  const btnReset = $("#btnResetTypography");
+  if (btnReset) btnReset.onclick = resetTypoSettings;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initAdminAuth();
   initAdminTabs();
@@ -2350,6 +2644,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSocialPublisher();
   initZohoOneIntegration();
   initHeroStudio();
+  initTypographyStudio();
 
   const openAddBtn = $("#btnOpenAddModal");
   if (openAddBtn) openAddBtn.onclick = openAddModal;

@@ -1,0 +1,15 @@
+{
+  "fontPrimary": "Rajdhani",
+  "fontHeading": "Rajdhani",
+  "baseFontSize": "17px",
+  "heroH1Size": "clamp(56px, 7vw, 108px)",
+  "sectionH2Size": "52px",
+  "prodTitleSize": "32px",
+  "cardH3Size": "16px",
+  "prodPriceSize": "38px",
+  "letterSpacingBase": "0.02em",
+  "letterSpacingHeading": "0.04em",
+  "headingTransform": "uppercase",
+  "bodyLineHeight": "1.45",
+  "fontWeightHeading": "800"
+}

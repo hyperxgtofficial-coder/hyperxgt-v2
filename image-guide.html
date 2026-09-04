@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HyperXGT · Master Image Dimensions & Asset Specifications Guide</title>
+  <style>
+    body { background: #0f1117; color: #e5e7eb; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px 20px; line-height: 1.6; }
+    .guide-box { max-width: 1000px; margin: 0 auto; background: #1a1d26; border: 1px solid #2e3446; border-radius: 24px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    h1 { font-size: 32px; color: #fff; margin: 0 0 10px; }
+    .badge { display: inline-block; background: #ed1c24; color: #fff; font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+    .btn-download { display: inline-flex; align-items: center; gap: 8px; background: #1488d8; color: #fff; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px; margin-top: 20px; transition: .2s; }
+    .btn-download:hover { background: #0f6fb3; transform: translateY(-2px); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 13px; text-align: left; }
+    th { background: #11131a; color: #fff; padding: 14px 16px; border-bottom: 2px solid #2e3446; font-weight: 800; }
+    td { padding: 14px 16px; border-bottom: 1px solid #282c3c; color: #d1d5db; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .sec-title { font-size: 20px; color: #fff; margin: 36px 0 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #2e3446; padding-bottom: 10px; }
+    .tip-box { background: rgba(20, 136, 216, 0.1); border: 1px solid rgba(20, 136, 216, 0.3); border-radius: 14px; padding: 16px 20px; margin: 20px 0; font-size: 13px; color: #93c5fd; }
+  </style>
+</head>
+<body>
+  <div class="guide-box">
+    <div class="badge">Official Reference Sheet</div>
+    <h1>Master Image Dimensions & Sizing Guide</h1>
+    <p style="color:#9ca3af; font-size:14px; margin-top:0">Official Design & Media Upload Reference Sheet for HyperXGT Storefront & Admin Studio</p>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap">
+      <a class="btn-download" href="HyperXGT_Master_Image_Dimensions_Guide.docx" download>📥 Download Word File (.docx)</a>
+      <a class="btn-download" style="background:#2e7d32" href="HyperXGT_Full_System_Data_and_Implementation.xlsx" download>📊 Download Excel Report (.xlsx)</a>
+      <a class="btn-download" style="background:#222; border:1px solid #444" href="admin.html">⚙️ Open Admin Studio</a>
+    </div>
+
+    <div class="tip-box">
+      <strong>💡 Golden Rule for Product Images:</strong> Crop tightly around the vehicle chassis and wheels so the car fills <strong>85% to 90%</strong> of the square canvas (leave only 5% to 8% margin). Always use <strong>1000 × 1000 px (1:1 Square)</strong> on a pure white (#FFFFFF) or transparent PNG background.
+    </div>
+
+    <!-- TABLE 1 -->
+    <div class="sec-title">🏎️ 1. Product Catalogue & Storefront Rigs</div>
+    <table>
+      <thead>
+        <tr><th>Asset / Image Type</th><th>Resolution</th><th>Aspect Ratio</th><th>Max Size</th><th>Format</th><th>Location</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Primary Product Image</strong></td><td><code>1000 × 1000 px</code></td><td>1:1 Square</td><td>&lt; 800 KB</td><td>.PNG / .WEBP / .JPG</td><td>Product Page, Shop Grid, Quick View</td></tr>
+        <tr><td><strong>Gallery Additional Angles</strong></td><td><code>1000 × 1000 px</code></td><td>1:1 Square</td><td>&lt; 800 KB</td><td>.PNG / .WEBP / .JPG</td><td>Product Detail Gallery Thumbnails</td></tr>
+        <tr><td><strong>Cart & Checkout Preview</strong></td><td><code>1000 × 1000 px</code></td><td>1:1 Square</td><td>&lt; 800 KB</td><td>.PNG / .WEBP</td><td>Cart Drawer, Cart Page, Checkout</td></tr>
+      </tbody>
+    </table>
+
+    <!-- TABLE 2 -->
+    <div class="sec-title">🎨 2. Homepage Hero Studio & Banners</div>
+    <table>
+      <thead>
+        <tr><th>Banner Asset</th><th>Resolution</th><th>Aspect Ratio</th><th>Max Size</th><th>Format</th><th>Usage / Framing</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Hero Background Car</strong></td><td><code>1920 × 1080 px</code></td><td>16:9 Wide</td><td>&lt; 1.2 MB</td><td>.WEBP / .JPG</td><td>Flagship rally car background (.hero-bg-car)</td></tr>
+        <tr><td><strong>Brand Ambassador Cutout</strong></td><td><code>800 × 1200 px</code></td><td>2:3 Portrait</td><td>&lt; 900 KB</td><td>Transparent .PNG</td><td>Driver cutout layer (.ambassador-layer)</td></tr>
+        <tr><td><strong>Top Side Card (Collectables)</strong></td><td><code>600 × 400 px</code></td><td>3:2</td><td>&lt; 500 KB</td><td>.WEBP / .JPG / .PNG</td><td>Hero top side feature card</td></tr>
+        <tr><td><strong>Bottom Side Card (Drift)</strong></td><td><code>600 × 400 px</code></td><td>3:2</td><td>&lt; 500 KB</td><td>.WEBP / .JPG / .PNG</td><td>Hero bottom side feature card</td></tr>
+      </tbody>
+    </table>
+
+    <!-- TABLE 3 -->
+    <div class="sec-title">🏔️ 3. Homepage Showcase & Terrain Sections</div>
+    <table>
+      <thead>
+        <tr><th>Showcase Element</th><th>Resolution</th><th>Aspect Ratio</th><th>Max Size</th><th>Format</th><th>Usage / Section</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Terrain Card 1 (Crawlers & Off Road)</strong></td><td><code>1200 × 800 px</code></td><td>3:2 or 4:3</td><td>&lt; 800 KB</td><td>.WEBP / .JPG</td><td>"Built for dirt" terrain card (#shop)</td></tr>
+        <tr><td><strong>Terrain Card 2 (Racing & Speed)</strong></td><td><code>1200 × 800 px</code></td><td>3:2 or 4:3</td><td>&lt; 800 KB</td><td>.WEBP / .JPG</td><td>"Own the apex" terrain card (#shop)</td></tr>
+        <tr><td><strong>Community Story Cards</strong></td><td><code>800 × 600 px</code></td><td>4:3</td><td>&lt; 500 KB</td><td>.WEBP / .JPG</td><td>Driver builds & community stories (#community)</td></tr>
+        <tr><td><strong>Brand Partner Logos</strong></td><td><code>400 × 200 px</code></td><td>2:1 Wide</td><td>&lt; 150 KB</td><td>Transparent .PNG / .SVG</td><td>Brand collaboration ticker rail (.rail)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- TABLE 4 -->
+    <div class="sec-title">🏷️ 4. Brand Identity, Icons & Customer Media</div>
+    <table>
+      <thead>
+        <tr><th>Asset Type</th><th>Resolution</th><th>Aspect Ratio</th><th>Max Size</th><th>Format</th><th>Location</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Website Main Logo</strong></td><td><code>500 × 150 px</code></td><td>3.3:1 Wide</td><td>&lt; 100 KB</td><td>Transparent .PNG</td><td>Header navigation and footer (assets/hyperxgt-logo.png)</td></tr>
+        <tr><td><strong>Browser Favicon</strong></td><td><code>512 × 512 px</code></td><td>1:1 Square</td><td>&lt; 50 KB</td><td>.PNG / .ICO</td><td>Browser tab icon (favicon.png)</td></tr>
+        <tr><td><strong>OpenGraph Link Preview</strong></td><td><code>1200 × 630 px</code></td><td>1.91:1</td><td>&lt; 600 KB</td><td>.JPG / .PNG</td><td>WhatsApp & social media link preview share card</td></tr>
+        <tr><td><strong>Customer Reviews / Unboxing</strong></td><td><code>1080 × 1080 px</code></td><td>1:1 or 9:16</td><td>&lt; 2 MB</td><td>.JPG / .PNG / .MP4</td><td>Customer reviews & unboxing modal (#reviewModal)</td></tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:40px; padding-top:20px; border-top:1px solid #282c3c; text-align:center; font-size:12px; color:#6b7280">
+      © 2026 HyperXGT · All Rights Reserved · RC Performance Store & Driver Club
+    </div>
+  </div>
+</body>
+</html>

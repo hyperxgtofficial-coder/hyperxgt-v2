@@ -1,3 +1,54 @@
+// GLOBAL STORE TYPOGRAPHY & FONT SCALING ENGINE
+function getFontStack(fontName) {
+  if (!fontName) return "'Inter', ui-sans-serif, system-ui, sans-serif";
+  const name = fontName.trim();
+  if (name.includes(',') || name.includes('sans-serif') || name.includes('monospace')) return name;
+  return `'${name}', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
+}
+
+function applyTypographySettings(t) {
+  if (!t || typeof t !== 'object') return;
+  const root = document.documentElement;
+
+  if (t.fontPrimary) root.style.setProperty('--font-primary', getFontStack(t.fontPrimary));
+  if (t.fontHeading) root.style.setProperty('--font-heading', getFontStack(t.fontHeading));
+  if (t.baseFontSize) root.style.setProperty('--base-font-size', t.baseFontSize);
+  if (t.bodyLineHeight) root.style.setProperty('--body-line-height', t.bodyLineHeight);
+  if (t.letterSpacingBase) root.style.setProperty('--letter-spacing-base', t.letterSpacingBase);
+  if (t.letterSpacingHeading) root.style.setProperty('--letter-spacing-heading', t.letterSpacingHeading);
+  if (t.headingTransform) root.style.setProperty('--heading-transform', t.headingTransform);
+  if (t.fontWeightHeading) root.style.setProperty('--font-weight-heading', t.fontWeightHeading);
+
+  if (t.heroH1Size) root.style.setProperty('--hero-h1-size', t.heroH1Size);
+  if (t.sectionH2Size) root.style.setProperty('--section-h2-size', t.sectionH2Size);
+  if (t.prodTitleSize) root.style.setProperty('--prod-title-size', t.prodTitleSize);
+  if (t.cardH3Size) root.style.setProperty('--card-h3-size', t.cardH3Size);
+  if (t.prodPriceSize) root.style.setProperty('--prod-price-size', t.prodPriceSize);
+}
+
+function initGlobalTypography() {
+  try {
+    const local = localStorage.getItem("hx_typography_settings");
+    if (local) {
+      const parsed = JSON.parse(local);
+      if (parsed) applyTypographySettings(parsed);
+    }
+  } catch(e) {}
+
+  fetch('/api/integrations?service=typography&action=get')
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data && data.status === 'ok' && data.data) {
+        applyTypographySettings(data.data);
+        try { localStorage.setItem("hx_typography_settings", JSON.stringify(data.data)); } catch(e) {}
+      }
+    })
+    .catch(() => {});
+}
+
+// Immediate synchronous run to avoid FOUC
+try { initGlobalTypography(); } catch(e) {}
+
 // PERSISTENT STOREFRONT PRODUCTS DATABASE SYNCHRONIZER
 function loadProductsDB() {
   const staticProducts = (window.HX_PRODUCTS && Array.isArray(window.HX_PRODUCTS)) ? window.HX_PRODUCTS.filter(p => p && p.id != null) : [];
