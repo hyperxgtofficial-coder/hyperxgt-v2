@@ -1106,16 +1106,28 @@ function renderAdminProducts() {
   const cat = $("#adminCatFilter")?.value || "";
 
   let filtered = P.filter(p => {
-    const textMatch = !q || (p.name + " " + p.sku + " " + p.category + " " + p.scale).toLowerCase().includes(q);
+    const textMatch = !q || (p.name + " " + p.sku + " " + p.category + " " + (p.scale || '')).toLowerCase().includes(q);
     const catMatch = !cat || p.category === cat;
     return textMatch && catMatch;
   });
 
   if ($("#adminCountText")) $("#adminCountText").textContent = `Showing ${filtered.length} of ${P.length} total products`;
   if ($("#metricCount")) $("#metricCount").textContent = P.length;
+  if ($("#metricValue")) {
+    const totalVal = P.reduce((acc, p) => acc + ((p.price || 0) * (p.stock !== undefined ? p.stock : 25)), 0);
+    $("#metricValue").textContent = totalVal >= 10000000 ? `₹${(totalVal / 10000000).toFixed(2)} Cr` : (totalVal >= 100000 ? `₹${(totalVal / 100000).toFixed(2)} Lakh` : INR(totalVal));
+  }
 
   if (!filtered.length) {
-    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:#888">No matching products found.</td></tr>`;
+    if (P.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:48px;color:#888;font-size:13px">
+        <div style="font-size:32px;margin-bottom:8px">📦</div>
+        <strong>No products in database yet.</strong><br>
+        Click <span style="color:#1488d8;font-weight:800">+ Add New Product</span> above to add your first product!
+      </td></tr>`;
+    } else {
+      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:#888">No matching products found for this search/category filter.</td></tr>`;
+    }
     return;
   }
 
@@ -1228,23 +1240,12 @@ async function fetchLiveBackendProductsAdmin() {
     const res = await fetch('/api/products-crud');
     if (!res.ok) return;
     const data = await res.json();
-    if (data && data.products && Array.isArray(data.products) && data.products.length > 0) {
-      const liveProducts = data.products.filter(p => p && p.id != null);
-      const map = new Map();
-      (P || []).forEach(p => { if (p && p.id != null) map.set(String(p.id), p); });
-      liveProducts.forEach(p => {
-        const key = String(p.id);
-        const existing = map.get(key) || {};
-        map.set(key, { ...existing, ...p });
-      });
-      const mergedList = Array.from(map.values()).filter(p => p && p.id != null);
-      if (mergedList.length > 0) {
-        P = mergedList;
-        saveProductsDB(P);
-        if (typeof renderAdminProducts === "function") renderAdminProducts();
-        if (typeof populateAdminCatFilter === "function") populateAdminCatFilter();
-        if (typeof populateSocialProductList === "function") populateSocialProductList();
-      }
+    if (data && Array.isArray(data.products)) {
+      P = data.products.filter(p => p && p.id != null);
+      saveProductsDB(P);
+      if (typeof renderAdminProducts === "function") renderAdminProducts();
+      if (typeof populateAdminCatFilter === "function") populateAdminCatFilter();
+      if (typeof populateSocialProductList === "function") populateSocialProductList();
     }
   } catch(e) {}
 }

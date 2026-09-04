@@ -7,7 +7,7 @@ const path = require('path');
 let cachedProducts = null;
 
 function getInitialProducts() {
-  if (cachedProducts && Array.isArray(cachedProducts) && cachedProducts.length > 0) {
+  if (cachedProducts && Array.isArray(cachedProducts)) {
     return cachedProducts;
   }
   try {
@@ -15,7 +15,7 @@ function getInitialProducts() {
     if (fs.existsSync(jsonPath)) {
       const data = fs.readFileSync(jsonPath, 'utf8');
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         cachedProducts = parsed;
         return cachedProducts;
       }
@@ -26,10 +26,23 @@ function getInitialProducts() {
 
 function saveProductsToJsonDisk(arr) {
   try {
-    if (!Array.isArray(arr) || !arr.length) return;
+    if (!Array.isArray(arr)) return;
+
+    const jsonPath = path.join(__dirname, '..', 'data', 'products.json');
+    const jsPath = path.join(__dirname, '..', 'assets', 'products.js');
+
+    if (arr.length === 0) {
+      const dir = path.dirname(jsonPath);
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(jsonPath, JSON.stringify([], null, 2), 'utf8');
+      try {
+        fs.writeFileSync(jsPath, `window.HX_PRODUCTS = [];\n`, 'utf8');
+      } catch(e) {}
+      cachedProducts = [];
+      return;
+    }
 
     let existingMap = new Map();
-    const jsonPath = path.join(__dirname, '..', 'data', 'products.json');
     if (fs.existsSync(jsonPath)) {
       try {
         const raw = fs.readFileSync(jsonPath, 'utf8');
@@ -91,7 +104,6 @@ function saveProductsToJsonDisk(arr) {
     fs.writeFileSync(jsonPath, JSON.stringify(merged, null, 2), 'utf8');
 
     // Keep assets/products.js in exact parity
-    const jsPath = path.join(__dirname, '..', 'assets', 'products.js');
     try {
       fs.writeFileSync(jsPath, `window.HX_PRODUCTS = ${JSON.stringify(merged, null, 2)};\n`, 'utf8');
     } catch(e) {}
@@ -178,67 +190,72 @@ module.exports = async (req, res) => {
             'apikey': supabaseAnonKey,
             'Authorization': `Bearer ${supabaseAnonKey}`
           });
-          if (dbRes.statusCode === 200 && Array.isArray(dbRes.body) && dbRes.body.length > 0) {
-            const initialMap = new Map();
-            (getInitialProducts() || []).forEach(p => initialMap.set(String(p.id), p));
+          if (dbRes.statusCode === 200 && Array.isArray(dbRes.body)) {
+            if (dbRes.body.length === 0) {
+              cachedProducts = [];
+              saveProductsToJsonDisk([]);
+            } else {
+              const initialMap = new Map();
+              (getInitialProducts() || []).forEach(p => initialMap.set(String(p.id), p));
 
-            // Map Supabase column names to frontend attributes and preserve rich local fields
-            cachedProducts = dbRes.body.map(item => {
-              const local = initialMap.get(String(item.id)) || {};
-              let rawImgs = [];
-              if (item.image && typeof item.image === 'string' && item.image.trim()) {
-                const trimmed = item.image.trim();
-                if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
-                  try {
-                    const parsed = JSON.parse(trimmed);
-                    if (Array.isArray(parsed)) rawImgs = parsed.filter(Boolean);
-                  } catch(e) {}
+              // Map Supabase column names to frontend attributes and preserve rich local fields
+              cachedProducts = dbRes.body.map(item => {
+                const local = initialMap.get(String(item.id)) || {};
+                let rawImgs = [];
+                if (item.image && typeof item.image === 'string' && item.image.trim()) {
+                  const trimmed = item.image.trim();
+                  if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+                    try {
+                      const parsed = JSON.parse(trimmed);
+                      if (Array.isArray(parsed)) rawImgs = parsed.filter(Boolean);
+                    } catch(e) {}
+                  }
+                  if (!rawImgs.length) {
+                    rawImgs = trimmed.split(',').map(x => x.trim()).filter(Boolean);
+                  }
                 }
-                if (!rawImgs.length) {
-                  rawImgs = trimmed.split(',').map(x => x.trim()).filter(Boolean);
+                if (!rawImgs.length && local.images && local.images.length) {
+                  rawImgs = local.images;
                 }
-              }
-              if (!rawImgs.length && local.images && local.images.length) {
-                rawImgs = local.images;
-              }
-              const mainHeroImg = rawImgs[0] || local.image || '';
+                const mainHeroImg = rawImgs[0] || local.image || '';
 
-              return {
-                ...local,
-                id: Number(item.id),
-                sku: item.sku || local.sku,
-                name: item.name || local.name,
-                category: item.category || local.category,
-                price: Number(item.price || local.price || 0),
-                mrp: Number(item.mrp || item.regular_price || local.mrp || 0),
-                stock: Number(item.stock !== undefined ? item.stock : (local.stock !== undefined ? local.stock : 25)),
-                gstRate: Number(item.gst_rate || local.gstRate || 18),
-                taxMode: item.tax_mode || local.taxMode || 'inclusive',
-                hsn: item.hsn || local.hsn || '95030090',
-                scale: item.scale || local.scale || '1:16',
-                speed: item.speed || local.speed || '35 KM/H',
-                drive: item.drive || local.drive || '4WD',
-                brand: item.brand || local.brand || 'HyperXGT',
-                motor: item.motor || local.motor || '',
-                battery: item.battery || local.battery || '',
-                control: item.control || local.control || '',
-                dimensions: item.dimensions || local.dimensions || '',
-                weight: item.weight || local.weight || '',
-                age: item.age || local.age || '14+ Years',
-                in_box: item.in_box || item.package_contents || local.in_box || local.package_contents || '',
-                package_contents: item.package_contents || item.in_box || local.package_contents || local.in_box || '',
-                amc_custom: item.amc_custom || local.amc_custom || '',
-                shipping_custom: item.shipping_custom || local.shipping_custom || '',
-                returns_custom: item.returns_custom || local.returns_custom || '',
-                video: item.video || local.video || '',
-                image: mainHeroImg,
-                images: rawImgs,
-                no_image: !mainHeroImg,
-                short_description: item.short_description || local.short_description || '',
-                full_description: item.full_description || local.full_description || '',
-                discount: (item.mrp || local.mrp) && (item.price || local.price) ? Math.round((((item.mrp || local.mrp) - (item.price || local.price)) / (item.mrp || local.mrp)) * 100) : 0
-              };
-            });
+                return {
+                  ...local,
+                  id: Number(item.id),
+                  sku: item.sku || local.sku,
+                  name: item.name || local.name,
+                  category: item.category || local.category,
+                  price: Number(item.price || local.price || 0),
+                  mrp: Number(item.mrp || item.regular_price || local.mrp || 0),
+                  stock: Number(item.stock !== undefined ? item.stock : (local.stock !== undefined ? local.stock : 25)),
+                  gstRate: Number(item.gst_rate || local.gstRate || 18),
+                  taxMode: item.tax_mode || local.taxMode || 'inclusive',
+                  hsn: item.hsn || local.hsn || '95030090',
+                  scale: item.scale || local.scale || '1:16',
+                  speed: item.speed || local.speed || '35 KM/H',
+                  drive: item.drive || local.drive || '4WD',
+                  brand: item.brand || local.brand || 'HyperXGT',
+                  motor: item.motor || local.motor || '',
+                  battery: item.battery || local.battery || '',
+                  control: item.control || local.control || '',
+                  dimensions: item.dimensions || local.dimensions || '',
+                  weight: item.weight || local.weight || '',
+                  age: item.age || local.age || '14+ Years',
+                  in_box: item.in_box || item.package_contents || local.in_box || local.package_contents || '',
+                  package_contents: item.package_contents || item.in_box || local.package_contents || local.in_box || '',
+                  amc_custom: item.amc_custom || local.amc_custom || '',
+                  shipping_custom: item.shipping_custom || local.shipping_custom || '',
+                  returns_custom: item.returns_custom || local.returns_custom || '',
+                  video: item.video || local.video || '',
+                  image: mainHeroImg,
+                  images: rawImgs,
+                  no_image: !mainHeroImg,
+                  short_description: item.short_description || local.short_description || '',
+                  full_description: item.full_description || local.full_description || '',
+                  discount: (item.mrp || local.mrp) && (item.price || local.price) ? Math.round((((item.mrp || local.mrp) - (item.price || local.price)) / (item.mrp || local.mrp)) * 100) : 0
+                };
+              });
+            }
           }
         } catch(e) {}
       }
@@ -492,8 +509,27 @@ module.exports = async (req, res) => {
       });
     }
 
-    // 4. DELETE PRODUCT FROM DATABASE
+    // 4. DELETE PRODUCT FROM DATABASE (or wipe all if ?all=1 or ?action=clear_all)
     if (req.method === 'DELETE') {
+      if (req.query.all === '1' || req.query.action === 'clear_all') {
+        cachedProducts = [];
+        saveProductsToJsonDisk([]);
+
+        if (supabaseServiceKey && supabaseUrl.includes("supabase")) {
+          try {
+            await httpsRequest(`${supabaseUrl}/rest/v1/products?id=gt.0`, 'DELETE', {
+              'apikey': supabaseServiceKey,
+              'Authorization': `Bearer ${supabaseServiceKey}`
+            });
+          } catch(e) { console.error('Supabase DELETE ALL error:', e.message); }
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: 'All products removed from database and disk!'
+        });
+      }
+
       const deleteId = Number(req.query.id);
       if (cachedProducts && Array.isArray(cachedProducts)) {
         cachedProducts = cachedProducts.filter(x => x.id !== deleteId);

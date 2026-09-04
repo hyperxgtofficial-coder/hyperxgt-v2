@@ -51,46 +51,25 @@ try { initGlobalTypography(); } catch(e) {}
 
 // PERSISTENT STOREFRONT PRODUCTS DATABASE SYNCHRONIZER
 function loadProductsDB() {
-  const staticProducts = (window.HX_PRODUCTS && Array.isArray(window.HX_PRODUCTS)) ? window.HX_PRODUCTS.filter(p => p && p.id != null) : [];
-  
   try {
     const local = localStorage.getItem("hx_products_db");
-    if (local) {
+    if (local !== null) {
       const parsed = JSON.parse(local);
-      if (parsed && Array.isArray(parsed) && parsed.length >= 10) {
-        const map = new Map();
-        staticProducts.forEach(p => {
-          if (p && p.id != null) map.set(String(p.id), p);
-        });
-        parsed.forEach(p => {
-          if (p && p.id != null) {
-            const key = String(p.id);
-            const existing = map.get(key) || {};
-            const merged = { ...existing, ...p };
-            if (p.image || (Array.isArray(p.images) && p.images.length > 0)) {
-              merged.no_image = false;
-            } else if (p.no_image || (p.image === "" && Array.isArray(p.images) && p.images.length === 0)) {
-              merged.image = "";
-              merged.images = [];
-              merged.no_image = true;
-            }
-            map.set(key, merged);
-          }
-        });
-        const result = Array.from(map.values()).filter(p => p && p.id != null);
-        if (result.length >= 10) return result;
+      if (Array.isArray(parsed)) {
+        return parsed.filter(p => p && p.id != null);
       }
     }
   } catch(e) {}
   
-  return staticProducts;
+  if (window.HX_PRODUCTS && Array.isArray(window.HX_PRODUCTS)) {
+    return window.HX_PRODUCTS.filter(p => p && p.id != null);
+  }
+  return [];
 }
 
 let P = loadProductsDB();
 
-// Category lists were hardcoded in three places and included "Mini RC", which no product
-// actually carries — those links and filters always produced an empty result set.
-// Deriving them from the catalogue keeps the UI honest as the data changes.
+// Dynamic Category list derived in real time from active catalogue
 function getCategories() {
   const seen = new Map();
   getProducts().forEach(p => {
@@ -106,25 +85,15 @@ function getScales() {
     const s = p && p.scale ? String(p.scale).trim() : "";
     if (s && s !== "Not specified") seen.add(s);
   });
-  // Sort by denominator so 1:7 comes before 1:64.
   return [...seen].sort((a, b) => (Number(a.split(":")[1]) || 0) - (Number(b.split(":")[1]) || 0));
 }
 
 function getProducts() {
-  if (Array.isArray(P) && P.length >= 10) {
-    const valid = P.filter(p => p && p.id != null);
-    if (valid.length >= 10) return valid;
+  if (Array.isArray(P)) {
+    return P.filter(p => p && p.id != null);
   }
   P = loadProductsDB();
-  if (Array.isArray(P) && P.length >= 10) {
-    const valid = P.filter(p => p && p.id != null);
-    if (valid.length >= 10) return valid;
-  }
-  if (window.HX_PRODUCTS && Array.isArray(window.HX_PRODUCTS)) {
-    const staticValid = window.HX_PRODUCTS.filter(p => p && p.id != null);
-    if (staticValid.length > 0) return staticValid;
-  }
-  return [];
+  return Array.isArray(P) ? P.filter(p => p && p.id != null) : [];
 }
 
 // Product ids are compared as strings everywhere (backend rows may use non-numeric ids),
@@ -324,47 +293,13 @@ async function fetchLiveBackendProducts() {
     const res = await fetch('/api/products-crud');
     if (!res.ok) return;
     const data = await res.json();
-    if (data && data.products && Array.isArray(data.products) && data.products.length > 0) {
-      const liveProducts = data.products.filter(p => p && p.id != null);
-      const staticProducts = (window.HX_PRODUCTS && Array.isArray(window.HX_PRODUCTS)) ? window.HX_PRODUCTS.filter(p => p && p.id != null) : [];
-      
-      let localProducts = [];
+    if (data && Array.isArray(data.products)) {
+      P = data.products.filter(p => p && p.id != null);
+      window.HX_PRODUCTS = P;
       try {
-        const local = localStorage.getItem("hx_products_db");
-        if (local) {
-          const parsed = JSON.parse(local);
-          if (Array.isArray(parsed)) localProducts = parsed.filter(p => p && p.id != null);
-        }
-      } catch(e) {}
-
-      const map = new Map();
-      staticProducts.forEach(p => map.set(String(p.id), p));
-      localProducts.forEach(p => {
-        const key = String(p.id);
-        const existing = map.get(key) || {};
-        map.set(key, { ...existing, ...p });
-      });
-      liveProducts.forEach(p => {
-        const key = String(p.id);
-        const existing = map.get(key) || {};
-        const merged = { ...existing, ...p };
-        if (p.image || (Array.isArray(p.images) && p.images.length > 0)) {
-          merged.no_image = false;
-        } else if (p.no_image || (p.image === "" && Array.isArray(p.images) && p.images.length === 0)) {
-          merged.image = "";
-          merged.images = [];
-          merged.no_image = true;
-        }
-        map.set(key, merged);
-      });
-
-      const mergedList = Array.from(map.values()).filter(p => p && p.id != null);
-      if (mergedList.length > 0) {
-        P = mergedList;
-        window.HX_PRODUCTS = P;
         localStorage.setItem("hx_products_db", JSON.stringify(P));
-        reRenderAllStorefrontPages();
-      }
+      } catch(e) {}
+      reRenderAllStorefrontPages();
     }
   } catch(e) {}
 }
@@ -388,8 +323,8 @@ window.addEventListener("storage", (e) => {
 });
 
 window.addEventListener("hx_stock_update", (e) => {
-  if (e.detail && e.detail.length >= 10) {
-    P = e.detail;
+  if (e.detail && Array.isArray(e.detail)) {
+    P = e.detail.filter(p => p && p.id != null);
     window.HX_PRODUCTS = P;
     reRenderAllStorefrontPages();
   }
