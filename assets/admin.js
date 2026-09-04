@@ -888,6 +888,7 @@ function openAddModal() {
   if ($("#formVideoUrl")) $("#formVideoUrl").value = "";
   renderAdminGalleryPreview([]);
   updateAdminGstBreakdown();
+  if (typeof resetProdDescPreviewMode === 'function') resetProdDescPreviewMode();
   openModal("productModal");
 }
 
@@ -940,6 +941,7 @@ function openEditModal(id) {
   $("#formFullDesc").value = p.full_description || "";
 
   updateAdminGstBreakdown();
+  if (typeof resetProdDescPreviewMode === 'function') resetProdDescPreviewMode();
   openModal("productModal");
 }
 
@@ -2304,13 +2306,22 @@ function initHeroStudio() {
       const data = await res.json();
       if (res.ok && data && data.status === "ok") {
         try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
-        toast("🎉 Homepage Showcase & Terrain Cards saved and published live!");
+        if (typeof saveTypoSettings === "function") {
+          await saveTypoSettings();
+        }
+        toast("🎉 Homepage Showcase, Banners & Typography saved and published live!");
       } else {
         try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
+        if (typeof saveTypoSettings === "function") {
+          await saveTypoSettings();
+        }
         toast("Saved locally. Server status: " + (data.error || "Updated"));
       }
     } catch(err) {
       try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
+      if (typeof saveTypoSettings === "function") {
+        await saveTypoSettings();
+      }
       toast("✓ Saved to local cache!");
     }
   };
@@ -2429,6 +2440,160 @@ const typoPresets = {
   }
 };
 
+// ====================================================================
+// PRODUCT MODAL RICH TYPOGRAPHY & LETTER STYLING TOOLBAR CONTROLLER
+// ====================================================================
+let lastFocusedProdTextarea = "formFullDesc";
+let isProdDescPreviewActive = false;
+
+function getActiveProdTargetEl() {
+  const targetId = $("#prodFormatTargetField")?.value || lastFocusedProdTextarea || "formFullDesc";
+  return $(`#${targetId}`) || $("#formFullDesc");
+}
+
+window.insertFormattingToTarget = function(prefix, suffix) {
+  const el = getActiveProdTargetEl();
+  if (!el) return;
+
+  el.focus();
+  const start = el.selectionStart || 0;
+  const end = el.selectionEnd || 0;
+  const text = el.value || "";
+  const selectedText = text.substring(start, end);
+
+  const replacement = prefix + (selectedText || "") + suffix;
+  el.value = text.substring(0, start) + replacement + text.substring(end);
+
+  // Reposition caret inside tag if empty selection, or encompass replacement
+  if (selectedText.length > 0) {
+    el.selectionStart = start;
+    el.selectionEnd = start + replacement.length;
+  } else {
+    el.selectionStart = start + prefix.length;
+    el.selectionEnd = start + prefix.length;
+  }
+
+  if (isProdDescPreviewActive) updateProdDescLivePreview();
+};
+
+window.applyFontFamilyFromToolbar = function(fontName) {
+  if (!fontName) return;
+  insertFormattingToTarget(`<span style="font-family:'${fontName}', sans-serif">`, `</span>`);
+  if ($("#prodFormatFontFamily")) $("#prodFormatFontFamily").value = "";
+};
+
+window.applyFontSizeFromToolbar = function(fontSize) {
+  if (!fontSize) return;
+  insertFormattingToTarget(`<span style="font-size:${fontSize}">`, `</span>`);
+  if ($("#prodFormatFontSize")) $("#prodFormatFontSize").value = "";
+};
+
+window.applyColorFromToolbar = function(hexColor) {
+  if (!hexColor) return;
+  insertFormattingToTarget(`<span style="color:${hexColor}">`, `</span>`);
+};
+
+window.toggleProdDescPreviewMode = function() {
+  isProdDescPreviewActive = !isProdDescPreviewActive;
+  const previewBox = $("#prodDescLivePreviewContainer");
+  const textareasBox = $("#prodTextareasContainer");
+  const icon = $("#btnToggleProdDescIcon");
+  const text = $("#btnToggleProdDescText");
+  const btn = $("#btnToggleProdDescMode");
+
+  if (isProdDescPreviewActive) {
+    if (previewBox) previewBox.style.display = "block";
+    if (textareasBox) textareasBox.style.display = "none";
+    if (icon) icon.textContent = "✏️";
+    if (text) text.textContent = "Edit Text / Code";
+    if (btn) btn.style.background = "#111";
+    updateProdDescLivePreview();
+  } else {
+    if (previewBox) previewBox.style.display = "none";
+    if (textareasBox) textareasBox.style.display = "block";
+    if (icon) icon.textContent = "👁️";
+    if (text) text.textContent = "Live HTML Preview";
+    if (btn) btn.style.background = "#1488d8";
+  }
+};
+
+window.resetProdDescPreviewMode = function() {
+  isProdDescPreviewActive = false;
+  const previewBox = $("#prodDescLivePreviewContainer");
+  const textareasBox = $("#prodTextareasContainer");
+  const icon = $("#btnToggleProdDescIcon");
+  const text = $("#btnToggleProdDescText");
+  const btn = $("#btnToggleProdDescMode");
+  if (previewBox) previewBox.style.display = "none";
+  if (textareasBox) textareasBox.style.display = "block";
+  if (icon) icon.textContent = "👁️";
+  if (text) text.textContent = "Live HTML Preview";
+  if (btn) btn.style.background = "#1488d8";
+};
+
+window.updateProdDescLivePreview = function() {
+  const targetId = $("#prodFormatTargetField")?.value || lastFocusedProdTextarea || "formFullDesc";
+  const el = $(`#${targetId}`);
+  const previewBox = $("#prodDescPreviewContent");
+  const titleBox = $("#prodDescPreviewTitle");
+  if (!previewBox) return;
+
+  const targetNames = {
+    formShortDesc: "Short Summary",
+    formFullDesc: "Tab 1: Full Technical Description",
+    formInBox: "Tab 2: What's In The Box",
+    formAmc: "Tab 3: AMC Coverage Terms",
+    formShipping: "Tab 4: Shipping Info",
+    formReturns: "Tab 5: Returns Policy"
+  };
+
+  if (titleBox) {
+    titleBox.textContent = `👁️ Live Rendered View: ${targetNames[targetId] || targetId}`;
+  }
+
+  const rawVal = el ? el.value : "";
+  if (!rawVal.trim()) {
+    previewBox.innerHTML = `<em style="color:#888">(No content in ${targetNames[targetId] || targetId} yet...)</em>`;
+    return;
+  }
+
+  if (/<[a-z][\s\S]*>/i.test(rawVal)) {
+    previewBox.innerHTML = rawVal;
+  } else {
+    previewBox.innerHTML = rawVal.replace(/\n/g, "<br>");
+  }
+};
+
+window.toggleModalTypographyCard = function() {
+  const drawer = $("#modalTypoDrawer");
+  const icon = $("#modalTypoToggleIcon");
+  if (!drawer) return;
+  const isOpen = drawer.style.display === "block";
+  drawer.style.display = isOpen ? "none" : "block";
+  if (icon) icon.textContent = isOpen ? "▼ Expand" : "▲ Collapse";
+};
+
+window.syncModalTypographyChange = function(key, val) {
+  const targetMap = {
+    prodTitleSize: "#typoProdTitleSize",
+    prodPriceSize: "#typoProdPriceSize",
+    fontHeading: "#typoFontHeading"
+  };
+  const mainEl = $(targetMap[key]);
+  if (mainEl) {
+    mainEl.value = val;
+    updateLiveTypographyPreview();
+  }
+};
+
+window.saveTypoSettingsFromModal = async function() {
+  if (typeof saveTypoSettings === "function") {
+    await saveTypoSettings();
+  } else if ($("#btnSaveTypography")) {
+    $("#btnSaveTypography").click();
+  }
+};
+
 window.applyTypoPreset = function(presetKey) {
   const p = typoPresets[presetKey];
   if (!p) return;
@@ -2469,6 +2634,11 @@ function populateTypographyForm(t) {
   setVal("#typoLetterSpacingHeading", t.letterSpacingHeading || '-0.03em');
   setVal("#typoLetterSpacingBase", t.letterSpacingBase || '0px');
   setVal("#typoBodyLineHeight", t.bodyLineHeight || '1.45');
+
+  // Sync modal quick selectors
+  setVal("#modalTypoProdTitleSize", t.prodTitleSize || '28px');
+  setVal("#modalTypoPriceSize", t.prodPriceSize || '34px');
+  setVal("#modalTypoFontHeading", t.fontHeading || 'Outfit');
 }
 
 function getTypographyFormData() {
@@ -2542,6 +2712,8 @@ function updateLiveTypographyPreview() {
   }
 }
 
+let saveTypoSettings = null;
+
 async function initTypographyStudio() {
   try {
     const res = await fetch("/api/integrations?service=typography&action=get");
@@ -2583,7 +2755,31 @@ async function initTypographyStudio() {
     }
   });
 
-  const saveTypoSettings = async () => {
+  // Track active product modal textareas
+  const descTextareas = ["formShortDesc", "formFullDesc", "formInBox", "formAmc", "formShipping", "formReturns"];
+  descTextareas.forEach(id => {
+    const el = $(`#${id}`);
+    if (el) {
+      el.addEventListener("focus", () => {
+        lastFocusedProdTextarea = id;
+        if ($("#prodFormatTargetField")) $("#prodFormatTargetField").value = id;
+        if (isProdDescPreviewActive) updateProdDescLivePreview();
+      });
+      el.addEventListener("input", () => {
+        if (isProdDescPreviewActive) updateProdDescLivePreview();
+      });
+    }
+  });
+
+  const targetSelector = $("#prodFormatTargetField");
+  if (targetSelector) {
+    targetSelector.addEventListener("change", () => {
+      lastFocusedProdTextarea = targetSelector.value;
+      if (isProdDescPreviewActive) updateProdDescLivePreview();
+    });
+  }
+
+  saveTypoSettings = async () => {
     const payload = getTypographyFormData();
     try {
       const res = await fetch("/api/integrations", {
