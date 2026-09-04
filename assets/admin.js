@@ -828,16 +828,66 @@ function acceptOrder(orderId) {
   toast(`Order ${orderId} ACCEPTED by Admin! Stock updated ✓`);
 }
 
+function updateAdminGstBreakdown() {
+  const priceInput = $("#formPrice");
+  const taxModeSelect = $("#formGstTaxType");
+  const gstRateSelect = $("#formGstRate");
+  const priceExclInput = $("#formPriceExcl");
+  const gstAmountInput = $("#formGstAmount");
+  const breakdownText = $("#gstBreakdownText");
+
+  if (!priceInput || !priceExclInput || !gstAmountInput) return;
+
+  const rawPrice = Number(priceInput.value) || 0;
+  const taxMode = taxModeSelect ? taxModeSelect.value : "inclusive";
+  const rate = Number(gstRateSelect ? gstRateSelect.value : 18) || 0;
+
+  let priceExcl = 0;
+  let gstAmt = 0;
+
+  if (taxMode === "inclusive") {
+    priceExcl = rate > 0 ? Math.round(rawPrice / (1 + (rate / 100))) : rawPrice;
+    gstAmt = rawPrice - priceExcl;
+  } else {
+    priceExcl = rawPrice;
+    gstAmt = Math.round(rawPrice * (rate / 100));
+  }
+
+  priceExclInput.value = priceExcl ? `₹${priceExcl}` : "₹0";
+  gstAmountInput.value = gstAmt ? `₹${gstAmt}` : "₹0";
+
+  if (breakdownText) {
+    const halfRate = (rate / 2).toFixed(1).replace(/\.0$/, '');
+    const halfAmt = Math.round(gstAmt / 2);
+    breakdownText.innerHTML = `Tax Breakdown: <strong>CGST ${halfRate}% (₹${halfAmt})</strong> + <strong>SGST ${halfRate}% (₹${halfAmt})</strong> | Total GST: <strong>₹${gstAmt}</strong>`;
+  }
+}
+
 function openAddModal() {
   $("#modalTitle").textContent = "Add New Product to Database";
   $("#formProdId").value = "";
   $("#productForm").reset();
+  if ($("#formBrand")) $("#formBrand").value = "HyperXGT";
   $("#formStock").value = "25";
   $("#formGstTaxType").value = "inclusive";
+  $("#formScale").value = "1:16";
+  $("#formSpeed").value = "35 KM/H";
+  $("#formDrive").value = "4WD";
+  if ($("#formMotor")) $("#formMotor").value = "";
+  if ($("#formBattery")) $("#formBattery").value = "";
+  if ($("#formControl")) $("#formControl").value = "";
+  if ($("#formDimensions")) $("#formDimensions").value = "";
+  if ($("#formWeight")) $("#formWeight").value = "";
+  if ($("#formAge")) $("#formAge").value = "14+ Years";
+  if ($("#formInBox")) $("#formInBox").value = "";
+  if ($("#formAmc")) $("#formAmc").value = "";
+  if ($("#formShipping")) $("#formShipping").value = "";
+  if ($("#formReturns")) $("#formReturns").value = "";
   $("#formImage").value = "";
   $("#formImagesList").value = "";
   if ($("#formVideoUrl")) $("#formVideoUrl").value = "";
   renderAdminGalleryPreview([]);
+  updateAdminGstBreakdown();
   openModal("productModal");
 }
 
@@ -849,6 +899,7 @@ function openEditModal(id) {
   $("#formProdId").value = p.id;
   $("#formName").value = p.name || "";
   $("#formSku").value = p.sku || "";
+  if ($("#formBrand")) $("#formBrand").value = p.brand || "HyperXGT";
   $("#formCat").value = p.category || "Racing Cars";
   $("#formStock").value = p.stock !== undefined ? p.stock : 25;
   $("#formGstTaxType").value = p.taxMode || "inclusive";
@@ -859,6 +910,20 @@ function openEditModal(id) {
   $("#formScale").value = p.scale || "1:16";
   $("#formSpeed").value = p.speed || "35 KM/H";
   $("#formDrive").value = p.drive || "4WD";
+
+  // Technical Matrix Specs
+  if ($("#formMotor")) $("#formMotor").value = p.motor || "";
+  if ($("#formBattery")) $("#formBattery").value = p.battery || "";
+  if ($("#formControl")) $("#formControl").value = p.control || "";
+  if ($("#formDimensions")) $("#formDimensions").value = p.dimensions || "";
+  if ($("#formWeight")) $("#formWeight").value = p.weight || "";
+  if ($("#formAge")) $("#formAge").value = p.age || "14+ Years";
+
+  // Tab Content Overrides
+  if ($("#formInBox")) $("#formInBox").value = p.in_box || p.package_contents || "";
+  if ($("#formAmc")) $("#formAmc").value = p.amc_custom || p.amc_details || "";
+  if ($("#formShipping")) $("#formShipping").value = p.shipping_custom || "";
+  if ($("#formReturns")) $("#formReturns").value = p.returns_custom || "";
 
   const allImgs = (typeof parseImagesArray === 'function')
     ? parseImagesArray(p)
@@ -874,6 +939,7 @@ function openEditModal(id) {
   $("#formShortDesc").value = p.short_description || "";
   $("#formFullDesc").value = p.full_description || "";
 
+  updateAdminGstBreakdown();
   openModal("productModal");
 }
 
@@ -883,6 +949,7 @@ async function saveProduct(e) {
   const idVal = $("#formProdId").value;
   const name = $("#formName").value.trim();
   const sku = $("#formSku").value.trim();
+  const brand = ($("#formBrand")?.value || "").trim() || "HyperXGT";
   const category = $("#formCat").value;
   const stock = Number($("#formStock").value);
   const taxMode = $("#formGstTaxType").value;
@@ -901,6 +968,18 @@ async function saveProduct(e) {
   const scale = $("#formScale").value.trim() || "1:16";
   const speed = $("#formSpeed").value.trim() || "35 KM/H";
   const drive = $("#formDrive").value;
+  const motor = ($("#formMotor")?.value || "").trim();
+  const battery = ($("#formBattery")?.value || "").trim();
+  const control = ($("#formControl")?.value || "").trim();
+  const dimensions = ($("#formDimensions")?.value || "").trim();
+  const weight = ($("#formWeight")?.value || "").trim();
+  const age = ($("#formAge")?.value || "").trim() || "14+ Years";
+
+  const in_box = ($("#formInBox")?.value || "").trim();
+  const amc_custom = ($("#formAmc")?.value || "").trim();
+  const shipping_custom = ($("#formShipping")?.value || "").trim();
+  const returns_custom = ($("#formReturns")?.value || "").trim();
+
   const rawGallery = $("#formImagesList").value.trim();
   let images = rawGallery ? rawGallery.split(',').map(x => x.trim()).filter(Boolean) : [];
   let image = $("#formImage").value.trim();
@@ -926,6 +1005,7 @@ async function saveProduct(e) {
     id: idVal ? Number(idVal) : Date.now(),
     sku,
     name,
+    brand,
     category,
     stock,
     taxMode,
@@ -937,6 +1017,17 @@ async function saveProduct(e) {
     scale,
     speed,
     drive,
+    motor,
+    battery,
+    control,
+    dimensions,
+    weight,
+    age,
+    in_box,
+    package_contents: in_box,
+    amc_custom,
+    shipping_custom,
+    returns_custom,
     image: isNoImage ? "" : image,
     images: isNoImage ? [] : images,
     no_image: isNoImage,
@@ -2265,4 +2356,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const productForm = $("#productForm");
   if (productForm) productForm.onsubmit = saveProduct;
+
+  const priceField = $("#formPrice");
+  if (priceField) priceField.addEventListener("input", updateAdminGstBreakdown);
+  const taxTypeField = $("#formGstTaxType");
+  if (taxTypeField) taxTypeField.addEventListener("change", updateAdminGstBreakdown);
+  const gstRateField = $("#formGstRate");
+  if (gstRateField) gstRateField.addEventListener("change", updateAdminGstBreakdown);
 });

@@ -592,19 +592,19 @@ function productCard(p) {
 
 function renderFullSpecGrid(p) {
   const specs = [
-    ["Scale", p.scale],
-    ["Top Speed", p.speed],
-    ["Drive System", p.drive],
-    ["Motor Type", p.motor],
-    ["Battery Spec", p.battery],
-    ["Control System", p.control],
-    ["Dimensions", p.dimensions],
-    ["Weight", p.weight],
-    ["Recommended Age", p.age],
-    ["Brand", p.brand]
+    ["Scale", p.scale || "1:16"],
+    ["Top Speed", p.speed || "35+ KM/H"],
+    ["Drive System", p.drive || "4WD"],
+    ["Motor Type", p.motor || "High-Output Electric Motor"],
+    ["Battery Spec", p.battery || "Rechargeable Li-ion Pack"],
+    ["Control System", p.control || "2.4GHz Proportional (100m+)"],
+    ["Dimensions", p.dimensions || "Standard Scale Chassis"],
+    ["Weight", p.weight || "Hobby-Grade RTR"],
+    ["Recommended Age", p.age || "14+ Years"],
+    ["Brand", p.brand || "HyperXGT"]
   ];
 
-  return specs.map(x => `<div><b>${esc(x[0])}</b><span>${esc(x[1] || "Standard")}</span></div>`).join("");
+  return specs.map(x => `<div><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join("");
 }
 
 function quickView(id) {
@@ -1637,6 +1637,187 @@ window.buyNowDirect = function(id, qty = 1) {
   location.href = "checkout.html";
 };
 
+function renderInBoxTabHTML(p) {
+  const customInBox = p.in_box || p.package_contents;
+  if (customInBox && String(customInBox).trim()) {
+    const raw = String(customInBox).trim();
+    const hasHtmlTags = /<\/?(p|div|br|h[1-6]|ul|ol|li|strong|b)/i.test(raw);
+    let listContent = "";
+    if (hasHtmlTags) {
+      listContent = raw;
+    } else {
+      const items = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      listContent = `<ul style="margin:0;padding-left:20px;font-size:14px;line-height:2;color:#333">
+        ${items.map(item => `<li>${esc(item.replace(/^[•\-\*]\s*/, ''))}</li>`).join("")}
+      </ul>`;
+    }
+
+    return `
+      <div style="max-width:800px">
+        <div class="eyebrow" style="color:#1488d8">Complete Unboxing Set</div>
+        <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Package Contents</h2>
+        <p style="color:#555;margin-bottom:20px">Every HyperXGT model comes 100% factory assembled and Ready-to-Run (RTR) out of the box.</p>
+        <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:24px">
+          ${listContent}
+        </div>
+        <div style="margin-top:20px;background:#ffeeef;border:1px solid #ffcdd2;border-radius:14px;padding:16px 20px">
+          <strong style="color:#ed1c24;display:block;margin-bottom:4px">⚠️ Required for Operation:</strong>
+          <span style="font-size:13px;color:#666">Transmitter requires standard AA batteries for the remote controller (not included).</span>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="max-width:800px">
+      <div class="eyebrow" style="color:#1488d8">Complete Unboxing Set</div>
+      <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Package Contents</h2>
+      <p style="color:#555;margin-bottom:20px">Every HyperXGT model comes 100% factory assembled and Ready-to-Run (RTR) out of the box.</p>
+
+      <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:24px">
+        <ul style="margin:0;padding-left:20px;font-size:14px;line-height:2;color:#333">
+          <li>1 × <strong>${esc(p.name)}</strong> Model Vehicle (battery pre-installed)</li>
+          <li>1 × <strong>2.4GHz Proportional Remote Controller</strong></li>
+          <li>1 × <strong>${esc(p.battery || 'Rechargeable Li-ion Battery Pack')}</strong></li>
+          <li>1 × <strong>USB High-Speed Charging Cable</strong></li>
+          <li>1 × <strong>Wheel Wrench & Cross Tool Set</strong></li>
+          <li>1 × <strong>Official Instruction & Tuning Manual</strong></li>
+        </ul>
+      </div>
+
+      <div style="margin-top:20px;background:#ffeeef;border:1px solid #ffcdd2;border-radius:14px;padding:16px 20px">
+        <strong style="color:#ed1c24;display:block;margin-bottom:4px">⚠️ Required for Operation:</strong>
+        <span style="font-size:13px;color:#666">Transmitter requires 3 or 4 × standard AA batteries for the remote controller (not included).</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderAmcTabHTML(p) {
+  if (p.amc_custom && String(p.amc_custom).trim()) {
+    return `
+      <div style="max-width:850px">
+        <div class="eyebrow" style="color:#ed1c24">Dedicated RC Protection</div>
+        <h2 style="font-size:24px;margin:8px 0 16px;color:#111">HyperXGT AMC & Annual Care Program</h2>
+        <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:24px;font-size:14px;line-height:1.8;color:#333">
+          ${formatDescriptionHTML(p.amc_custom)}
+        </div>
+        <div style="margin-top:20px">
+          <a class="btn blue" href="care.html" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;font-size:13px">Learn more about Care & Support →</a>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="max-width:850px">
+      <div class="eyebrow" style="color:#ed1c24">Dedicated RC Protection</div>
+      <h2 style="font-size:24px;margin:8px 0 16px;color:#111">HyperXGT AMC & Annual Care Program</h2>
+      <p style="color:#555;margin-bottom:24px">Give your RC model the protection it deserves. Every new HyperXGT vehicle purchase includes <strong>6 months of complimentary AMC coverage</strong> right from day one.</p>
+
+      <h3 style="font-size:16px;color:#111;margin-bottom:12px">🛡️ What's Covered:</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+        <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+          <strong>✅ Accidental Damage Support</strong>
+          <span style="font-size:12px;color:#666;display:block;margin-top:4px">Covers high-speed crashes, suspension snaps, and rollover impacts.</span>
+        </div>
+        <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+          <strong>⚙️ Mechanical & Gear Overhaul</strong>
+          <span style="font-size:12px;color:#666;display:block;margin-top:4px">Includes differential calibration, motor servicing, and steering servo maintenance.</span>
+        </div>
+        <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+          <strong>🔋 Battery & ESC Diagnostics</strong>
+          <span style="font-size:12px;color:#666;display:block;margin-top:4px">Full electronic speed controller troubleshooting and voltage testing.</span>
+        </div>
+        <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+          <strong>🚀 Priority Lab Turnaround</strong>
+          <span style="font-size:12px;color:#666;display:block;margin-top:4px">48-hour response and expedited repair lab queue for members.</span>
+        </div>
+      </div>
+
+      <a class="btn blue" href="care.html" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;font-size:13px">Learn more about Care & Support →</a>
+    </div>
+  `;
+}
+
+function renderShippingTabHTML(p) {
+  if (p.shipping_custom && String(p.shipping_custom).trim()) {
+    return `
+      <div style="max-width:850px">
+        <div class="eyebrow" style="color:#1488d8">Domestic Courier & Fulfillment</div>
+        <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Shipping & Express Delivery Information</h2>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:20px;font-size:14px;line-height:1.8;color:#333">
+          ${formatDescriptionHTML(p.shipping_custom)}
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="max-width:850px">
+      <div class="eyebrow" style="color:#1488d8">Domestic Courier & Fulfillment</div>
+      <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Shipping & Express Delivery Information</h2>
+
+      <div style="display:grid;gap:16px;margin-top:16px">
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:18px 20px">
+          <strong style="color:#166534;font-size:15px;display:block;margin-bottom:4px">🚀 Fast In-Stock Dispatch (24–48 Hours)</strong>
+          <span style="font-size:13px;color:#333;line-height:1.6">All catalogue models tagged In Stock are dispatched from our central Indian warehouses via premium air & surface courier partners (Shiprocket, Bluedart, Delhivery).</span>
+          <ul style="margin:8px 0 0 18px;font-size:12.5px;color:#444">
+            <li>Metro Cities: <strong>1–3 Business Days</strong> after dispatch.</li>
+            <li>Rest of India: <strong>3–5 Business Days</strong> after dispatch.</li>
+          </ul>
+        </div>
+
+        <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+          <strong style="color:#111;font-size:14px;display:block;margin-bottom:4px">📦 Real-Time AWB Tracking</strong>
+          <span style="font-size:13px;color:#555">You will receive an automated SMS and WhatsApp update with your live Airway Bill (AWB) tracking link immediately upon courier pickup.</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderReturnsTabHTML(p) {
+  if (p.returns_custom && String(p.returns_custom).trim()) {
+    return `
+      <div style="max-width:850px">
+        <div class="eyebrow" style="color:#ed1c24">Hassle-Free Protection</div>
+        <h2 style="font-size:24px;margin:8px 0 16px;color:#111">7-Day Replacement & Warranty Policy</h2>
+        <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:20px;font-size:14px;line-height:1.8;color:#333">
+          ${formatDescriptionHTML(p.returns_custom)}
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="max-width:850px">
+      <div class="eyebrow" style="color:#ed1c24">Hassle-Free Protection</div>
+      <h2 style="font-size:24px;margin:8px 0 16px;color:#111">7-Day Replacement & Transit Damage Guarantee</h2>
+
+      <p style="color:#555;font-size:13.5px;line-height:1.7;margin-bottom:20px">
+        In rare cases where your package arrives damaged during transit or exhibits a manufacturing defect out of the box, we provide a 100% free pickup and replacement.
+      </p>
+
+      <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:18px 20px;margin-bottom:20px">
+        <strong style="color:#b78103;font-size:14px;display:block;margin-bottom:6px">📹 Unboxing Video Requirement:</strong>
+        <span style="font-size:13px;color:#444;line-height:1.6">
+          To guarantee fast approval, record a continuous, unedited video while opening the outer courier parcel. This protects you against courier mishandling and ensures immediate replacement dispatch.
+        </span>
+      </div>
+
+      <div style="font-size:13px;color:#666;line-height:1.8">
+        <strong>How to submit a claim:</strong>
+        <ol style="margin:8px 0 0 18px">
+          <li>WhatsApp our support team at <strong>+91 70902 27777</strong> or email <strong>contact@hyperxgt.com</strong> with your Order ID.</li>
+          <li>Attach your unboxing video footage.</li>
+          <li>Our technical support desk approves the pickup within 24–48 hours.</li>
+        </ol>
+      </div>
+    </div>
+  `;
+}
+
 function productInit() {
   const root = $("#productDetail");
   if (!root) return;
@@ -1804,7 +1985,7 @@ function productInit() {
       <!-- RIGHT: PURCHASING & PRODUCT HIGHLIGHTS -->
       <div class="detail-info">
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
-          <span style="background:#111;color:#fff;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px;letter-spacing:.06em">HYPERXGT</span>
+          <span style="background:#111;color:#fff;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px;letter-spacing:.06em">${esc(p.brand || 'HYPERXGT')}</span>
           <span style="background:#eef4ff;color:#1488d8;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px">${esc(p.scale || '1:16')} SCALE</span>
           <span style="background:#f0fdf4;color:#16a34a;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px">${esc(p.drive || '4WD')}</span>
           <span style="color:#666;font-size:12px;margin-left:auto">SKU: <strong>${esc(p.sku)}</strong></span>
@@ -1849,13 +2030,13 @@ function productInit() {
           </div>
           <div class="quick-spec-card">
             <span>🔋 Power Motor</span>
-            <strong>${esc(p.motor ? (p.motor.length > 16 ? p.motor.substring(0, 16) + '...' : p.motor) : 'Electric Motor')}</strong>
+            <strong>${esc(p.motor ? (p.motor.length > 18 ? p.motor.substring(0, 18) + '...' : p.motor) : 'Electric Motor')}</strong>
           </div>
         </div>
 
         <!-- NARRATIVE SHORT DESCRIPTION -->
         <div class="product-short-desc" style="color:#444; font-size: 14px; line-height: 1.7; margin-bottom: 24px; background:#f9fafb; padding:18px 20px; border-radius:14px; border:1px solid #eaedf2">
-          ${formatDescriptionHTML(p.short_description, `Experience high-performance RC action with the official HyperXGT ${esc(p.scale || '1:16')} ${esc(p.category || 'RC Car')}. Engineered with a heavy-duty chassis, 2.4GHz proportional control, and high-torque power delivery for all terrains.`)}
+          ${formatDescriptionHTML(p.short_description, `Experience high-performance RC action with the official ${esc(p.brand || 'HyperXGT')} ${esc(p.scale || '1:16')} ${esc(p.category || 'RC Car')}. Engineered with a heavy-duty chassis, 2.4GHz proportional control, and high-torque power delivery for all terrains.`)}
         </div>
 
         <!-- ACTION BUTTONS ROW: QUANTITY + ADD TO CART + BUY NOW + WISHLIST -->
@@ -1904,18 +2085,18 @@ function productInit() {
               ${p.full_description ? `
                 ${formatDescriptionHTML(p.full_description)}
               ` : `
-                <p>${formatDescriptionHTML(p.short_description || `The HyperXGT ${p.name} combines advanced RC engineering with rugged structural durability. Built for enthusiasts who demand extreme power, precision steering, and scale realism across every driving surface.`)}</p>
+                <p>${formatDescriptionHTML(p.short_description || `The ${esc(p.brand || 'HyperXGT')} ${esc(p.name)} combines advanced RC engineering with rugged structural durability. Built for enthusiasts who demand extreme power, precision steering, and scale realism across every driving surface.`)}</p>
                 
-                <h3 style="font-size:17px;color:#111;margin-top:20px">⚡ Full 4-Wheel Drive & Proportional Control</h3>
+                <h3 style="font-size:17px;color:#111;margin-top:20px">⚡ High-Output Drive & Proportional Control</h3>
                 <p>Driven by a high-torque <strong>${esc(p.motor || 'High-Output Electric Motor')}</strong> with <strong>${esc(p.drive || '4WD Full-Time 4-Wheel Drive')}</strong>, offering precise proportional throttle, instantaneous braking, and responsive steering calibration for high-speed tracking and rock crawling.</p>
 
                 <h3 style="font-size:17px;color:#111;margin-top:20px">🕹️ 2.4GHz Anti-Interference Radio Transmitter</h3>
-                <p>Reliable 2.4GHz multi-channel transmitter with an operating range of up to <strong>100+ meters</strong>. Race alongside friends with zero signal cross-talk or radio interference.</p>
+                <p>Reliable 2.4GHz multi-channel transmitter with an operating range of up to <strong>${esc(p.control || '100+ meters')}</strong>. Race alongside friends with zero signal cross-talk or radio interference.</p>
 
                 <h3 style="font-size:17px;color:#111;margin-top:20px">🔋 High-Capacity Battery & Endurance Runtime</h3>
-                <p>Equipped with a rechargeable <strong>${esc(p.battery || 'Li-ion Battery Pack')}</strong> and high-speed USB charger. Enjoy extended runtimes per charge with built-in low-voltage protection.</p>
+                <p>Equipped with a rechargeable <strong>${esc(p.battery || 'Li-ion Battery Pack')}</strong> and high-speed charging system. Enjoy extended runtimes per charge with built-in low-voltage protection.</p>
 
-                <h3 style="font-size:17px;color:#111;margin-top:20px">🛡️ Heavy-Duty Drivetrain & Metal Gears</h3>
+                <h3 style="font-size:17px;color:#111;margin-top:20px">🛡️ Heavy-Duty Drivetrain & Chassis</h3>
                 <p>Features alloy differential gears, precision ball bearings, and all-terrain rubber tires with aggressive tread patterns for optimal traction across dirt, grass, gravel, and asphalt.</p>
               `}
             </div>
@@ -1932,110 +2113,22 @@ function productInit() {
 
       <!-- TAB 2: IN-BOX ITEMS -->
       <div class="product-tab-pane" id="tab-inbox">
-        <div style="max-width:800px">
-          <div class="eyebrow" style="color:#1488d8">Complete Unboxing Set</div>
-          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Package Contents</h2>
-          <p style="color:#555;margin-bottom:20px">Every HyperXGT model comes 100% factory assembled and Ready-to-Run (RTR) out of the box.</p>
-
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:24px">
-            <ul style="margin:0;padding-left:20px;font-size:14px;line-height:2;color:#333">
-              <li>1 × <strong>${esc(p.name)}</strong> Model Vehicle (battery pre-installed)</li>
-              <li>1 × <strong>2.4GHz Proportional Remote Controller</strong></li>
-              <li>1 × <strong>${esc(p.battery || 'Rechargeable Li-ion Battery Pack')}</strong></li>
-              <li>1 × <strong>USB High-Speed Charging Cable</strong></li>
-              <li>1 × <strong>Wheel Wrench & Cross Tool Set</strong></li>
-              <li>1 × <strong>Official Instruction & Tuning Manual</strong></li>
-            </ul>
-          </div>
-
-          <div style="margin-top:20px;background:#ffeeef;border:1px solid #ffcdd2;border-radius:14px;padding:16px 20px">
-            <strong style="color:#ed1c24;display:block;margin-bottom:4px">⚠️ Required for Operation:</strong>
-            <span style="font-size:13px;color:#666">Transmitter requires 3 or 4 × standard AA batteries for the remote controller (not included).</span>
-          </div>
-        </div>
+        ${renderInBoxTabHTML(p)}
       </div>
 
-      <!-- TAB 3: AMC / CARE PROGRAM (CRAZYRC REFERENCE) -->
+      <!-- TAB 3: AMC / CARE PROGRAM -->
       <div class="product-tab-pane" id="tab-amc">
-        <div style="max-width:850px">
-          <div class="eyebrow" style="color:#ed1c24">Dedicated RC Protection</div>
-          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">HyperXGT AMC & Annual Care Program</h2>
-          <p style="color:#555;margin-bottom:24px">Give your RC model the protection it deserves. Every new HyperXGT vehicle purchase includes <strong>6 months of complimentary AMC coverage</strong> right from day one.</p>
-
-          <h3 style="font-size:16px;color:#111;margin-bottom:12px">🛡️ What's Covered:</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
-            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
-              <strong>✅ Accidental Damage Support</strong>
-              <span style="font-size:12px;color:#666;display:block;margin-top:4px">Covers high-speed crashes, suspension snaps, and rollover impacts.</span>
-            </div>
-            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
-              <strong>⚙️ Mechanical & Gear Overhaul</strong>
-              <span style="font-size:12px;color:#666;display:block;margin-top:4px">Includes differential calibration, motor servicing, and steering servo maintenance.</span>
-            </div>
-            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
-              <strong>🔋 Battery & ESC Diagnostics</strong>
-              <span style="font-size:12px;color:#666;display:block;margin-top:4px">Full electronic speed controller troubleshooting and voltage testing.</span>
-            </div>
-            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
-              <strong>🚀 Priority Lab Turnaround</strong>
-              <span style="font-size:12px;color:#666;display:block;margin-top:4px">48-hour response and expedited repair lab queue for members.</span>
-            </div>
-          </div>
-
-          <a class="btn blue" href="care.html" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;font-size:13px">Learn more about Care & Support →</a>
-        </div>
+        ${renderAmcTabHTML(p)}
       </div>
 
       <!-- TAB 4: SHIPPING & DELIVERY -->
       <div class="product-tab-pane" id="tab-shipping">
-        <div style="max-width:850px">
-          <div class="eyebrow" style="color:#1488d8">Domestic Courier & Fulfillment</div>
-          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Shipping & Express Delivery Information</h2>
-
-          <div style="display:grid;gap:16px;margin-top:16px">
-            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:18px 20px">
-              <strong style="color:#166534;font-size:15px;display:block;margin-bottom:4px">🚀 Fast In-Stock Dispatch (24–48 Hours)</strong>
-              <span style="font-size:13px;color:#333;line-height:1.6">All catalogue models tagged In Stock are dispatched from our central Indian warehouses via premium air & surface courier partners (Shiprocket, Bluedart, Delhivery).</span>
-              <ul style="margin:8px 0 0 18px;font-size:12.5px;color:#444">
-                <li>Metro Cities: <strong>1–3 Business Days</strong> after dispatch.</li>
-                <li>Rest of India: <strong>3–5 Business Days</strong> after dispatch.</li>
-              </ul>
-            </div>
-
-            <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:14px;padding:18px 20px">
-              <strong style="color:#111;font-size:14px;display:block;margin-bottom:4px">📦 Real-Time AWB Tracking</strong>
-              <span style="font-size:13px;color:#555">You will receive an automated SMS and WhatsApp update with your live Airway Bill (AWB) tracking link immediately upon courier pickup.</span>
-            </div>
-          </div>
-        </div>
+        ${renderShippingTabHTML(p)}
       </div>
 
       <!-- TAB 5: RETURNS & REPLACEMENT POLICY -->
       <div class="product-tab-pane" id="tab-returns">
-        <div style="max-width:850px">
-          <div class="eyebrow" style="color:#ed1c24">Hassle-Free Protection</div>
-          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">7-Day Replacement & Transit Damage Guarantee</h2>
-
-          <p style="color:#555;font-size:13.5px;line-height:1.7;margin-bottom:20px">
-            In rare cases where your package arrives damaged during transit or exhibits a manufacturing defect out of the box, we provide a 100% free pickup and replacement.
-          </p>
-
-          <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:18px 20px;margin-bottom:20px">
-            <strong style="color:#b78103;font-size:14px;display:block;margin-bottom:6px">📹 Unboxing Video Requirement:</strong>
-            <span style="font-size:13px;color:#444;line-height:1.6">
-              To guarantee fast approval, record a continuous, unedited video while opening the outer courier parcel. This protects you against courier mishandling and ensures immediate replacement dispatch.
-            </span>
-          </div>
-
-          <div style="font-size:13px;color:#666;line-height:1.8">
-            <strong>How to submit a claim:</strong>
-            <ol style="margin:8px 0 0 18px">
-              <li>WhatsApp our support team at <strong>+91 70902 27777</strong> or email <strong>contact@hyperxgt.com</strong> with your Order ID.</li>
-              <li>Attach your unboxing video footage.</li>
-              <li>Our technical support desk approves the pickup within 24–48 hours.</li>
-            </ol>
-          </div>
-        </div>
+        ${renderReturnsTabHTML(p)}
       </div>
     </div>
 

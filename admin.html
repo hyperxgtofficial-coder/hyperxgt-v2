@@ -1090,7 +1090,7 @@
       <form id="productForm" style="margin-top:18px">
         <input type="hidden" id="formProdId">
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px">
           <div>
             <label class="form-label">Product Name *</label>
             <input class="field" id="formName" required placeholder="e.g. 1:10 Brushless RC Rally Car">
@@ -1098,6 +1098,10 @@
           <div>
             <label class="form-label">SKU Code *</label>
             <input class="field" id="formSku" required placeholder="e.g. HX-10482">
+          </div>
+          <div>
+            <label class="form-label">Brand / Manufacturer *</label>
+            <input class="field" id="formBrand" placeholder="e.g. HyperXGT / WLToys" value="HyperXGT">
           </div>
         </div>
 
@@ -1167,23 +1171,59 @@
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px">
-          <div>
-            <label class="form-label">Scale Factor</label>
-            <input class="field" id="formScale" placeholder="e.g. 1:10">
+        <!-- TECHNICAL MATRIX & ENGINEERING SPECS -->
+        <div style="margin-top:14px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:14px; padding:16px;">
+          <label class="form-label" style="color:#166534; font-size:13px">⚙️ Technical Matrix & Performance Specs</label>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+            <div>
+              <label class="form-label">Scale Factor</label>
+              <input class="field" id="formScale" placeholder="e.g. 1:10 or 1:14" value="1:16" style="margin:0">
+            </div>
+            <div>
+              <label class="form-label">Top Speed</label>
+              <input class="field" id="formSpeed" placeholder="e.g. 60 KM/H" value="35 KM/H" style="margin:0">
+            </div>
+            <div>
+              <label class="form-label">Drive System</label>
+              <select class="field" id="formDrive" style="margin:0">
+                <option value="4WD">4WD (Full-Time 4-Wheel Drive)</option>
+                <option value="2WD">2WD (2-Wheel Drive)</option>
+                <option value="RWD">RWD (Rear-Wheel Drive)</option>
+                <option value="AWD">AWD (All-Wheel Drive)</option>
+                <option value="Pull-Back">Pull-Back Friction</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label class="form-label">Top Speed</label>
-            <input class="field" id="formSpeed" placeholder="e.g. 60 KM/H">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+            <div>
+              <label class="form-label">Motor Type</label>
+              <input class="field" id="formMotor" placeholder="e.g. 390 High-Torque / Brushless 3650" style="margin:0">
+            </div>
+            <div>
+              <label class="form-label">Battery Spec</label>
+              <input class="field" id="formBattery" placeholder="e.g. 7.4V 1500mAh 2S Li-ion" style="margin:0">
+            </div>
+            <div>
+              <label class="form-label">Control System & Range</label>
+              <input class="field" id="formControl" placeholder="e.g. 2.4GHz Proportional (100m+)" style="margin:0">
+            </div>
           </div>
-          <div>
-            <label class="form-label">Drive System</label>
-            <select class="field" id="formDrive">
-              <option>4WD</option>
-              <option>2WD</option>
-              <option>RWD</option>
-              <option>Pull-Back</option>
-            </select>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div>
+              <label class="form-label">Dimensions (L × W × H)</label>
+              <input class="field" id="formDimensions" placeholder="e.g. 46 × 32 × 20 cm" style="margin:0">
+            </div>
+            <div>
+              <label class="form-label">Weight</label>
+              <input class="field" id="formWeight" placeholder="e.g. 2.4 kg" style="margin:0">
+            </div>
+            <div>
+              <label class="form-label">Recommended Age</label>
+              <input class="field" id="formAge" placeholder="e.g. 14+ Years" value="14+ Years" style="margin:0">
+            </div>
           </div>
         </div>
 
@@ -1223,15 +1263,39 @@
           <div style="font-size:10.5px;color:#666;margin-top:6px">When a video URL or video file is attached, an interactive live video player automatically displays on the live website for customers!</div>
         </div>
 
-        <div style="margin-top:10px">
-          <label class="form-label">Product Short Description</label>
-          <textarea class="field" id="formShortDesc" style="height:70px;padding-top:10px" placeholder="Brief summary of model specs..."></textarea>
-        </div>
+        <!-- PRODUCT DESCRIPTIONS & 5-TAB CONTENT OVERRIDES -->
+        <div style="margin-top:14px; background:#fafafa; border:1px solid #e0e0e0; border-radius:14px; padding:16px;">
+          <label class="form-label" style="color:#111; font-size:13px; margin-bottom:12px">📑 Product Page Knowledge Tabs & Narrative Content</label>
 
+          <div style="margin-bottom:14px">
+            <label class="form-label">Product Short Description (Shown near Buy Box)</label>
+            <textarea class="field" id="formShortDesc" style="height:65px;padding-top:8px;margin:0" placeholder="Brief summary of vehicle features, engineering and specs..."></textarea>
+          </div>
 
-        <div style="margin-top:10px">
-          <label class="form-label">Full Technical Description (HTML allowed)</label>
-          <textarea class="field" id="formFullDesc" style="height:100px;padding-top:10px" placeholder="Detailed specs and feature highlights..."></textarea>
+          <div style="margin-bottom:14px">
+            <label class="form-label">Tab 1: Full Technical Description & Performance Highlights (HTML allowed)</label>
+            <textarea class="field" id="formFullDesc" style="height:90px;padding-top:8px;margin:0" placeholder="Detailed performance overview, brushless motor highlights, chassis construction..."></textarea>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <label class="form-label">Tab 2: What's In The Box (Package Checklist - One item per line or HTML)</label>
+            <textarea class="field" id="formInBox" style="height:80px;padding-top:8px;margin:0" placeholder="e.g.&#10;1 × Model Vehicle (battery pre-installed)&#10;1 × 2.4GHz Proportional Remote Controller&#10;1 × Rechargeable Li-ion Battery&#10;1 × USB Charging Cable&#10;1 × Tool Set & User Manual"></textarea>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <label class="form-label">Tab 3: AMC & Care Program Coverage Terms (Leave blank for standard 6-month free AMC)</label>
+            <textarea class="field" id="formAmc" style="height:70px;padding-top:8px;margin:0" placeholder="Custom AMC coverage terms, maintenance lab guarantee, repair support details..."></textarea>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <label class="form-label">Tab 4: Shipping & Express Delivery Information (Leave blank for standard 24-48h dispatch)</label>
+            <textarea class="field" id="formShipping" style="height:70px;padding-top:8px;margin:0" placeholder="Custom shipping timeline, delivery carrier notes, AWB tracking details..."></textarea>
+          </div>
+
+          <div>
+            <label class="form-label">Tab 5: Returns & 7-Day Replacement Policy (Leave blank for standard 7-day guarantee)</label>
+            <textarea class="field" id="formReturns" style="height:70px;padding-top:8px;margin:0" placeholder="Custom return terms, replacement guidelines, unboxing video requirement..."></textarea>
+          </div>
         </div>
 
         <div class="modal-row" style="margin-top:20px">

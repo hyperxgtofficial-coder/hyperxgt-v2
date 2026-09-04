@@ -179,8 +179,12 @@ module.exports = async (req, res) => {
             'Authorization': `Bearer ${supabaseAnonKey}`
           });
           if (dbRes.statusCode === 200 && Array.isArray(dbRes.body) && dbRes.body.length > 0) {
-            // Map Supabase column names to frontend attributes
+            const initialMap = new Map();
+            (getInitialProducts() || []).forEach(p => initialMap.set(String(p.id), p));
+
+            // Map Supabase column names to frontend attributes and preserve rich local fields
             cachedProducts = dbRes.body.map(item => {
+              const local = initialMap.get(String(item.id)) || {};
               let rawImgs = [];
               if (item.image && typeof item.image === 'string' && item.image.trim()) {
                 const trimmed = item.image.trim();
@@ -194,28 +198,45 @@ module.exports = async (req, res) => {
                   rawImgs = trimmed.split(',').map(x => x.trim()).filter(Boolean);
                 }
               }
-              const mainHeroImg = rawImgs[0] || '';
+              if (!rawImgs.length && local.images && local.images.length) {
+                rawImgs = local.images;
+              }
+              const mainHeroImg = rawImgs[0] || local.image || '';
 
               return {
+                ...local,
                 id: Number(item.id),
-                sku: item.sku,
-                name: item.name,
-                category: item.category,
-                price: Number(item.price || 0),
-                mrp: Number(item.mrp || item.regular_price || item.price || 0),
-                stock: Number(item.stock !== undefined ? item.stock : 25),
-                gstRate: Number(item.gst_rate || 18),
-                taxMode: item.tax_mode || 'inclusive',
-                hsn: item.hsn || '95030090',
-                scale: item.scale || '1:16',
-                speed: item.speed || '35 KM/H',
-                drive: item.drive || '4WD',
+                sku: item.sku || local.sku,
+                name: item.name || local.name,
+                category: item.category || local.category,
+                price: Number(item.price || local.price || 0),
+                mrp: Number(item.mrp || item.regular_price || local.mrp || 0),
+                stock: Number(item.stock !== undefined ? item.stock : (local.stock !== undefined ? local.stock : 25)),
+                gstRate: Number(item.gst_rate || local.gstRate || 18),
+                taxMode: item.tax_mode || local.taxMode || 'inclusive',
+                hsn: item.hsn || local.hsn || '95030090',
+                scale: item.scale || local.scale || '1:16',
+                speed: item.speed || local.speed || '35 KM/H',
+                drive: item.drive || local.drive || '4WD',
+                brand: item.brand || local.brand || 'HyperXGT',
+                motor: item.motor || local.motor || '',
+                battery: item.battery || local.battery || '',
+                control: item.control || local.control || '',
+                dimensions: item.dimensions || local.dimensions || '',
+                weight: item.weight || local.weight || '',
+                age: item.age || local.age || '14+ Years',
+                in_box: item.in_box || item.package_contents || local.in_box || local.package_contents || '',
+                package_contents: item.package_contents || item.in_box || local.package_contents || local.in_box || '',
+                amc_custom: item.amc_custom || local.amc_custom || '',
+                shipping_custom: item.shipping_custom || local.shipping_custom || '',
+                returns_custom: item.returns_custom || local.returns_custom || '',
+                video: item.video || local.video || '',
                 image: mainHeroImg,
                 images: rawImgs,
                 no_image: !mainHeroImg,
-                short_description: item.short_description || '',
-                full_description: item.full_description || '',
-                discount: item.mrp && item.price ? Math.round(((item.mrp - item.price) / item.mrp) * 100) : 0
+                short_description: item.short_description || local.short_description || '',
+                full_description: item.full_description || local.full_description || '',
+                discount: (item.mrp || local.mrp) && (item.price || local.price) ? Math.round((((item.mrp || local.mrp) - (item.price || local.price)) / (item.mrp || local.mrp)) * 100) : 0
               };
             });
           }
