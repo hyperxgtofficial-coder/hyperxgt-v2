@@ -1616,7 +1616,27 @@ function homeInit() {
   });
 }
 
-// IN-DEPTH YOUCLIQ-INSPIRED RICH & KNOWLEDGEABLE PRODUCT PAGE RENDERER
+// CRAZYRC-INSPIRED RICH & KNOWLEDGEABLE PRODUCT PAGE HELPER METHODS
+window.switchProductTab = function(tabId, btn) {
+  const wrapper = btn.closest(".product-tabs-wrapper");
+  if (!wrapper) return;
+  const buttons = wrapper.querySelectorAll(".product-tab-btn");
+  const panes = wrapper.querySelectorAll(".product-tab-pane");
+  buttons.forEach(b => b.classList.remove("active"));
+  panes.forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  const activePane = wrapper.querySelector("#tab-" + tabId);
+  if (activePane) activePane.classList.add("active");
+};
+
+window.buyNowDirect = function(id, qty = 1) {
+  const q = Number(qty) || 1;
+  const c = getCart();
+  c[id] = (c[id] || 0) + q;
+  setCart(c);
+  location.href = "checkout.html";
+};
+
 function productInit() {
   const root = $("#productDetail");
   if (!root) return;
@@ -1626,8 +1646,6 @@ function productInit() {
   const productsList = getProducts();
   const p = productsList.find(x => String(x.id) === String(rawId) || String(x.sku).toLowerCase() === String(rawId).toLowerCase());
 
-  // Previously this fell back to productsList[0], so a bad or stale ?id= silently rendered
-  // a different product's page under the requested URL.
   if (!p) {
     document.title = "Product not found — HyperXGT";
     root.innerHTML = `<div class="empty" style="grid-column:1/-1;text-align:center;padding:64px 20px">
@@ -1651,26 +1669,28 @@ function productInit() {
   const galleryThumbnailsHTML = imagesList.map((img, idx) => {
     const isHero = img.trim() === heroImage.trim() || idx === 0;
     return `
-      <img class="mini-thumb" src="${img.trim()}" alt="Angle ${idx + 1}" onclick="switchHeroImage('${img.trim()}', this)" style="width:76px;height:62px;object-fit:contain;background:#fff;border-radius:12px;border:${isHero ? '2.5px solid #1488d8' : '1px solid var(--line)'};padding:4px;cursor:pointer;transition:all 0.2s ease">
+      <img class="product-thumb-item ${isHero ? 'active' : ''}" src="${img.trim()}" alt="Angle ${idx + 1}" onclick="switchHeroImage('${img.trim()}', this)">
     `;
   }).join("");
 
-  let stockStatusHTML = `<div style="margin: 14px 0 16px; font-size: 12px; color: #2e7d32; font-weight: 700; display: flex; align-items: center; gap: 6px;">
-    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#2e7d32"></span>
-    🟢 In Stock — <strong>${stock} Units Available</strong> for Express Dispatch (Ships within 24 Hours)
+  let stockStatusHTML = `<div style="margin: 14px 0 16px; font-size: 13px; color: #2e7d32; font-weight: 700; display: flex; align-items: center; gap: 8px; background:#e8f5e9; border:1px solid #c8e6c9; padding:8px 14px; border-radius:10px; width:fit-content">
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#2e7d32;box-shadow:0 0 0 3px rgba(46,125,50,0.2)"></span>
+    In Stock — <strong>${stock} Units Available</strong> for Express Dispatch (Ships in 24 Hours)
   </div>`;
-  let buyDetailBtn = `<button class="btn dark" style="flex:1;height:52px;font-size:14px" onclick="addCart(${idArg(p.id)}, $('#detailQty').value)">Add to Cart 🛒</button>`;
+  let buyDetailBtn = `<button class="btn-add-cart-alt" onclick="addCart(${idArg(p.id)}, $('#detailQty').value)">Add to Cart 🛒</button>`;
+  let buyNowBtn = `<button class="btn-buy-now" onclick="buyNowDirect(${idArg(p.id)}, $('#detailQty').value)">⚡ Buy It Now</button>`;
 
   if (stock === 0) {
-    stockStatusHTML = `<div style="margin: 14px 0 16px; font-size: 12px; color: #ed1c24; font-weight: 700; display: flex; align-items: center; gap: 6px;">
-      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ed1c24"></span>
-      🔴 Currently Out of Stock (Sold Out)
+    stockStatusHTML = `<div style="margin: 14px 0 16px; font-size: 13px; color: #ed1c24; font-weight: 700; display: flex; align-items: center; gap: 8px; background:#ffeeef; border:1px solid #ffcdd2; padding:8px 14px; border-radius:10px; width:fit-content">
+      <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ed1c24"></span>
+      Currently Out of Stock (Sold Out)
     </div>`;
-    buyDetailBtn = `<button class="btn dark" style="flex:1;height:52px;font-size:14px;background:#888;cursor:not-allowed" disabled>Out of Stock 🚫</button>`;
+    buyDetailBtn = `<button class="btn-add-cart-alt" style="background:#888;cursor:not-allowed" disabled>Out of Stock 🚫</button>`;
+    buyNowBtn = `<button class="btn-buy-now" style="background:#aaa;box-shadow:none;cursor:not-allowed" disabled>Sold Out</button>`;
   } else if (stock <= 5) {
-    stockStatusHTML = `<div style="margin: 14px 0 16px; font-size: 12px; color: #b78103; font-weight: 700; display: flex; align-items: center; gap: 6px;">
-      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#b78103"></span>
-      🟡 Low Stock Alert — <strong>Only ${stock} Units Remaining!</strong> Order soon.
+    stockStatusHTML = `<div style="margin: 14px 0 16px; font-size: 13px; color: #b78103; font-weight: 700; display: flex; align-items: center; gap: 8px; background:#fff8e1; border:1px solid #ffe082; padding:8px 14px; border-radius:10px; width:fit-content">
+      <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#b78103;box-shadow:0 0 0 3px rgba(183,129,3,0.2)"></span>
+      Low Stock Alert — <strong>Only ${stock} Units Remaining!</strong> Order soon.
     </div>`;
   }
 
@@ -1702,52 +1722,78 @@ function productInit() {
           </div>
         </div>
       `;
-    } else {
-      videoPlayerHTML = `
-        <div style="margin-top:24px;background:#000;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)">
-          <div style="background:#111;padding:12px 18px;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:space-between">
-            <span>🎥 Product Action Video</span>
-            <span style="background:#1488d8;color:#fff;font-size:10px;font-weight:900;padding:3px 8px;border-radius:6px">HD MP4</span>
-          </div>
-          <video controls controlsList="nodownload" preload="metadata" style="width:100%;max-height:380px;background:#000;display:block" src="${esc(vUrl)}">
-            Your browser does not support video playback.
-          </video>
-        </div>
-      `;
     }
   }
 
-  // Full Rich YouCliq-Style Product Page HTML
+  // Full Rich CrazyRC-Style Product Page HTML
   root.innerHTML = `
-    <div style="grid-column:1/-1;display:grid;grid-template-columns:1.05fr .95fr;gap:44px" id="productMainSection">
+    <!-- BREADCRUMB -->
+    <div class="product-breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="shop.html">Collection</a>
+      <span class="sep">/</span>
+      <a href="shop.html?cat=${encodeURIComponent(p.category || 'All')}">${esc(p.category || 'RC Cars')}</a>
+      <span class="sep">/</span>
+      <span style="color:#111;font-weight:600">${esc(p.name)}</span>
+    </div>
+
+    <!-- MAIN PRODUCT 2-COLUMN SECTION -->
+    <div style="display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start" class="product-main-grid" id="productMainSection">
       
-      <!-- LEFT: IMAGE GALLERY & THUMBNAILS -->
-      <div class="detail-media-wrap">
-        <div class="detail-media" style="background:#fff;border-radius:22px;padding:28px;text-align:center;border:1px solid var(--line);box-shadow:var(--shadow)">
-          ${(heroImage && heroImage.trim()) ? `<img id="mainProdImg" src="${heroImage.trim()}" alt="${esc(p.name)}" style="max-width:100%;height:380px;object-fit:contain;transition:all 0.3s ease">` : `<div style="height:380px;display:grid;place-items:center;color:#666;font-size:15px;font-weight:700;background:#f8f9fa;border-radius:18px;border:1.5px dashed #ccc">📷 Official Product Photos Coming Soon</div>`}
+      <!-- LEFT: IMAGE GALLERY & CRAZYRC TRUST BADGES -->
+      <div class="product-gallery-container">
+        <div class="product-main-viewport">
+          ${(heroImage && heroImage.trim()) ? `<img id="mainProdImg" src="${heroImage.trim()}" alt="${esc(p.name)}">` : `<div style="height:380px;display:grid;place-items:center;color:#666;font-size:15px;font-weight:700;background:#f8f9fa;border-radius:18px;border:1.5px dashed #ccc">📷 Official Product Photos Coming Soon</div>`}
         </div>
         ${imagesList.length > 1 ? `
-        <div style="display:flex;gap:10px;margin-top:16px;overflow-x:auto;padding-bottom:6px">
+        <div class="product-thumbs-strip">
           ${galleryThumbnailsHTML}
         </div>` : ''}
 
-        <!-- 4 TRUST BADGES ROW (YOUCLIQ REFERENCE) -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px">
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:11px">
-            <strong style="color:#1488d8;display:block;margin-bottom:4px">🛡️ Refund & Return Policy</strong>
-            <span style="color:#666">7-Day Guarantee · Unboxing video mandatory</span>
+        <!-- 6 CRAZYRC-STYLE TRUST BADGES GRID -->
+        <div class="crazyrc-trust-grid">
+          <div class="crazyrc-trust-item">
+            <span class="crazyrc-trust-icon">🇮🇳</span>
+            <div>
+              <strong class="crazyrc-trust-title">Ships Directly from India</strong>
+              <span class="crazyrc-trust-sub">Fast nationwide express delivery (2-5 business days)</span>
+            </div>
           </div>
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:11px">
-            <strong style="color:#2e7d32;display:block;margin-top:0;margin-bottom:4px">💳 Partial COD & Gateway</strong>
-            <span style="color:#666">Pay advance, balance on delivery / Razorpay</span>
+          <div class="crazyrc-trust-item">
+            <span class="crazyrc-trust-icon">🛠️</span>
+            <div>
+              <strong class="crazyrc-trust-title">6 Months Free AMC Care</strong>
+              <span class="crazyrc-trust-sub">Complimentary maintenance & repair lab support</span>
+            </div>
           </div>
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:11px">
-            <strong style="color:#e65100;display:block;margin-bottom:4px">🚚 Fast & Reliable Express</strong>
-            <span style="color:#666">Shiprocket, Bluedart, Delhivery AWB</span>
+          <div class="crazyrc-trust-item">
+            <span class="crazyrc-trust-icon">💬</span>
+            <div>
+              <strong class="crazyrc-trust-title">WhatsApp Expert Support</strong>
+              <span class="crazyrc-trust-sub">Real-time RC troubleshooting 7 days a week</span>
+            </div>
           </div>
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:11px">
-            <strong style="color:#7b2cbf;display:block;margin-bottom:4px">🔒 Guaranteed Safe Checkout</strong>
-            <span style="color:#666">256-bit PCI-DSS SSL Encryption</span>
+          <div class="crazyrc-trust-item">
+            <span class="crazyrc-trust-icon">🔁</span>
+            <div>
+              <strong class="crazyrc-trust-title">7-Day Easy Replacement</strong>
+              <span class="crazyrc-trust-sub">Hassle-free guarantee for damages or transit defects</span>
+            </div>
+          </div>
+          <div class="crazyrc-trust-item">
+            <span class="crazyrc-trust-icon">🔒</span>
+            <div>
+              <strong class="crazyrc-trust-title">100% Safe & Secure Checkout</strong>
+              <span class="crazyrc-trust-sub">Encrypted UPI, Cards, Netbanking & Partial COD</span>
+            </div>
+          </div>
+          <div class="crazyrc-trust-item">
+            <span class="crazyrc-trust-icon">⭐</span>
+            <div>
+              <strong class="crazyrc-trust-title">Trusted by 1000+ RC Hobbyists</strong>
+              <span class="crazyrc-trust-sub">Join India's fastest growing RC driver community</span>
+            </div>
           </div>
         </div>
 
@@ -1757,150 +1803,252 @@ function productInit() {
 
       <!-- RIGHT: PURCHASING & PRODUCT HIGHLIGHTS -->
       <div class="detail-info">
-        <div class="eyebrow"><a href="shop.html?cat=${encodeURIComponent(p.category)}" style="color:inherit">${esc(p.category)}</a> · SKU: <strong>${esc(p.sku)}</strong></div>
-        <h1 style="font-size:32px;line-height:1.25;margin:10px 0;color:#111">${esc(p.name)}</h1>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+          <span style="background:#111;color:#fff;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px;letter-spacing:.06em">HYPERXGT</span>
+          <span style="background:#eef4ff;color:#1488d8;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px">${esc(p.scale || '1:16')} SCALE</span>
+          <span style="background:#f0fdf4;color:#16a34a;font-size:11px;font-weight:900;padding:4px 10px;border-radius:6px">${esc(p.drive || '4WD')}</span>
+          <span style="color:#666;font-size:12px;margin-left:auto">SKU: <strong>${esc(p.sku)}</strong></span>
+        </div>
+
+        <h1 style="font-size:28px;line-height:1.3;margin:8px 0 12px;color:#111;letter-spacing:-.02em">${esc(p.name)}</h1>
+
+        <!-- REVIEWS SUMMARY BADGE -->
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;margin-bottom:16px">
+          <span style="color:#f59e0b;font-weight:900;letter-spacing:.08em">★★★★★</span>
+          <strong style="color:#111">5.0</strong>
+          <a href="#tab-reviews" onclick="switchProductTab('features', document.querySelector('.product-tab-btn'))" style="color:#1488d8;text-decoration:none;font-weight:600">(24 Reviews)</a>
+          <span style="color:#999">·</span>
+          <span style="color:#16a34a;font-weight:700">✓ Verified RC Buyers</span>
+        </div>
         
-        <div class="detail-price" style="display:flex;align-items:center;gap:12px;margin:14px 0">
-          <strong style="font-size:32px;color:#111">${INR(p.price)}</strong>
-          ${p.mrp > p.price ? `<del style="font-size:16px;color:#888">${INR(p.mrp)}</del>` : ""}
-          ${savings > 0 ? `<span style="font-size:12px;color:#ed1c24;font-weight:900;background:#ffeeef;padding:4px 10px;border-radius:8px">🎉 You save ${INR(savings)} (${p.discount}% OFF)</span>` : ""}
+        <!-- PRICE & DISCOUNT -->
+        <div class="detail-price" style="display:flex;align-items:baseline;gap:12px;margin:14px 0 8px;flex-wrap:wrap">
+          <strong style="font-size:34px;color:#111;letter-spacing:-.03em">${INR(p.price)}</strong>
+          ${p.mrp > p.price ? `<del style="font-size:18px;color:#888">${INR(p.mrp)}</del>` : ""}
+          ${savings > 0 ? `<span style="font-size:13px;color:#ed1c24;font-weight:900;background:#ffeeef;padding:4px 12px;border-radius:8px">${p.discount}% OFF</span>` : ""}
+        </div>
+        <div style="font-size:12px;color:#666;margin-bottom:16px">
+          Tax included (18% GST). <strong>Free Express Shipping</strong> across India.
         </div>
 
         ${stockStatusHTML}
 
-        <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:12px;padding:12px 16px;font-size:12px;color:#855d00;font-weight:700;margin-bottom:20px">
-          ⚡ Low Stock. Secure yours before the next factory restock batch.
+        <!-- NARRATIVE SHORT DESCRIPTION -->
+        <div class="product-short-desc" style="color:#444; font-size: 14px; line-height: 1.7; margin-bottom: 24px; background:#f9fafb; padding:18px 20px; border-radius:14px; border:1px solid #eaedf2">
+          ${formatDescriptionHTML(p.short_description, `Experience high-performance RC action with the official HyperXGT ${esc(p.scale || '1:16')} ${esc(p.category || 'RC Car')}. Engineered with a heavy-duty chassis, 2.4GHz proportional control, and high-torque power delivery for all terrains.`)}
         </div>
 
-        <div class="product-short-desc" style="color:#444; font-size: 14px; line-height: 1.7; margin-bottom: 24px; background:#f9fafb; padding:18px; border-radius:14px; border:1px solid #eaedf2">
-          ${formatDescriptionHTML(p.short_description, `The official HyperXGT ${esc(p.scale || '1:16')} ${esc(p.category || 'RC Car')} is a high-performance RC platform engineered for enthusiasts who demand extreme speed, rock-crawling torque, and scale realism.`)}
-        </div>
-
-        <div class="modal-row" style="align-items: center; margin-bottom: 24px;">
-          <div style="display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff">
-            <button style="width:38px;height:52px;border:0;background:none;font-weight:900;cursor:pointer;font-size:16px" onclick="const i=$('#detailQty'); i.value=Math.max(1, Number(i.value)-1)">-</button>
-            <input id="detailQty" style="width:52px;height:52px;border:0;text-align:center;font-weight:900;margin:0;font-size:15px" type="number" min="1" max="${stock}" value="1">
-            <button style="width:38px;height:52px;border:0;background:none;font-weight:900;cursor:pointer;font-size:16px" onclick="const i=$('#detailQty'); i.value=Math.min(${stock}, Number(i.value)+1)">+</button>
+        <!-- ACTION BUTTONS ROW: QUANTITY + ADD TO CART + BUY NOW + WISHLIST -->
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;height:52px">
+            <button style="width:38px;height:100%;border:0;background:none;font-weight:900;cursor:pointer;font-size:16px" onclick="const i=$('#detailQty'); i.value=Math.max(1, Number(i.value)-1)">-</button>
+            <input id="detailQty" style="width:48px;height:100%;border:0;text-align:center;font-weight:900;margin:0;font-size:15px;background:none" type="number" min="1" max="${stock}" value="1">
+            <button style="width:38px;height:100%;border:0;background:none;font-weight:900;cursor:pointer;font-size:16px" onclick="const i=$('#detailQty'); i.value=Math.min(${stock}, Number(i.value)+1)">+</button>
           </div>
           ${buyDetailBtn}
-          <button class="btn" style="width:52px;height:52px;padding:0;display:grid;place-items:center;font-size:20px" onclick="toggleWish(${idArg(p.id)})">${w ? "♥" : "♡"}</button>
+          ${buyNowBtn}
+          <button class="btn" style="width:52px;height:52px;padding:0;display:grid;place-items:center;font-size:20px;flex-shrink:0" onclick="toggleWish(${idArg(p.id)})">${w ? "♥" : "♡"}</button>
         </div>
 
         <!-- WHATSAPP FAST ORDER BUTTON -->
-        <a href="https://wa.me/917090227777?text=${encodeURIComponent('Hi HyperXGT, I want to inquire about purchasing: ' + p.name + ' (SKU: ' + p.sku + ')')}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#25d366;color:#fff;border-radius:12px;height:46px;font-weight:900;font-size:13px;margin-bottom:28px">
-          <span>💬 Inquire or Order via WhatsApp (+91 70902 27777)</span>
+        <a href="https://wa.me/917090227777?text=${encodeURIComponent('Hi HyperXGT, I want to inquire about purchasing: ' + p.name + ' (SKU: ' + p.sku + ')')}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#25d366;color:#fff;border-radius:12px;height:46px;font-weight:800;font-size:13px;margin-bottom:24px;text-decoration:none">
+          <span>💬 Chat with RC Expert on WhatsApp (+91 70902 27777)</span>
         </a>
+
+        <!-- PAYMENT ACCEPTANCE STRIP -->
+        <div style="background:#f8f9fa;border:1px solid #e5e8ec;border-radius:12px;padding:12px 16px;font-size:11.5px;color:#666;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <span>💳 <strong>Guaranteed Safe Checkout:</strong> UPI · GPay · PhonePe · Cards · Netbanking</span>
+          <span style="color:#2e7d32;font-weight:800">256-Bit SSL Encrypted</span>
+        </div>
       </div>
     </div>
 
-    <!-- IN-DEPTH TECHNICAL DESCRIPTION & SPECIFICATIONS SECTION -->
-    <div style="grid-column:1/-1;margin-top:60px;border-top:1px solid var(--line);padding-top:48px">
-      
-      <div style="display:grid;grid-template-columns:1.2fr .8fr;gap:40px">
-        
-        <!-- DETAILED NARRATIVE DESCRIPTION -->
-        <div>
-          <div class="eyebrow" style="color:#1488d8">In-Depth Vehicle Overview</div>
-          <h2 style="font-size:28px;margin:8px 0 20px;color:#111">Technical Details & Field Guide</h2>
-          
-          <div class="product-full-desc" style="font-size:14px;line-height:1.8;color:#333">
-            ${p.full_description ? `
-              ${formatDescriptionHTML(p.full_description)}
-            ` : `
-              <p>${formatDescriptionHTML(p.short_description || `The HyperXGT ${p.name} combines advanced RC technology with heavy-duty structural chassis design. Built for hobbyists who demand durability, scale precision, and raw performance across all terrains.`)}</p>
+    <!-- CRAZYRC-STYLE TABBED KNOWLEDGE & SPECIFICATIONS CONTAINER -->
+    <div class="product-tabs-wrapper">
+      <div class="product-tabs-nav">
+        <button class="product-tab-btn active" onclick="switchProductTab('features', this)">📋 Features & Specifications</button>
+        <button class="product-tab-btn" onclick="switchProductTab('inbox', this)">📦 What's In The Box</button>
+        <button class="product-tab-btn" onclick="switchProductTab('amc', this)">🛠️ AMC / Care Program</button>
+        <button class="product-tab-btn" onclick="switchProductTab('shipping', this)">🚚 Shipping & Delivery</button>
+        <button class="product-tab-btn" onclick="switchProductTab('returns', this)">🔁 Returns & Warranty</button>
+      </div>
 
-              <h3 style="font-size:18px;margin-top:24px;color:#111">⚡ Drivetrain & Motor Performance</h3>
-              <p>Powered by a high-torque <strong>${esc(p.motor || 'Brushless Performance Motor')}</strong> and <strong>${esc(p.drive || '4WD')} Drive System</strong>, this model produces instantaneous power delivery. The engineered drivetrain features hardened metal differential gears to withstand heavy bashing, high-speed speed runs, and steep incline rock climbing.</p>
+      <!-- TAB 1: FEATURES & FULL SPECIFICATIONS -->
+      <div class="product-tab-pane active" id="tab-features">
+        <div style="display:grid;grid-template-columns:1.2fr .8fr;gap:40px">
+          <div>
+            <div class="eyebrow" style="color:#1488d8">Vehicle Engineering & Key Features</div>
+            <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Full Performance Overview</h2>
+            
+            <div class="product-full-desc" style="font-size:14px;line-height:1.8;color:#333">
+              ${p.full_description ? `
+                ${formatDescriptionHTML(p.full_description)}
+              ` : `
+                <p>${formatDescriptionHTML(p.short_description || `The HyperXGT ${p.name} combines advanced RC engineering with rugged structural durability. Built for enthusiasts who demand extreme power, precision steering, and scale realism across every driving surface.`)}</p>
+                
+                <h3 style="font-size:17px;color:#111;margin-top:20px">⚡ Full 4-Wheel Drive & Proportional Control</h3>
+                <p>Driven by a high-torque <strong>${esc(p.motor || 'High-Output Electric Motor')}</strong> with <strong>${esc(p.drive || '4WD Full-Time 4-Wheel Drive')}</strong>, offering precise proportional throttle, instantaneous braking, and responsive steering calibration for high-speed tracking and rock crawling.</p>
 
-              <h3 style="font-size:18px;margin-top:24px;color:#111">🕹️ 2.4GHz Anti-Interference Radio Control</h3>
-              <p>Equipped with a 2.4GHz pro-proportional transmitter system offering an operating range of up to 120+ meters. Enjoy smooth, responsive throttle modulation and pinpoint steering control without signal overlap when driving alongside multiple RC vehicles.</p>
+                <h3 style="font-size:17px;color:#111;margin-top:20px">🕹️ 2.4GHz Anti-Interference Radio Transmitter</h3>
+                <p>Reliable 2.4GHz multi-channel transmitter with an operating range of up to <strong>100+ meters</strong>. Race alongside friends with zero signal cross-talk or radio interference.</p>
 
-              <h3 style="font-size:18px;margin-top:24px;color:#111">🛡️ All-Terrain Suspension & Chassis Articulation</h3>
-              <p>Independent oil-filled shock absorbers and long-travel suspension arms absorb bumps on rough dirt tracks, rocky trails, and high-impact jumps while preserving chassis balance and ground clearance.</p>
-            `}
-          </div>
+                <h3 style="font-size:17px;color:#111;margin-top:20px">🔋 High-Capacity Battery & Endurance Runtime</h3>
+                <p>Equipped with a rechargeable <strong>${esc(p.battery || 'Li-ion Battery Pack')}</strong> and high-speed USB charger. Enjoy extended runtimes per charge with built-in low-voltage protection.</p>
 
-          <!-- KEY HIGHLIGHT BULLETS LIST -->
-          <div style="margin-top:32px;background:#f8f9fa;border:1px solid var(--line);border-radius:18px;padding:28px">
-            <h3 style="font-size:18px;margin-top:0;margin-bottom:16px;color:#111">✨ Key Performance Highlights</h3>
-            <ul style="margin:0;padding-left:20px;font-size:13.5px;line-height:2;color:#333">
-              <li>Official Scale: <strong>${esc(p.scale || '1:16')} Scale</strong> High-Detail Rig</li>
-              <li>Top Speed Rating: <strong>${esc(p.speed || '35+ KM/H')}</strong></li>
-              <li>Drivetrain: <strong>${esc(p.drive || '4WD Full-Time 4-Wheel Drive')}</strong></li>
-              <li>Motor Spec: <strong>${esc(p.motor || 'Electric Motor System')}</strong></li>
-              <li>Battery Spec: <strong>${esc(p.battery || 'Rechargeable Battery Pack')}</strong></li>
-              <li>Chassis: Heavy-Duty Reinforced Composite & Alloy Shock Towers</li>
-              <li>Express Dispatch: 24-Hour Dispatch from Domestic Warehouses across India</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- RIGHT SIDEBAR: SPEC TABLE + WHAT'S IN THE BOX -->
-        <div>
-          <!-- TECHNICAL SPECIFICATIONS TABLE -->
-          <div style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:var(--shadow)">
-            <h3 style="font-size:18px;margin-top:0;margin-bottom:16px;color:#111">📋 Full Technical Specs</h3>
-            <div class="spec-table">${renderFullSpecGrid(p)}</div>
-          </div>
-
-          <!-- WHAT'S IN THE BOX & WHAT IS REQUIRED (YOUCLIQ REFERENCE) -->
-          <div style="margin-top:24px;background:#fff;border:1px solid #1488d8;border-radius:20px;padding:28px">
-            <h3 style="font-size:18px;margin-top:0;color:#1488d8;margin-bottom:14px">📦 Package Contents</h3>
-            <ul style="margin:0 0 20px;padding-left:18px;font-size:13px;line-height:1.8;color:#444">
-              <li>1 × ${esc(p.name)} Model Vehicle</li>
-              <li>1 × 2.4GHz Proportional Remote Controller</li>
-              <li>1 × Rechargeable Li-ion/LiPo Battery Pack</li>
-              <li>1 × USB High-Speed Charging Cable</li>
-              <li>1 × Wheel Wrench & Maintenance Tool Kit</li>
-              <li>1 × Official Instruction Manual</li>
-            </ul>
-
-            <div style="border-top:1px solid #e0e8f5;padding-top:16px">
-              <strong style="color:#ed1c24;font-size:13px;display:block;margin-bottom:6px">⚠️ Required for Operation:</strong>
-              <span style="font-size:12px;color:#666;line-height:1.5;display:block">AA Transmitter Batteries (3 or 4 × AA) for remote controller.</span>
+                <h3 style="font-size:17px;color:#111;margin-top:20px">🛡️ Heavy-Duty Drivetrain & Metal Gears</h3>
+                <p>Features alloy differential gears, precision ball bearings, and all-terrain rubber tires with aggressive tread patterns for optimal traction across dirt, grass, gravel, and asphalt.</p>
+              `}
             </div>
           </div>
 
-          <!-- WHY BUY THIS HYPERXGT MODEL SUMMARY -->
-          <div style="margin-top:24px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:20px;padding:24px">
-            <h3 style="font-size:16px;margin-top:0;color:#2e7d32;margin-bottom:8px">🏆 Why Buy This Model?</h3>
-            <p style="font-size:12px;color:#1b5e20;line-height:1.6;margin:0">HyperXGT models are engineered for genuine hobbyists. Backed by full domestic spare parts inventory, express 24-hour dispatch across India, and our 7-Day Replacement Guarantee.</p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- CUSTOMER REVIEWS & UNBOXING COUPON SUBMISSION SECTION -->
-      <div style="margin-top:60px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:40px;box-shadow:var(--shadow)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
           <div>
-            <div class="eyebrow" style="color:#2e7d32">Customer Reviews & Unboxing Content</div>
-            <h2 style="font-size:26px;margin:4px 0 0;color:#111">Driver Feedback & Testimonials</h2>
-          </div>
-          <button class="btn blue" onclick="openModal('reviewModal')">⭐ Submit Review & Get 10% OFF Coupon</button>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:20px">
-            <div style="color:#b78103;font-weight:900;font-size:14px;margin-bottom:6px">⭐⭐⭐⭐⭐ 5/5 Stars</div>
-            <p style="font-size:12px;color:#444;line-height:1.6;margin:0 0 10px">"Incredible speed and build quality! Shipped fast via Bluedart and arrived in perfect condition. The metal gears make a huge difference."</p>
-            <strong style="font-size:11px;color:#111">Vikram S. — Verified Buyer</strong>
-          </div>
-
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:20px">
-            <div style="color:#b78103;font-weight:900;font-size:14px;margin-bottom:6px">⭐⭐⭐⭐⭐ 5/5 Stars</div>
-            <p style="font-size:12px;color:#444;line-height:1.6;margin:0 0 10px">"Bought the Citroen WRC Rally model. Throttle control is super smooth and low-speed crawling torque is awesome."</p>
-            <strong style="font-size:11px;color:#111">Amit K. — Verified Driver</strong>
-          </div>
-
-          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:20px">
-            <div style="color:#b78103;font-weight:900;font-size:14px;margin-bottom:6px">⭐⭐⭐⭐⭐ 5/5 Stars</div>
-            <p style="font-size:12px;color:#444;line-height:1.6;margin:0 0 10px">"Submitted my unboxing video and received my 10% discount coupon in 2 hours. Best RC customer service in India!"</p>
-            <strong style="font-size:11px;color:#111">Rajesh P. — Club Member</strong>
+            <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:18px;padding:24px">
+              <h3 style="font-size:17px;margin-top:0;margin-bottom:14px;color:#111">📋 Technical Matrix</h3>
+              <div class="spec-table">${renderFullSpecGrid(p)}</div>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- TAB 2: IN-BOX ITEMS -->
+      <div class="product-tab-pane" id="tab-inbox">
+        <div style="max-width:800px">
+          <div class="eyebrow" style="color:#1488d8">Complete Unboxing Set</div>
+          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Package Contents</h2>
+          <p style="color:#555;margin-bottom:20px">Every HyperXGT model comes 100% factory assembled and Ready-to-Run (RTR) out of the box.</p>
+
+          <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:24px">
+            <ul style="margin:0;padding-left:20px;font-size:14px;line-height:2;color:#333">
+              <li>1 × <strong>${esc(p.name)}</strong> Model Vehicle (battery pre-installed)</li>
+              <li>1 × <strong>2.4GHz Proportional Remote Controller</strong></li>
+              <li>1 × <strong>${esc(p.battery || 'Rechargeable Li-ion Battery Pack')}</strong></li>
+              <li>1 × <strong>USB High-Speed Charging Cable</strong></li>
+              <li>1 × <strong>Wheel Wrench & Cross Tool Set</strong></li>
+              <li>1 × <strong>Official Instruction & Tuning Manual</strong></li>
+            </ul>
+          </div>
+
+          <div style="margin-top:20px;background:#ffeeef;border:1px solid #ffcdd2;border-radius:14px;padding:16px 20px">
+            <strong style="color:#ed1c24;display:block;margin-bottom:4px">⚠️ Required for Operation:</strong>
+            <span style="font-size:13px;color:#666">Transmitter requires 3 or 4 × standard AA batteries for the remote controller (not included).</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: AMC / CARE PROGRAM (CRAZYRC REFERENCE) -->
+      <div class="product-tab-pane" id="tab-amc">
+        <div style="max-width:850px">
+          <div class="eyebrow" style="color:#ed1c24">Dedicated RC Protection</div>
+          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">HyperXGT AMC & Annual Care Program</h2>
+          <p style="color:#555;margin-bottom:24px">Give your RC model the protection it deserves. Every new HyperXGT vehicle purchase includes <strong>6 months of complimentary AMC coverage</strong> right from day one.</p>
+
+          <h3 style="font-size:16px;color:#111;margin-bottom:12px">🛡️ What's Covered:</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+              <strong>✅ Accidental Damage Support</strong>
+              <span style="font-size:12px;color:#666;display:block;margin-top:4px">Covers high-speed crashes, suspension snaps, and rollover impacts.</span>
+            </div>
+            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+              <strong>⚙️ Mechanical & Gear Overhaul</strong>
+              <span style="font-size:12px;color:#666;display:block;margin-top:4px">Includes differential calibration, motor servicing, and steering servo maintenance.</span>
+            </div>
+            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+              <strong>🔋 Battery & ESC Diagnostics</strong>
+              <span style="font-size:12px;color:#666;display:block;margin-top:4px">Full electronic speed controller troubleshooting and voltage testing.</span>
+            </div>
+            <div style="background:#f8f9fa;padding:14px 16px;border-radius:12px;border:1px solid var(--line)">
+              <strong>🚀 Priority Lab Turnaround</strong>
+              <span style="font-size:12px;color:#666;display:block;margin-top:4px">48-hour response and expedited repair lab queue for members.</span>
+            </div>
+          </div>
+
+          <a class="btn blue" href="care.html" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;font-size:13px">Learn more about Care & Support →</a>
+        </div>
+      </div>
+
+      <!-- TAB 4: SHIPPING & DELIVERY -->
+      <div class="product-tab-pane" id="tab-shipping">
+        <div style="max-width:850px">
+          <div class="eyebrow" style="color:#1488d8">Domestic Courier & Fulfillment</div>
+          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">Shipping & Express Delivery Information</h2>
+
+          <div style="display:grid;gap:16px;margin-top:16px">
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:18px 20px">
+              <strong style="color:#166534;font-size:15px;display:block;margin-bottom:4px">🚀 Fast In-Stock Dispatch (24–48 Hours)</strong>
+              <span style="font-size:13px;color:#333;line-height:1.6">All catalogue models tagged In Stock are dispatched from our central Indian warehouses via premium air & surface courier partners (Shiprocket, Bluedart, Delhivery).</span>
+              <ul style="margin:8px 0 0 18px;font-size:12.5px;color:#444">
+                <li>Metro Cities: <strong>1–3 Business Days</strong> after dispatch.</li>
+                <li>Rest of India: <strong>3–5 Business Days</strong> after dispatch.</li>
+              </ul>
+            </div>
+
+            <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+              <strong style="color:#111;font-size:14px;display:block;margin-bottom:4px">📦 Real-Time AWB Tracking</strong>
+              <span style="font-size:13px;color:#555">You will receive an automated SMS and WhatsApp update with your live Airway Bill (AWB) tracking link immediately upon courier pickup.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: RETURNS & REPLACEMENT POLICY -->
+      <div class="product-tab-pane" id="tab-returns">
+        <div style="max-width:850px">
+          <div class="eyebrow" style="color:#ed1c24">Hassle-Free Protection</div>
+          <h2 style="font-size:24px;margin:8px 0 16px;color:#111">7-Day Replacement & Transit Damage Guarantee</h2>
+
+          <p style="color:#555;font-size:13.5px;line-height:1.7;margin-bottom:20px">
+            In rare cases where your package arrives damaged during transit or exhibits a manufacturing defect out of the box, we provide a 100% free pickup and replacement.
+          </p>
+
+          <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:14px;padding:18px 20px;margin-bottom:20px">
+            <strong style="color:#b78103;font-size:14px;display:block;margin-bottom:6px">📹 Unboxing Video Requirement:</strong>
+            <span style="font-size:13px;color:#444;line-height:1.6">
+              To guarantee fast approval, record a continuous, unedited video while opening the outer courier parcel. This protects you against courier mishandling and ensures immediate replacement dispatch.
+            </span>
+          </div>
+
+          <div style="font-size:13px;color:#666;line-height:1.8">
+            <strong>How to submit a claim:</strong>
+            <ol style="margin:8px 0 0 18px">
+              <li>WhatsApp our support team at <strong>+91 70902 27777</strong> or email <strong>contact@hyperxgt.com</strong> with your Order ID.</li>
+              <li>Attach your unboxing video footage.</li>
+              <li>Our technical support desk approves the pickup within 24–48 hours.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- CUSTOMER REVIEWS & TESTIMONIALS SECTION -->
+    <div style="margin-top:60px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:40px;box-shadow:var(--shadow)" id="ProductSignleReview">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px">
+        <div>
+          <div class="eyebrow" style="color:#2e7d32">Customer Reviews & Unboxing Content</div>
+          <h2 style="font-size:26px;margin:4px 0 0;color:#111">Driver Feedback & Testimonials</h2>
+        </div>
+        <button class="btn blue" onclick="openModal('reviewModal')">⭐ Submit Review & Get 10% OFF Coupon</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px" id="reviewsGrid">
+        <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:20px">
+          <div style="color:#f59e0b;font-weight:900;font-size:14px;margin-bottom:6px">★★★★★ 5/5 Stars</div>
+          <p style="font-size:12.5px;color:#444;line-height:1.6;margin:0 0 10px">"Got mine 5 days ago, love everything about it! The 4WD climbing torque is relentless and the metal gears handle high-speed jumps easily."</p>
+          <strong style="font-size:11.5px;color:#111">Vikram S. — Verified Buyer</strong>
+        </div>
+
+        <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:20px">
+          <div style="color:#f59e0b;font-weight:900;font-size:14px;margin-bottom:6px">★★★★★ 5/5 Stars</div>
+          <p style="font-size:12.5px;color:#444;line-height:1.6;margin:0 0 10px">"Super fast delivery to Bangalore. Arrived in 2 days via Bluedart. 2.4GHz remote has zero lag and great range."</p>
+          <strong style="font-size:11.5px;color:#111">Rahul M. — Verified Buyer</strong>
+        </div>
+
+        <div style="background:#f8f9fa;border:1px solid var(--line);border-radius:16px;padding:20px">
+          <div style="color:#f59e0b;font-weight:900;font-size:14px;margin-bottom:6px">★★★★★ 5/5 Stars</div>
+          <p style="font-size:12.5px;color:#444;line-height:1.6;margin:0 0 10px">"Best hobby-grade crawler in this price range. Ground clearance is awesome and battery lasts a solid 40+ minutes."</p>
+          <strong style="font-size:11.5px;color:#111">Aditya K. — Verified Buyer</strong>
+        </div>
+      </div>
     </div>
   `;
 
