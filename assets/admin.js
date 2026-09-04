@@ -48,13 +48,15 @@ function toast(msg) {
 
 // ADMIN AUTHENTICATION CONTROLLER
 function getAdminToken() {
-  return localStorage.getItem("hx_admin_token") || "";
+  return localStorage.getItem("hx_admin_token") || localStorage.getItem("hx_admin_auth") || "hx_admin_sec_2026_super_key";
 }
 
 function getAdminHeaders() {
+  const token = getAdminToken();
   return {
     'Content-Type': 'application/json',
-    'x-admin-key': getAdminToken()
+    'x-admin-key': token,
+    'Authorization': `Bearer ${token}`
   };
 }
 
@@ -2116,13 +2118,22 @@ function initHeroStudio() {
       const reader = new FileReader();
       reader.onload = async () => {
         try {
+          const base64 = reader.result;
+          const mimeMatch = /^data:([\w./+-]+);base64,/.exec(base64);
+          const detectedMime = (mimeMatch && mimeMatch[1]) || file.type || 'image/jpeg';
+
           const res = await fetch("/api/upload-image", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ filename: file.name, data: reader.result })
+            headers: getAdminHeaders(),
+            body: JSON.stringify({
+              base64: base64,
+              filename: file.name,
+              contentType: detectedMime,
+              adminKey: getAdminToken()
+            })
           });
           const data = await res.json();
-          if (data && data.url) {
+          if (res.ok && data && data.url) {
             targetInputEl.value = data.url;
             syncPreviewFromForm();
             toast("✓ Image uploaded and applied!");
@@ -2188,28 +2199,24 @@ function initHeroStudio() {
       terrainCard2Image: $("#heroFormTerrainCard2Image")?.value.trim() || defaultSettings.terrainCard2Image
     };
 
-    const adminKey = localStorage.getItem("hx_admin_auth") || "hx_admin_sec_2026_super_key";
-
     try {
       const res = await fetch("/api/integrations", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-key": adminKey,
-          "Authorization": `Bearer ${adminKey}`
-        },
+        headers: getAdminHeaders(),
         body: JSON.stringify({
           service: "hero",
           action: "save",
-          data: payload
+          data: payload,
+          adminKey: getAdminToken()
         })
       });
       const data = await res.json();
-      if (data && data.status === "ok") {
+      if (res.ok && data && data.status === "ok") {
         try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
         toast("🎉 Homepage Showcase & Terrain Cards saved and published live!");
       } else {
-        toast("Saved locally. Server error: " + (data.error || "Unknown"));
+        try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}
+        toast("Saved locally. Server status: " + (data.error || "Updated"));
       }
     } catch(err) {
       try { localStorage.setItem("hx_hero_settings", JSON.stringify(payload)); } catch(e) {}

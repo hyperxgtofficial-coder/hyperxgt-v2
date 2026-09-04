@@ -114,7 +114,7 @@ async function handleApi(req, res, apiName) {
   }
 
   let targetName = apiName;
-  if (targetName === 'zoho' || targetName === 'shiprocket') {
+  if (targetName === 'zoho' || targetName === 'shiprocket' || targetName === 'hero') {
     targetName = 'integrations';
   }
 
@@ -126,6 +126,7 @@ async function handleApi(req, res, apiName) {
   const parsedUrl = new URL(req.url, 'http://' + (req.headers.host || 'localhost'));
   req.query = Object.fromEntries(parsedUrl.searchParams.entries());
   if (apiName === 'zoho') req.query.service = 'zoho';
+  if (apiName === 'hero') req.query.service = 'hero';
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     try {
