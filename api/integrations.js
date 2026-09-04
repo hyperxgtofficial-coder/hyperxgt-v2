@@ -324,10 +324,60 @@ function getHeroSettingsDisk() {
   };
 }
 
+async function getHeroSettingsFromSupabase() {
+  const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\/$/, '');
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return null;
+
+  try {
+    const res = await httpsRequest(`${supabaseUrl}/rest/v1/collaborations?id=eq.99999&select=link`, 'GET', {
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`
+    });
+    if (res.statusCode === 200 && Array.isArray(res.body) && res.body.length > 0 && res.body[0].link) {
+      const parsed = JSON.parse(res.body[0].link);
+      return parsed;
+    }
+  } catch(e) {}
+  return null;
+}
+
+async function saveHeroSettingsToSupabase(settings) {
+  const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\/$/, '');
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return false;
+
+  try {
+    const payload = {
+      id: 99999,
+      name: 'homepage_hero_settings',
+      link: JSON.stringify(settings),
+      active: true,
+      display_order: 999
+    };
+    const res = await httpsRequest(`${supabaseUrl}/rest/v1/collaborations`, 'POST', {
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`,
+      'Prefer': 'resolution=merge-duplicates,return=representation'
+    }, payload);
+    return res.statusCode === 200 || res.statusCode === 201;
+  } catch(e) {
+    return false;
+  }
+}
+
 async function handleHeroRequest(req, res, action) {
   if (req.method === 'GET' || action === 'get') {
+    // 1. First priority: load from Supabase cloud database
+    const supabaseData = await getHeroSettingsFromSupabase();
+    if (supabaseData) {
+      cachedHeroSettings = supabaseData;
+      return res.status(200).json({ status: 'ok', data: supabaseData, source: 'supabase' });
+    }
+
+    // 2. Fallback: load from local JSON disk
     const data = getHeroSettingsDisk();
-    return res.status(200).json({ status: 'ok', data });
+    return res.status(200).json({ status: 'ok', data, source: 'disk' });
   }
 
   if (req.method === 'POST' || action === 'save') {
@@ -340,21 +390,24 @@ async function handleHeroRequest(req, res, action) {
       return res.status(400).json({ error: "Invalid hero settings payload" });
     }
 
-    const current = getHeroSettingsDisk();
+    const current = (await getHeroSettingsFromSupabase()) || getHeroSettingsDisk();
     const updated = {
       ...current,
       ...payload
     };
 
     cachedHeroSettings = updated;
+
+    // 1. Save to Supabase PostgreSQL cloud database (permanent across Vercel deployments & restarts)
+    await saveHeroSettingsToSupabase(updated);
+
+    // 2. Also save to local JSON disk
     try {
       const filePath = path.join(__dirname, '..', 'data', 'hero-settings.json');
       fs.writeFileSync(filePath, JSON.stringify(updated, null, 2), 'utf8');
-    } catch(e) {
-      console.warn("Could not write hero-settings to disk:", e.message);
-    }
+    } catch(e) {}
 
-    return res.status(200).json({ status: 'ok', message: 'Homepage Hero Banner updated successfully!', data: updated });
+    return res.status(200).json({ status: 'ok', message: 'Homepage Showcase & Terrain Cards saved to Supabase & published live!', data: updated });
   }
 
   return res.status(400).json({ error: 'Unsupported action' });

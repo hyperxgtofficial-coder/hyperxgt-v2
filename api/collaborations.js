@@ -63,18 +63,19 @@ module.exports = async (req, res) => {
     if (req.method === 'GET') {
       if (supabaseAnonKey && supabaseUrl.includes("supabase")) {
         try {
-          const dbRes = await httpsRequest(`${supabaseUrl}/rest/v1/collaborations?select=*`, 'GET', {
+          const dbRes = await httpsRequest(`${supabaseUrl}/rest/v1/collaborations?id=neq.99999&select=*`, 'GET', {
             'apikey': supabaseAnonKey,
             'Authorization': `Bearer ${supabaseAnonKey}`
           });
           if (dbRes.statusCode === 200 && Array.isArray(dbRes.body) && dbRes.body.length > 0) {
-            inMemoryCollaborations = dbRes.body;
+            inMemoryCollaborations = dbRes.body.filter(c => String(c.id) !== '99999');
           }
         } catch(e) {}
       }
 
-      inMemoryCollaborations.sort((a, b) => (a.order || 0) - (b.order || 0));
-      return res.status(200).json({ success: true, collaborations: inMemoryCollaborations });
+      const cleanCollabs = inMemoryCollaborations.filter(c => String(c.id) !== '99999');
+      cleanCollabs.sort((a, b) => (a.order || 0) - (b.order || 0));
+      return res.status(200).json({ success: true, collaborations: cleanCollabs });
     }
 
     // REQUIRE ADMIN AUTH FOR WRITE / EDIT / DELETE

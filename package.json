@@ -15,6 +15,7 @@
     "check": "npm run check:syntax && npm run check:handlers"
   },
   "dependencies": {
+    "docx": "^9.7.1",
     "xlsx": "^0.18.5"
   }
 }
