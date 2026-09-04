@@ -252,7 +252,7 @@ function parseImagesArray(p) {
 window.switchHeroImage = function(src, el) {
   const main = document.getElementById("mainProdImg");
   if (main) {
-    main.style.opacity = "0.4";
+    main.style.opacity = "0.3";
     setTimeout(() => {
       main.src = src;
       main.style.opacity = "1";
@@ -261,9 +261,9 @@ window.switchHeroImage = function(src, el) {
   const parent = el.parentElement;
   if (parent) {
     [...parent.children].forEach(c => {
-      c.style.border = "1px solid var(--line)";
+      c.classList.remove("active");
     });
-    el.style.border = "2.5px solid #1488d8";
+    el.classList.add("active");
   }
 };
 
@@ -1816,22 +1816,42 @@ function productInit() {
         <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;margin-bottom:16px">
           <span style="color:#f59e0b;font-weight:900;letter-spacing:.08em">★★★★★</span>
           <strong style="color:#111">5.0</strong>
-          <a href="#tab-reviews" onclick="switchProductTab('features', document.querySelector('.product-tab-btn'))" style="color:#1488d8;text-decoration:none;font-weight:600">(24 Reviews)</a>
+          <a href="#ProductSignleReview" onclick="document.getElementById('ProductSignleReview')?.scrollIntoView({behavior:'smooth'}); return false;" style="color:#1488d8;text-decoration:underline;font-weight:600;cursor:pointer">(24 Reviews)</a>
           <span style="color:#999">·</span>
           <span style="color:#16a34a;font-weight:700">✓ Verified RC Buyers</span>
         </div>
         
         <!-- PRICE & DISCOUNT -->
         <div class="detail-price" style="display:flex;align-items:baseline;gap:12px;margin:14px 0 8px;flex-wrap:wrap">
-          <strong style="font-size:34px;color:#111;letter-spacing:-.03em">${INR(p.price)}</strong>
+          <strong style="font-size:34px;color:#db0000;letter-spacing:-.03em">${INR(p.price)}</strong>
           ${p.mrp > p.price ? `<del style="font-size:18px;color:#888">${INR(p.mrp)}</del>` : ""}
-          ${savings > 0 ? `<span style="font-size:13px;color:#ed1c24;font-weight:900;background:#ffeeef;padding:4px 12px;border-radius:8px">${p.discount}% OFF</span>` : ""}
+          ${savings > 0 ? `<span style="font-size:13px;color:#ed1c24;font-weight:900;background:#ffeeef;padding:4px 12px;border-radius:8px">SAVE ${INR(savings)} (${p.discount}% OFF)</span>` : ""}
         </div>
         <div style="font-size:12px;color:#666;margin-bottom:16px">
-          Tax included (18% GST). <strong>Free Express Shipping</strong> across India.
+          Inclusive of all taxes (18% GST). <strong>Free Express Courier Delivery</strong> across India.
         </div>
 
         ${stockStatusHTML}
+
+        <!-- QUICK HIGHLIGHT SPECS SNAPSHOT -->
+        <div class="quick-specs-grid">
+          <div class="quick-spec-card">
+            <span>🚀 Top Speed</span>
+            <strong>${esc(p.speed || '50+ KM/H')}</strong>
+          </div>
+          <div class="quick-spec-card">
+            <span>🕹️ Control Range</span>
+            <strong>${esc(p.control || '2.4GHz 100m+')}</strong>
+          </div>
+          <div class="quick-spec-card">
+            <span>⚙️ Drive System</span>
+            <strong>${esc(p.drive || '4WD Full-Time')}</strong>
+          </div>
+          <div class="quick-spec-card">
+            <span>🔋 Power Motor</span>
+            <strong>${esc(p.motor ? (p.motor.length > 16 ? p.motor.substring(0, 16) + '...' : p.motor) : 'Electric Motor')}</strong>
+          </div>
+        </div>
 
         <!-- NARRATIVE SHORT DESCRIPTION -->
         <div class="product-short-desc" style="color:#444; font-size: 14px; line-height: 1.7; margin-bottom: 24px; background:#f9fafb; padding:18px 20px; border-radius:14px; border:1px solid #eaedf2">
